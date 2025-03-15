@@ -1,0 +1,8 @@
+{
+  "name": "zro",
+  "private": true,
+  "keywords": [],
+  "author": "Nariman Movaffaghi",
+  "license": "MIT",
+  "packageManager": "pnpm@10.6.3"
+}

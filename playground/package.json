@@ -1,0 +1,17 @@
+{
+  "name": "zro playground",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -w '../packages/' -x 'zro dev'"
+  },
+  "keywords": [],
+  "author": "Nariman Movaffaghi",
+  "license": "MIT",
+  "dependencies": {
+    "nodemon": "^3.1.9",
+    "zro": "workspace:*"
+  },
+  "packageManager": "pnpm@10.6.3"
+}

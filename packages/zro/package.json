@@ -1,0 +1,37 @@
+{
+  "name": "zro",
+  "version": "0.0.1",
+  "description": "ZRO framework",
+  "keywords": [],
+  "license": "MIT",
+  "author": "Nariman Movaffaghi",
+  "type": "module",
+  "bin": "./dist/src/cli/index.js",
+  "scripts": {
+    "dev": "tsc-watch --onSuccess \"pnpm run postbuild\"",
+    "build": "tsc",
+    "postbuild": "tsc-alias",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "pre-publish": "pnpx changelogen --release --push && pnpm build",
+    "publish-package": "pnpm run pre-publish && pnpm publish"
+  },
+  "dependencies": {
+    "citty": "^0.1.6",
+    "consola": "^3.4.0",
+    "es-toolkit": "^1.33.0",
+    "h3": "npm:h3-nightly@latest",
+    "listhen": "^1.9.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rou3": "^0.5.1",
+    "tsc-alias": "^1.8.11",
+    "tsc-watch": "^6.2.1",
+    "unctx": "^2.4.1",
+    "unimport": "^4.1.2",
+    "vite": "^6.2.2",
+    "vitest": "^3.0.8",
+    "yocto-spinner": "^0.2.1"
+  },
+  "packageManager": "pnpm@10.6.3"
+}

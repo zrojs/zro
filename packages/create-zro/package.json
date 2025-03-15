@@ -1,0 +1,9 @@
+{
+  "name": "create-zro",
+  "version": "0.0.1",
+  "description": "Create ZRO App CLI",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.6.3"
+}
