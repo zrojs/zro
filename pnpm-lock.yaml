@@ -18,6 +18,9 @@ importers:
       consola:
         specifier: ^3.4.0
         version: 3.4.0
+      defu:
+        specifier: ^6.1.4
+        version: 6.1.4
       es-toolkit:
         specifier: ^1.33.0
         version: 1.33.0
@@ -27,6 +30,9 @@ importers:
       listhen:
         specifier: ^1.9.0
         version: 1.9.0
+      pkg-types:
+        specifier: ^2.1.0
+        version: 2.1.0
       react:
         specifier: ^19.0.0
         version: 19.0.0
@@ -45,9 +51,15 @@ importers:
       unctx:
         specifier: ^2.4.1
         version: 2.4.1
+      unhead:
+        specifier: 2.0.0-rc.13
+        version: 2.0.0-rc.13
       unimport:
         specifier: ^4.1.2
         version: 4.1.2
+      unplugin:
+        specifier: ^2.2.0
+        version: 2.2.0
       vite:
         specifier: ^6.2.2
         version: 6.2.2(jiti@2.4.2)
@@ -645,6 +657,9 @@ packages:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
     engines: {node: '>=4'}
 
+  hookable@5.5.3:
+    resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
+
   http-shutdown@1.2.2:
     resolution: {integrity: sha512-S9wWkJ/VSY9/k4qcjG318bqJNruzE4HySUhFYknwmu6LBP97KLLfwNf+n4V1BHurvFNkSKLFnK/RsuUnRTf9Vw==}
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
@@ -1019,6 +1034,9 @@ packages:
 
   undefsafe@2.0.5:
     resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==}
+
+  unhead@2.0.0-rc.13:
+    resolution: {integrity: sha512-cuG4Uu6kS9/zF2+XL/5od6S1J4GJqm3xB/I6PVoXgqEVCKryziGdLo+uaqewgOWnv5y5kDRiSuRQz/7fh0nUfw==}
 
   unimport@4.1.2:
     resolution: {integrity: sha512-oVUL7PSlyVV3QRhsdcyYEMaDX8HJyS/CnUonEJTYA3//bWO+o/4gG8F7auGWWWkrrxBQBYOO8DKe+C53ktpRXw==}
@@ -1620,6 +1638,8 @@ snapshots:
 
   has-flag@3.0.0: {}
 
+  hookable@5.5.3: {}
+
   http-shutdown@1.2.2: {}
 
   human-signals@5.0.0: {}
@@ -1964,6 +1984,10 @@ snapshots:
       unplugin: 2.2.0
 
   undefsafe@2.0.5: {}
+
+  unhead@2.0.0-rc.13:
+    dependencies:
+      hookable: 5.5.3
 
   unimport@4.1.2:
     dependencies:

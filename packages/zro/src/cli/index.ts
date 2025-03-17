@@ -1,5 +1,6 @@
 import { defineCommand, runMain } from 'citty'
 import { colors } from 'consola/utils'
+import { readPackageJSON } from 'pkg-types'
 import { useZro, zroContext } from './context'
 
 const cli = defineCommand({
@@ -19,7 +20,7 @@ const cli = defineCommand({
         },
       },
       run: async ({ args }) => {
-        const { bootstrapDevServer } = await import('../server')
+        const { bootstrapDevServer } = await import('../dev-server')
         console.clear()
         const { title, version } = useZro()
         console.log(` ${colors.bold(title)} ${colors.dim(`v${version}`)} ${colors.dim(`(Development)`)}`)
@@ -30,12 +31,14 @@ const cli = defineCommand({
   },
 })
 
-zroContext.call(
-  {
-    title: '[Z•RO]',
-    version: '0.0.1',
-  },
-  () => {
-    runMain(cli)
-  },
-)
+readPackageJSON(import.meta.resolve('../../package.json')).then(pkg => {
+  zroContext.call(
+    {
+      title: '[Z•RO]',
+      version: pkg.version!,
+    },
+    () => {
+      runMain(cli)
+    },
+  )
+})
