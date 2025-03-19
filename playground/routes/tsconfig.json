@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "types": [
+      "vite/client",
+    ],
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./*"
+      ],
+      "@/*": [
+        "./*"
+      ]
+    },
+  }
+}

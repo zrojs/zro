@@ -1,6 +1,6 @@
 import { Merge } from './utils/types'
 
-type NextFn<LoaderData> = <ReturnType>(data: ReturnType) => Promise<Merge<LoaderData, ReturnType>>
+type NextFn<LoaderData> = <ReturnType>(data?: ReturnType) => Promise<Merge<LoaderData, ReturnType>>
 
 export class Middleware<LoaderData, ReturnedValue> {
   constructor(private fn: (args: { data: LoaderData; next: NextFn<LoaderData> }) => Promise<ReturnedValue>) {}

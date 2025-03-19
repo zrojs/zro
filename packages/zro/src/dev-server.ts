@@ -43,6 +43,8 @@ export const bootstrapDevServer = async ({ host = false }: { host: boolean }) =>
       const listener = await listen(toNodeListener(app), {
         isProd: false,
         showURL: false,
+        ws: false,
+        autoClose: true,
       })
       startingServerSpinner.stop()
       startingServerSpinner.clear()

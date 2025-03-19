@@ -11,6 +11,10 @@
     "./router": {
       "types": "./dist/src/router/index.d.ts",
       "import": "./dist/src/router/index.js"
+    },
+    "./unplugin": {
+      "types": "./dist/src/unplugin/index.d.ts",
+      "import": "./dist/src/unplugin/index.js"
     }
   },
   "scripts": {
@@ -22,17 +26,29 @@
     "pre-publish": "pnpx changelogen --release --push && pnpm build",
     "publish-package": "pnpm run pre-publish && pnpm publish"
   },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19",
+    "typescript": "^5.5.4",
+    "vite": "^6.2.2"
+  },
   "dependencies": {
+    "@types/esprima": "^4.0.6",
     "citty": "^0.1.6",
     "consola": "^3.4.0",
     "defu": "^6.1.4",
+    "es-module-lexer": "^1.6.0",
     "es-toolkit": "^1.33.0",
+    "esprima": "^4.0.1",
     "h3": "npm:h3-nightly@latest",
     "listhen": "^1.9.0",
+    "magicast": "^0.3.5",
     "pkg-types": "^2.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "recast": "^0.23.11",
     "rou3": "^0.5.1",
+    "tiny-glob": "^0.2.9",
     "tsc-alias": "^1.8.11",
     "tsc-watch": "^6.2.1",
     "unctx": "^2.4.1",
@@ -42,6 +58,9 @@
     "vite": "^6.2.2",
     "vitest": "^3.0.8",
     "yocto-spinner": "^0.2.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
   },
   "packageManager": "pnpm@10.6.3"
 }
