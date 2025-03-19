@@ -36,6 +36,9 @@ importers:
       h3:
         specifier: npm:h3-nightly@latest
         version: h3-nightly@1.15.1-20250222-111608-d1c00fc
+      knitwork:
+        specifier: ^1.2.0
+        version: 1.2.0
       listhen:
         specifier: ^1.9.0
         version: 1.9.0
@@ -66,6 +69,9 @@ importers:
       tsc-watch:
         specifier: ^6.2.1
         version: 6.2.1(typescript@5.8.2)
+      ufo:
+        specifier: ^1.5.4
+        version: 1.5.4
       unctx:
         specifier: ^2.4.1
         version: 2.4.1
@@ -795,6 +801,9 @@ packages:
 
   js-tokens@9.0.1:
     resolution: {integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==}
+
+  knitwork@1.2.0:
+    resolution: {integrity: sha512-xYSH7AvuQ6nXkq42x0v5S8/Iry+cfulBz/DJQzhIyESdLD7425jXsPy4vn5cCXU+HhRN2kVw51Vd1K6/By4BQg==}
 
   listhen@1.9.0:
     resolution: {integrity: sha512-I8oW2+QL5KJo8zXNWX046M134WchxsXC7SawLPvRQpogCbkyQIaFxPE89A2HiwR7vAK2Dm2ERBAmyjTYGYEpBg==}
@@ -1809,6 +1818,8 @@ snapshots:
   jiti@2.4.2: {}
 
   js-tokens@9.0.1: {}
+
+  knitwork@1.2.0: {}
 
   listhen@1.9.0:
     dependencies:

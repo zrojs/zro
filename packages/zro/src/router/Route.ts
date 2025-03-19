@@ -17,6 +17,7 @@ export type LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares extends Mid
   middlewares: readonly [...TMiddlewares]
   actions: Action[]
   meta?: MetaFunction<LoaderData>
+  props?: Record<string, any>
 }
 
 export class Route<

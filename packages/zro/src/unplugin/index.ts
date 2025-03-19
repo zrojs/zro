@@ -1,3 +1,4 @@
+import { joinURL } from 'ufo'
 import { unctxPlugin } from 'unctx/plugin'
 import { createUnplugin, UnpluginOptions } from 'unplugin'
 import { prepare } from './generators'
@@ -12,7 +13,7 @@ export default createUnplugin<ZroUnpluginOptions>((options, meta) => {
         await prepare({ routesDir })
       },
       async watchChange(id, change) {
-        await prepare({ routesDir })
+        if (!id.startsWith(joinURL(process.cwd(), '.zro'))) await prepare({ routesDir })
       },
     },
     unctxPlugin.raw({}, meta) as UnpluginOptions,

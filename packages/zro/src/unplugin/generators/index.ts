@@ -4,8 +4,9 @@ import { existsSync } from 'fs'
 import { loadFile } from 'magicast'
 import { exit } from 'process'
 import glob from 'tiny-glob'
+import { joinURL } from 'ufo'
 import { logger } from '../../utils/log'
-
+import { createRouterFile } from './router'
 const filePathToRoutePath = (file: string, cwd: string) => {
   return file
     .replace(cwd, '')
@@ -25,7 +26,7 @@ export type RouteModuleInfo = {
   hasErrorBoundary: boolean
 }
 
-type Tree = {
+export type Tree = {
   path: string
   filePath: string
   isLeaf: boolean
@@ -146,5 +147,7 @@ export const prepare = async ({ routesDir }: PrepareOptions) => {
   // more precise glob to includes only _layout.tsx and index.tsx
   const files = await glob('**/*.{ts,tsx,js,jsx}', { cwd: routesDir, filesOnly: true, absolute: true })
   const routeTree = await (await buildTree(files, routesDir)).children
+
+  await createRouterFile(routeTree, joinURL(process.cwd(), '.zro'))
   // console.log(routeTree)
 }
