@@ -3,6 +3,7 @@ import { addRoute, createRouter, findRoute } from 'rou3'
 import { createContext, withAsyncContext } from 'unctx'
 import { ResolvableHead } from 'unhead/types'
 import { Route } from './Route'
+import { abort } from './utils'
 
 type RequestContext = {
   request: Request
@@ -22,6 +23,21 @@ export class Router {
   public addRoute(route: Route<any, any>) {
     if (route.getPath() === '_root') this.rootRoute = route
     addRoute(this.router, '', route.getPath(), route)
+    // add not found route
+    if (route.getParent()) {
+      const currentParent = route.getParent()!
+      const notFoundRoute = currentParent.getPath().replace('_layout', '**')
+      if (!findRoute(this.router, '', notFoundRoute))
+        addRoute(
+          this.router,
+          '',
+          notFoundRoute,
+          new Route<any, any>(notFoundRoute, {
+            loader: async () => abort(404, 'Page not found'),
+            parent: currentParent,
+          }),
+        )
+    }
   }
 
   public getRoot() {
@@ -30,7 +46,7 @@ export class Router {
 
   public findRoute(path: string) {
     const destRoute = findRoute(this.router, '', path)
-    if (destRoute) return { route: destRoute.data, params: destRoute.params }
+    if (destRoute) return { route: destRoute.data, params: destRoute.params, tree: destRoute.data.getRouteTree() }
     return null
   }
 
@@ -38,11 +54,7 @@ export class Router {
     const path = new URL(request.url).pathname
     const routeInfo = this.findRoute(path)
     if (routeInfo) {
-      const { route, params } = routeInfo
-      const routes = [route]
-      while (routes[0].getParent()) {
-        routes.unshift(routes[0].getParent() as Route<any, any>)
-      }
+      const { params, tree: routes } = routeInfo
       return requestContext.callAsync(
         { request, params },
         withAsyncContext(async () => {
@@ -54,5 +66,6 @@ export class Router {
         }),
       )
     }
+    throw new Error('Route not found')
   }
 }

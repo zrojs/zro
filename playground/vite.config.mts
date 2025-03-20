@@ -1,6 +1,8 @@
+import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
-import zro from 'zro/unplugin'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import zro from 'zro/unplugin/vite'
 
 export default defineConfig({
-  plugins: [zro.vite({})],
+  plugins: [tsconfigPaths(), tailwindcss(), zro()],
 })

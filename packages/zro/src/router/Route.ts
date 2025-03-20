@@ -1,5 +1,6 @@
 import { defu } from 'defu'
 import { merge } from 'es-toolkit'
+import { withAsyncContext } from 'unctx'
 import type { ResolvableHead } from 'unhead/types'
 import { Action } from './Action'
 import { Middleware } from './Middleware'
@@ -50,21 +51,35 @@ export class Route<
     return this.options.parent
   }
 
+  public getProps() {
+    return this.options.props
+  }
+
+  public getRouteTree = (): Route<any, any, any, any[], any>[] => {
+    const routes: Route<any, any, any, any[], any>[] = [this]
+    while (routes[0].getParent()) {
+      routes.unshift(routes[0].getParent() as Route<any, any>)
+    }
+    return routes
+  }
+
   public async load(parentData: ParentLoaderData = {} as ParentLoaderData, next: (data: any) => Promise<any> = async (data: any) => data): Promise<Data> {
     const middlewares = this.options.middlewares
 
     const runMiddlewares = async (index: number, data: any = {}): Promise<any> => {
-      if (index >= middlewares.length) {
-        if (this.options.loader) {
-          const loaderData = await this.options.loader(data)
-          return await next(merge(data, loaderData || {}))
+      return withAsyncContext(async () => {
+        if (index >= middlewares.length) {
+          if (this.options.loader) {
+            const loaderData = await this.options.loader(data)
+            return await next(merge(data, loaderData || {}))
+          }
+          return await next(data)
         }
-        return await next(data)
-      }
-      return await middlewares[index].run({
-        data: data as ParentLoaderData,
-        next: async newData => runMiddlewares(index + 1, merge(data, newData || {})),
-      })
+        return await middlewares[index].run({
+          data: data as ParentLoaderData,
+          next: async newData => runMiddlewares(index + 1, merge(data, newData || {})),
+        })
+      })()
     }
 
     return (await runMiddlewares(0, parentData)) as Data

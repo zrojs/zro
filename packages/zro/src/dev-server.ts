@@ -1,6 +1,6 @@
 import { colors } from 'consola/utils'
 import { upperFirst } from 'es-toolkit'
-import { App, createApp, fromNodeMiddleware, toNodeListener } from 'h3'
+import { App, createApp, eventHandler, fromNodeMiddleware, proxyRequest, toNodeListener } from 'h3'
 import { listen, Listener } from 'listhen'
 import { AsyncLocalStorage } from 'node:async_hooks'
 import { createContext } from 'unctx'
@@ -30,6 +30,7 @@ const startingServerSpinner = loadingSpinner({
 export const bootstrapDevServer = async ({ host = false }: { host: boolean }) => {
   startingServerSpinner.start()
   const app = createApp()
+
   return serverContext.call(app, async () => {
     const vite = await createServer({
       server: {
@@ -40,6 +41,11 @@ export const bootstrapDevServer = async ({ host = false }: { host: boolean }) =>
     })
     return viteContext.call(vite, async () => {
       app.use(fromNodeMiddleware(vite.middlewares))
+      app.use(
+        eventHandler(e => {
+          return proxyRequest(e, 'http://localhost:3000/index.html')
+        }),
+      )
       const listener = await listen(toNodeListener(app), {
         isProd: false,
         showURL: false,

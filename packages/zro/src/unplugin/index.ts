@@ -15,6 +15,23 @@ export default createUnplugin<ZroUnpluginOptions>((options, meta) => {
       async watchChange(id, change) {
         if (!id.startsWith(joinURL(process.cwd(), '.zro'))) await prepare({ routesDir })
       },
+      vite: {
+        config(config, env) {
+          return {
+            ...config,
+            logLevel: 'warn',
+            optimizeDeps: {
+              include: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client'],
+            },
+            esbuild: {
+              jsx: 'automatic',
+            },
+            ssr: {
+              external: ['zro'],
+            },
+          }
+        },
+      },
     },
     unctxPlugin.raw({}, meta) as UnpluginOptions,
   ]

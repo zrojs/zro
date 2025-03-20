@@ -1,4 +1,6 @@
-import { Middleware } from 'zro/router'
+import { Link, Outlet } from 'zro/react'
+import { MetaFunction, Middleware } from 'zro/router'
+import styles from './styles.css?url'
 
 export const loader = () => {
   return {
@@ -18,11 +20,25 @@ export const middlewares = [
   }),
 ]
 
-export function RootLayout() {
+export const meta: MetaFunction<any> = () => {
+  return {
+    link: [
+      {
+        href: styles,
+        rel: 'stylesheet',
+      },
+    ],
+  }
+}
+
+export default function RootLayout() {
   return (
     <div>
-      <span>Hi there</span>
-      <div>Yo - content</div>
+      <div className="flex gap-2">
+        <Link href="/">[HOME]</Link>
+        <Link href="/blog">[BLOG]</Link>
+      </div>
+      <Outlet />
     </div>
   )
 }

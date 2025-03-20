@@ -5,9 +5,7 @@
     <title>Document</title>
   </head>
   <body>
-    <script type="module">
-      import { router } from '/.zro/router.server.ts'
-      console.log(await router.load(new Request('http://localhost:3000/')))
-    </script>
+    <div id="app" />
+    <script type="module" src="/app.tsx"></script>
   </body>
 </html>
