@@ -56,6 +56,7 @@
     "pkg-types": "^2.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-error-boundary": "^5.0.0",
     "recast": "^0.23.11",
     "rou3": "^0.5.1",
     "tiny-glob": "^0.2.9",

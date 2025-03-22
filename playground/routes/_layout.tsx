@@ -1,24 +1,23 @@
 import { Link, Outlet } from 'zro/react'
-import { MetaFunction, Middleware } from 'zro/router'
+import { MetaFunction } from 'zro/router'
 import styles from './styles.css?url'
 
-export const loader = () => {
+export const loader = data => {
   return {
-    title: 'Welcome to playground',
-    description: 'This is a playground for testing zro',
+    version: '1.2',
   }
 }
 
-export const middlewares = [
-  new Middleware(async ({ next }) => {
-    console.log('before middleware 1')
-    const n = await next({
-      code: false,
-    })
-    console.log('after middleware 1')
-    return n
-  }),
-]
+// export const middlewares = [
+//   new Middleware(async ({ next }) => {
+//     // console.log('before middleware 1')
+//     const n = await next({
+//       code: false,
+//     })
+//     // console.log('after middleware 1')
+//     return n
+//   }),
+// ]
 
 export const meta: MetaFunction<any> = () => {
   return {
@@ -41,4 +40,8 @@ export default function RootLayout() {
       <Outlet />
     </div>
   )
+}
+
+export const Loading = () => {
+  return <div>Loading...</div>
 }

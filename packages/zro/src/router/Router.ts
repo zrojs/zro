@@ -1,4 +1,4 @@
-import { merge } from 'es-toolkit'
+import { toMerged } from 'es-toolkit'
 import { addRoute, createRouter, findRoute } from 'rou3'
 import { createContext, withAsyncContext } from 'unctx'
 import { ResolvableHead } from 'unhead/types'
@@ -58,9 +58,20 @@ export class Router {
       return requestContext.callAsync(
         { request, params },
         withAsyncContext(async () => {
+          const dataPerRoute: Map<string, any> = new Map()
           const loadRoutes = async (index: number = 0, data: any = {}) => {
-            if (index >= routes.length) return data
-            return await routes[index].load(data, async (newData: any): Promise<any> => loadRoutes(index + 1, merge(data, newData!)))
+            if (index >= routes.length) {
+              return dataPerRoute
+            }
+
+            return await routes[index].load(data, async (newData: any): Promise<any> => {
+              dataPerRoute.set(routes[index].getPath(), newData)
+              // if didn't error, load next route
+              if (newData instanceof Error) {
+                return dataPerRoute
+              }
+              return loadRoutes(index + 1, toMerged(data, newData!))
+            })
           }
           return await loadRoutes()
         }),

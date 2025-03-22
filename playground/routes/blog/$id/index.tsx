@@ -5,6 +5,8 @@ import { posts } from '~/data'
 export const loader = () => {
   const requestContext = useRequest()
   const { id } = requestContext.params
+  const post = posts.find(post => post.id == id)
+  if (!post) throw new Error('Post not found')
   return posts.find(post => post.id == id)
 }
 
@@ -16,4 +18,12 @@ export default function SingleBlog() {
       <p>{loaderData.content}</p>
     </div>
   )
+}
+
+export const Loading = () => {
+  return <div>Loading blog post...</div>
+}
+
+export const ErrorBoundary = () => {
+  return 'Something went wrong!'
 }

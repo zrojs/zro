@@ -2,24 +2,42 @@ import { Suspense, use } from 'react'
 import { Link, useLoaderData } from 'zro/react'
 import { posts } from '~/data'
 
-export const loader = () => {
+export const loader = async () => {
+  const timestamp = new Date()
   return {
-    posts: new Promise(r => setTimeout(r.bind(null, posts), 500)),
+    timestamp,
+    posts: new Promise(r =>
+      setTimeout(
+        r.bind(null, [
+          ...posts,
+          {
+            id: 3,
+            title: 'Not found',
+            content: `-`,
+            createdAt: new Date('2021-01-02'),
+          },
+        ]),
+        1000,
+      ),
+    ),
   }
 }
 
-export default function () {
+export default function BlogPage() {
+  const loaderData = useLoaderData()
   return (
     <div>
       <p>Blog page</p>
       <div>
-        <Suspense fallback="Loading posts...">
+        <span>{loaderData.timestamp.toString()}</span>
+        <Suspense fallback={<div>Loading...</div>}>
           <Posts />
         </Suspense>
       </div>
     </div>
   )
 }
+
 const Posts = () => {
   const loaderData = useLoaderData()
   const posts = use(loaderData.posts)
@@ -31,4 +49,12 @@ const Posts = () => {
       </Link>
     )
   })
+}
+
+export const Loading = () => {
+  return <div>Loading...</div>
+}
+
+export const ErrorBoundary = () => {
+  return 'Something went wrong!'
 }

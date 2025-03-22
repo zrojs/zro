@@ -1,4 +1,4 @@
-export const loader = () => {
+export const loader = data => {
   return {
     title: 'Welcome to playground',
     description: 'This is a playground for testing zro',

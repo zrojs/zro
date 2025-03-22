@@ -65,20 +65,38 @@ export class Route<
 
   public async load(parentData: ParentLoaderData = {} as ParentLoaderData, next: (data: any) => Promise<any> = async (data: any) => data): Promise<Data> {
     const middlewares = this.options.middlewares
-
+    let loadedData: any = {}
     const runMiddlewares = async (index: number, data: any = {}): Promise<any> => {
       return withAsyncContext(async () => {
         if (index >= middlewares.length) {
           if (this.options.loader) {
-            const loaderData = await this.options.loader(data)
-            return await next(merge(data, loaderData || {}))
+            let loaderData
+            try {
+              loaderData = await this.options.loader(data)
+              if (loaderData) {
+                loadedData = merge(loaderData, loadedData)
+              }
+            } catch (e) {
+              loadedData = e
+            }
+            return await next(loadedData)
           }
-          return await next(data)
+          return await next(loadedData)
         }
-        return await middlewares[index].run({
-          data: data as ParentLoaderData,
-          next: async newData => runMiddlewares(index + 1, merge(data, newData || {})),
-        })
+
+        return await middlewares[index]
+          .run({
+            data: data as ParentLoaderData,
+            next: async newData => {
+              if (newData) {
+                loadedData = merge(newData, loadedData)
+              }
+              return runMiddlewares(index + 1, merge(data, newData || {}))
+            },
+          })
+          .catch(e => {
+            loadedData = e
+          })
       })()
     }
 
