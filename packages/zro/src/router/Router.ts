@@ -63,7 +63,6 @@ export class Router {
             if (index >= routes.length) {
               return dataPerRoute
             }
-
             return await routes[index].load(data, async (newData: any): Promise<any> => {
               dataPerRoute.set(routes[index].getPath(), newData)
               // if didn't error, load next route

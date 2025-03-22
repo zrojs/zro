@@ -1,5 +1,5 @@
 import { createContext, FC, HTMLProps, MouseEvent, PropsWithChildren, startTransition, Suspense, use, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 import { isRedirectResponse, Route, Router as ZroRouter } from '../router'
 import { Cache } from './cache'
 
@@ -34,6 +34,7 @@ export const Router: FC<RouterProps> = ({ router }) => {
       const loaderFn = () =>
         router.load(req).then(data => {
           if (data instanceof Response && isRedirectResponse(data)) {
+            Cache.delete(reqKey)
             return data
           }
           return data
@@ -84,11 +85,23 @@ export const Router: FC<RouterProps> = ({ router }) => {
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
-  console.log(tree)
+
   return (
-    <navigateContext.Provider value={navigateValue}>
-      <RenderTree tree={tree} />
-    </navigateContext.Provider>
+    <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
+      <navigateContext.Provider value={navigateValue}>
+        <RenderTree tree={tree} />
+      </navigateContext.Provider>
+    </ErrorBoundary>
+  )
+}
+
+const GlobalErrorBoundary: FC<FallbackProps> = ({ error }) => {
+  console.error(error)
+  return (
+    <div>
+      <h2>{error.message}</h2>
+      <span style={{ whiteSpace: 'pre' }}>{error.stack}</span>
+    </div>
   )
 }
 

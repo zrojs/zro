@@ -1,7 +1,8 @@
 import { Middleware, redirect } from 'zro/router'
 
 export const middlewares = [
-  new Middleware(({ next }) => {
+  new Middleware(async ({ next }) => {
+    await new Promise(r => setTimeout(r, 3000))
     redirect('/')
     return next()
   }),
