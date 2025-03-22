@@ -109,21 +109,12 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.0.14
         version: 4.0.14(vite@6.2.2(jiti@2.4.2)(lightningcss@1.29.2))
-      '@tanstack/react-query':
-        specifier: ^5.69.0
-        version: 5.69.0(react@19.0.0)
-      '@types/react-dom':
-        specifier: ^19.0.4
-        version: 19.0.4(@types/react@19.0.11)
       nodemon:
         specifier: ^3.1.9
         version: 3.1.9
       tailwindcss:
         specifier: ^4.0.14
         version: 4.0.14
-      turbo-stream:
-        specifier: ^3.1.0
-        version: 3.1.0
       zro:
         specifier: workspace:*
         version: link:../packages/zro
@@ -131,6 +122,12 @@ importers:
       '@types/react':
         specifier: ^19.0.11
         version: 19.0.11
+      '@types/react-dom':
+        specifier: ^19.0.4
+        version: 19.0.4(@types/react@19.0.11)
+      vite:
+        specifier: ^6.2.2
+        version: 6.2.2(jiti@2.4.2)(lightningcss@1.29.2)
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.8.2)(vite@6.2.2(jiti@2.4.2)(lightningcss@1.29.2))
@@ -583,14 +580,6 @@ packages:
     resolution: {integrity: sha512-y69ztPTRFy+13EPS/7dEFVl7q2Goh1pQueVO8IfGeyqSpcx/joNJXFk0lLhMgUbF0VFJotwRSb9ZY7Xoq3r26Q==}
     peerDependencies:
       vite: ^5.2.0 || ^6
-
-  '@tanstack/query-core@5.69.0':
-    resolution: {integrity: sha512-Kn410jq6vs1P8Nm+ZsRj9H+U3C0kjuEkYLxbiCyn3MDEiYor1j2DGVULqAz62SLZtUZ/e9Xt6xMXiJ3NJ65WyQ==}
-
-  '@tanstack/react-query@5.69.0':
-    resolution: {integrity: sha512-Ift3IUNQqTcaFa1AiIQ7WCb/PPy8aexZdq9pZWLXhfLcLxH0+PZqJ2xFImxCpdDZrFRZhLJrh76geevS5xjRhA==}
-    peerDependencies:
-      react: ^18 || ^19
 
   '@types/esprima@4.0.6':
     resolution: {integrity: sha512-lIk+kSt9lGv5hxK6aZNjiUEGZqKmOTpmg0tKiJQI+Ow98fLillxsiZNik5+RcP7mXL929KiTH/D9jGtpDlMbVw==}
@@ -1333,9 +1322,6 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  turbo-stream@3.1.0:
-    resolution: {integrity: sha512-tVI25WEXl4fckNEmrq70xU1XumxUwEx/FZD5AgEcV8ri7Wvrg2o7GEq8U7htrNx3CajciGm+kDyhRf5JB6t7/A==}
-
   typescript@5.8.2:
     resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
     engines: {node: '>=14.17'}
@@ -1767,13 +1753,6 @@ snapshots:
       lightningcss: 1.29.2
       tailwindcss: 4.0.14
       vite: 6.2.2(jiti@2.4.2)(lightningcss@1.29.2)
-
-  '@tanstack/query-core@5.69.0': {}
-
-  '@tanstack/react-query@5.69.0(react@19.0.0)':
-    dependencies:
-      '@tanstack/query-core': 5.69.0
-      react: 19.0.0
 
   '@types/esprima@4.0.6':
     dependencies:
@@ -2500,8 +2479,6 @@ snapshots:
       typescript: 5.8.2
 
   tslib@2.8.1: {}
-
-  turbo-stream@3.1.0: {}
 
   typescript@5.8.2: {}
 

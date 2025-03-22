@@ -1,6 +1,6 @@
-import { createContext, FC, HTMLProps, MouseEvent, PropsWithChildren, startTransition, Suspense, use, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, FC, HTMLProps, MouseEvent, PropsWithChildren, startTransition, Suspense, use, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Route, Router as ZroRouter } from '../router'
+import { isRedirectResponse, Route, Router as ZroRouter } from '../router'
 import { Cache } from './cache'
 
 export type RouterProps = {
@@ -19,10 +19,10 @@ let currentLoadingRoute: { path: string; loader: Promise<any> | null; cacheKey: 
 
 const getRouterCacheKey = (request: Request) => JSON.stringify(request.url)
 
-type NavigateFn = (url: string) => void
+type NavigateFn = (url: string, options: { replace?: boolean }) => void
 type NavigateContext = { navigate: NavigateFn }
 const navigateContext = createContext<NavigateContext>(null!)
-const useNavigate = () => useContext(navigateContext)
+export const useNavigate = () => useContext(navigateContext)
 
 export const Router: FC<RouterProps> = ({ router }) => {
   const [url, setUrl] = useState(window.location.pathname)
@@ -31,7 +31,13 @@ export const Router: FC<RouterProps> = ({ router }) => {
     if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
       const req = new Request(new URL(url, window.location.origin))
       const reqKey = getRouterCacheKey(req)
-      const loaderFn = () => router.load(req)
+      const loaderFn = () =>
+        router.load(req).then(data => {
+          if (data instanceof Response && isRedirectResponse(data)) {
+            return data
+          }
+          return data
+        })
       if (!Cache.getRevalidateCallback(reqKey)) Cache.setRevalidateCallback(reqKey, loaderFn)
       currentLoadingRoute.loader = Cache.get(reqKey) || Cache.set(reqKey, loaderFn())
       currentLoadingRoute.path = routeInfo.route.getPath()
@@ -40,20 +46,18 @@ export const Router: FC<RouterProps> = ({ router }) => {
     return routeInfo
   }, [url])
 
-  const navigateValue = useMemo(() => {
+  const navigateValue = useMemo((): NavigateContext => {
     return {
-      navigate: (url: string, { replace = false }: { replace?: boolean }) => {
+      navigate: (url, { replace = false }) => {
         if (replace) window.history.replaceState({}, '', url)
         else window.history.pushState({}, '', url)
       },
     } as NavigateContext
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.history.pushState = new Proxy(window.history.pushState, {
       apply: (target, thisArg, argArray) => {
-        // trigger here what you need
-        // Handle the browser Back Button.
         startTransition(() => {
           setUrl(argArray[2])
         })
@@ -62,7 +66,6 @@ export const Router: FC<RouterProps> = ({ router }) => {
     })
     window.history.replaceState = new Proxy(window.history.replaceState, {
       apply: (target, thisArg, argArray) => {
-        // trigger here what you need
         startTransition(() => {
           setUrl(argArray[2])
         })
@@ -81,7 +84,7 @@ export const Router: FC<RouterProps> = ({ router }) => {
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
-
+  console.log(tree)
   return (
     <navigateContext.Provider value={navigateValue}>
       <RenderTree tree={tree} />
@@ -144,6 +147,7 @@ const RouteErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
 const RenderRouteComponent: FC = () => {
   const { route } = use(OutletContext)
   const loaderData = useLoaderData()
+
   const routeProps = route.getProps() as any
   return <routeProps.component loaderData={loaderData} />
 }
@@ -162,7 +166,14 @@ export const Link: FC<HTMLProps<HTMLAnchorElement>> = props => {
 export const useLoaderData = () => {
   const currentData = use(currentLoadingRoute.loader!)
   const route = useContext(OutletContext).route
-  const data = currentData.get(route.getPath())
+  const { navigate } = useNavigate()
+  useLayoutEffect(() => {
+    if (currentData instanceof Response && isRedirectResponse(currentData)) {
+      const url = new URL(currentData.headers.get('Location')!)
+      navigate(url.pathname, { replace: true })
+    }
+  }, [currentData])
+  const data = currentData instanceof Map ? currentData.get(route.getPath()) : null
   if (data instanceof Error) throw data
   return data
 }

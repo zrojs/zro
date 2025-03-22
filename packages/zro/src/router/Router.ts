@@ -3,7 +3,7 @@ import { addRoute, createRouter, findRoute } from 'rou3'
 import { createContext, withAsyncContext } from 'unctx'
 import { ResolvableHead } from 'unhead/types'
 import { Route } from './Route'
-import { abort } from './utils'
+import { abort, isRedirectResponse } from './utils'
 
 type RequestContext = {
   request: Request
@@ -69,6 +69,9 @@ export class Router {
               // if didn't error, load next route
               if (newData instanceof Error) {
                 return dataPerRoute
+              }
+              if (newData instanceof Response && isRedirectResponse(newData)) {
+                return newData
               }
               return loadRoutes(index + 1, toMerged(data, newData!))
             })
