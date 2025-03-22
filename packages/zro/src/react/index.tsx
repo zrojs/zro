@@ -137,7 +137,6 @@ export const Outlet = () => {
 const RouteErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
   const { route } = useContext(OutletContext)
   const routeProps = route.getProps() as any
-  console.log(route.getPath(), routeProps)
   if (routeProps.errorBoundary) return <ErrorBoundary FallbackComponent={routeProps.errorBoundary}>{children}</ErrorBoundary>
   return children
 }

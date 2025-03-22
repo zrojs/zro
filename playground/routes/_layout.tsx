@@ -36,6 +36,7 @@ export default function RootLayout() {
       <div className="flex gap-2">
         <Link href="/">[HOME]</Link>
         <Link href="/blog">[BLOG]</Link>
+        <Link href="/dashboard">[DASHBOARD]</Link>
       </div>
       <Outlet />
     </div>
