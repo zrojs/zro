@@ -1,5 +1,7 @@
-import { Outlet } from 'zro/react'
+import { Outlet, useLoaderData } from 'zro/react'
 import { Middleware } from 'zro/router'
+
+type Route = Routes['/dashboard/_layout']
 
 export const loader = () => {
   return {
@@ -8,21 +10,22 @@ export const loader = () => {
 }
 
 export const middlewares = [
-  new Middleware(({ next }) =>
-    next({
+  new Middleware(async ({ next }) => {
+    return next({
       user: {
         name: 'nariman movaffaghi',
         email: 'nariman.movaffaghi@gmail.com',
       },
-    }),
-  ),
+    })
+  }),
 ] as const
 
 export default function DashboardLayout() {
+  const loaderData = useLoaderData<Route>()
   return (
     <div className="flex flex-col gap-2">
       <h1>Dashboard</h1>
-      <p>Welcome to the dashboard</p>
+      <p>Welcome to the dashboard, {loaderData.user.name}</p>
       <Outlet />
     </div>
   )
