@@ -1,5 +1,6 @@
-import { mkdir, writeFile } from 'fs/promises'
 import { genSafeVariableName } from 'knitwork'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { relative } from 'node:path'
 import { joinURL } from 'ufo'
 import { createUnimport, Import } from 'unimport'
 import { Tree } from '.'
@@ -30,7 +31,7 @@ declare global {
     imports.push({
       name: '*',
       as: genSafeVariableName(`import_${route.path}`),
-      from: route.filePath,
+      from: relative(destDir, route.filePath).replace(/\.[^/.]+$/, ''),
     })
     code = code.replace(
       '--code',

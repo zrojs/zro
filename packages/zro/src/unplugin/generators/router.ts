@@ -1,5 +1,6 @@
-import { mkdir, writeFile } from 'fs/promises'
 import { genSafeVariableName } from 'knitwork'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { relative } from 'node:path'
 import { joinURL } from 'ufo'
 import { createUnimport, Import } from 'unimport'
 import { Tree } from '.'
@@ -21,7 +22,7 @@ export const createRouterFile = async (tree: Tree['children'], destDir: string) 
     imports.push({
       name: '*',
       as: genSafeVariableName(`import_${route.path}`),
-      from: route.filePath,
+      from: relative(destDir, route.filePath).replace(/\.[^/.]+$/, ''),
     })
 
     code += `const ${genSafeVariableName(`route_${route.path}`)} = new Route(${JSON.stringify(route.path)}, {
