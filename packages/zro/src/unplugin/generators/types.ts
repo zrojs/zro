@@ -36,7 +36,7 @@ declare global {
       '--code',
       `${JSON.stringify(route.path)}: Route<${JSON.stringify(route.path)}, LoaderReturnType<typeof ${genSafeVariableName(`import_${route.path}`)}.loader>, ${
         parent ? `RouteData<Routes[${JSON.stringify(parent?.path)}]>` : `{}`
-      }>,\n    --code`,
+      }, ${route.moduleInfo?.hasMiddleware ? `typeof ${genSafeVariableName(`import_${route.path}`)}.middlewares` : `[]`}>,\n    --code`,
     )
 
     for (const child of Object.values(route.children)) {

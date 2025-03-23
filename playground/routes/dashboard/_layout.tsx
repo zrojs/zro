@@ -1,4 +1,5 @@
-import { Middleware, redirect } from 'zro/router'
+import { Outlet } from 'zro/react'
+import { Middleware } from 'zro/router'
 
 export const loader = () => {
   return {
@@ -7,23 +8,22 @@ export const loader = () => {
 }
 
 export const middlewares = [
-  new Middleware(async ({ next }) => {
-    await new Promise(r => setTimeout(r, 3000))
-    redirect('/')
-    return next({
+  new Middleware(({ next }) =>
+    next({
       user: {
         name: 'nariman movaffaghi',
         email: 'nariman.movaffaghi@gmail.com',
       },
-    })
-  }),
-]
+    }),
+  ),
+] as const
 
 export default function DashboardLayout() {
   return (
     <div className="flex flex-col gap-2">
       <h1>Dashboard</h1>
       <p>Welcome to the dashboard</p>
+      <Outlet />
     </div>
   )
 }

@@ -24,7 +24,7 @@ export const loader = async () => {
 }
 
 export default function BlogPage() {
-  const loaderData = useLoaderData()
+  const loaderData = useLoaderData<Route>()
   return (
     <div>
       <p>Blog page</p>

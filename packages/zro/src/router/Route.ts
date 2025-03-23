@@ -10,11 +10,12 @@ import { Merge, MergeMiddlewaresReturnType } from './utils/types'
 export type MetaFunction<LoaderData> = (data: LoaderData) => ResolvableHead
 export type LoaderReturnType<T extends () => any> = T extends () => infer R ? Awaited<R> : never
 export type RouteData<R extends Route<any, any>> = R extends Route<any, any, any, any, infer D> ? D : never
+export type RouteLoaderData<R extends Route<any, any>> = R extends Route<any, any, any, any, any, infer D> ? D : never
 
-export type LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares extends Middleware<ParentLoaderData, any>[]> = {
+export type LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares extends readonly Middleware<any, any>[]> = {
   parent?: Route<any, ParentLoaderData>
   loader?: () => LoaderData | Promise<LoaderData>
-  middlewares: readonly [...TMiddlewares]
+  middlewares: TMiddlewares
   actions: Action[]
   meta?: MetaFunction<LoaderData>
   props?: Record<string, any>
@@ -24,8 +25,9 @@ export class Route<
   RouteId,
   LoaderData,
   ParentLoaderData = any,
-  TMiddlewares extends Middleware<ParentLoaderData, any>[] = Middleware<ParentLoaderData, any>[],
+  TMiddlewares extends readonly Middleware<any, any>[] = Middleware<any, any>[],
   Data = Merge<Merge<ParentLoaderData, MergeMiddlewaresReturnType<TMiddlewares>>, LoaderData>,
+  DataToLoaders = Merge<ParentLoaderData, MergeMiddlewaresReturnType<TMiddlewares>>,
 > {
   private options: LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares>
 
@@ -54,8 +56,8 @@ export class Route<
     return this.options.props
   }
 
-  public getRouteTree = (): Route<any, any, any, any[], any>[] => {
-    const routes: Route<any, any, any, any[], any>[] = [this]
+  public getRouteTree = (): Route<any, any, any, readonly any[], any, any>[] => {
+    const routes: Route<any, any, any, readonly any[], any, any>[] = [this]
     while (routes[0].getParent()) {
       routes.unshift(routes[0].getParent() as Route<any, any>)
     }
