@@ -7,11 +7,14 @@ import { abort, isRedirectResponse } from './utils'
 
 type RequestContext = {
   request: Request
-  params?: Record<string, string>
+  params: Record<string, string>
 }
 
 const requestContext = createContext<RequestContext>()
 export const useRequest = requestContext.use
+
+export const dataContext = createContext<any>()
+export const useDataContext = dataContext.use as <R extends Route<any, any>>() => R extends Route<any, any, infer P> ? P : any
 
 const HeadContext = createContext<ResolvableHead>()
 export const useHead = HeadContext.use
@@ -56,25 +59,32 @@ export class Router {
     if (routeInfo) {
       const { params, tree: routes } = routeInfo
       return requestContext.callAsync(
-        { request, params },
+        { request, params: params || {} },
         withAsyncContext(async () => {
           const dataPerRoute: Map<string, any> = new Map()
+
           const loadRoutes = async (index: number = 0, data: any = {}) => {
             if (index >= routes.length) {
               return dataPerRoute
             }
-            return await routes[index].load(data, async (newData: any): Promise<any> => {
-              dataPerRoute.set(routes[index].getPath(), newData)
-              // if didn't error, load next route
-              if (newData instanceof Error) {
-                return dataPerRoute
-              }
-              if (newData instanceof Response && isRedirectResponse(newData)) {
-                return newData
-              }
-              return loadRoutes(index + 1, toMerged(data, newData!))
-            })
+            return dataContext.callAsync(
+              data,
+              withAsyncContext(async () => {
+                return await routes[index].load(async (newData: any): Promise<any> => {
+                  dataPerRoute.set(routes[index].getPath(), newData)
+                  // if didn't error, load next route
+                  if (newData instanceof Error) {
+                    return dataPerRoute
+                  }
+                  if (newData instanceof Response && isRedirectResponse(newData)) {
+                    return newData
+                  }
+                  return loadRoutes(index + 1, toMerged(data, newData!))
+                })
+              }),
+            )
           }
+
           return await loadRoutes()
         }),
       )

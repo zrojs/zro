@@ -26,7 +26,8 @@
     "emitDeclarationOnly": false,
     "rootDir": ".",
     "outDir": "dist",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
   },
   "tsc-alias": {
     "resolveFullPaths": true,

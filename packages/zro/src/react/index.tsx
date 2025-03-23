@@ -1,6 +1,6 @@
 import { createContext, FC, HTMLProps, MouseEvent, PropsWithChildren, startTransition, Suspense, use, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
-import { isRedirectResponse, Route, Router as ZroRouter } from '../router'
+import { isRedirectResponse, Route, RouteData, Router as ZroRouter } from '../router'
 import { Cache } from './cache'
 
 export type RouterProps = {
@@ -176,7 +176,7 @@ export const Link: FC<HTMLProps<HTMLAnchorElement>> = props => {
   return <a {...props} onClick={onClick} />
 }
 
-export const useLoaderData = () => {
+export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
   const currentData = use(currentLoadingRoute.loader!)
   const route = useContext(OutletContext).route
   const { navigate } = useNavigate()

@@ -1,5 +1,6 @@
 import { defu } from 'defu'
 import { merge } from 'es-toolkit'
+import { dataContext } from 'src/router/Router'
 import { withAsyncContext } from 'unctx'
 import type { ResolvableHead } from 'unhead/types'
 import { Action } from './Action'
@@ -7,14 +8,12 @@ import { Middleware } from './Middleware'
 import { Merge, MergeMiddlewaresReturnType } from './utils/types'
 
 export type MetaFunction<LoaderData> = (data: LoaderData) => ResolvableHead
-
-type LoaderArgs<ParentLoaderData> = {
-  data: ParentLoaderData
-}
+export type LoaderReturnType<T extends () => any> = T extends () => infer R ? Awaited<R> : never
+export type RouteData<R extends Route<any, any>> = R extends Route<any, any, any, any, infer D> ? D : never
 
 export type LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares extends Middleware<ParentLoaderData, any>[]> = {
   parent?: Route<any, ParentLoaderData>
-  loader?: (args: LoaderArgs<ParentLoaderData>) => LoaderData | Promise<LoaderData>
+  loader?: () => LoaderData | Promise<LoaderData>
   middlewares: readonly [...TMiddlewares]
   actions: Action[]
   meta?: MetaFunction<LoaderData>
@@ -63,7 +62,7 @@ export class Route<
     return routes
   }
 
-  public async load(parentData: ParentLoaderData = {} as ParentLoaderData, next: (data: any) => Promise<any> = async (data: any) => data): Promise<Data> {
+  public async load(next: (data: any) => Promise<any> = async (data: any) => data): Promise<Data> {
     const middlewares = this.options.middlewares
     let loadedData: any = {}
 
@@ -73,7 +72,7 @@ export class Route<
           if (this.options.loader) {
             let loaderData
             try {
-              loaderData = await this.options.loader(data)
+              loaderData = await this.options.loader()
               if (loaderData) {
                 loadedData = merge(loaderData, loadedData)
               }
@@ -84,15 +83,15 @@ export class Route<
           }
           return await next(loadedData)
         }
-
-        return await middlewares[index].run({
-          data: data as ParentLoaderData,
-          next: async newData => {
-            if (newData) {
-              loadedData = merge(newData, loadedData)
-            }
-            return runMiddlewares(index + 1, merge(data, newData || {}))
-          },
+        return dataContext.callAsync(data, async () => {
+          return await middlewares[index].run({
+            next: async newData => {
+              if (newData) {
+                loadedData = merge(newData, loadedData)
+              }
+              return runMiddlewares(index + 1, merge(data, newData || {}))
+            },
+          })
         })
       })().catch(e => {
         loadedData = e
@@ -100,6 +99,6 @@ export class Route<
       })
     }
 
-    return (await runMiddlewares(0, parentData)) as Data
+    return (await runMiddlewares(0)) as Data
   }
 }

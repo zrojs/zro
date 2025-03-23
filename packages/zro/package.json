@@ -12,6 +12,10 @@
       "types": "./dist/src/router/index.d.ts",
       "import": "./dist/src/router/index.js"
     },
+    "./router/types": {
+      "types": "./dist/src/router/utils/types.d.ts",
+      "import": "./dist/src/router/utils/types.js"
+    },
     "./unplugin": {
       "types": "./dist/src/unplugin/index.d.ts",
       "import": "./dist/src/unplugin/index.js"

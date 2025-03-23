@@ -1,3 +1,4 @@
+import { Route } from 'src/router/Route'
 import { Middleware, MiddlewareReturnType } from '../Middleware'
 
 export type Prettify<T> = {
@@ -14,3 +15,6 @@ export type MergeMiddlewaresReturnType<TArr extends readonly Middleware<any, any
 ]
   ? MergeMiddlewaresReturnType<TRest, Merge<T1, MiddlewareReturnType<T2>>>
   : T1
+
+export type TRouteLoaderData<R extends Route<any, any>> = R extends Route<any, infer L> ? L : never
+export type TRouteParentData<R extends Route<any, any>> = R extends Route<any, any, infer L> ? L : never

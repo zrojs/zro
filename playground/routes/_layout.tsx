@@ -2,7 +2,7 @@ import { Link, Outlet } from 'zro/react'
 import { MetaFunction } from 'zro/router'
 import styles from './styles.css?url'
 
-export const loader = data => {
+export const loader = async () => {
   return {
     version: '1.2',
   }

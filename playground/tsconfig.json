@@ -6,6 +6,7 @@
     "module": "esnext",
     "types": [
       "vite/client",
+      "./.zro/router.types.d.ts",
     ],
     "moduleResolution": "Bundler",
     "baseUrl": ".",

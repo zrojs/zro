@@ -2,24 +2,24 @@ import { Suspense, use } from 'react'
 import { Link, useLoaderData } from 'zro/react'
 import { posts } from '~/data'
 
+type Route = Routes['/blog/']
+
 export const loader = async () => {
   const timestamp = new Date()
   return {
     timestamp,
-    posts: new Promise(r =>
-      setTimeout(
-        r.bind(null, [
-          ...posts,
-          {
-            id: 3,
-            title: 'Not found',
-            content: `-`,
-            createdAt: new Date('2021-01-02'),
-          },
-        ]),
-        1000,
-      ),
-    ),
+    posts: new Promise<typeof posts>(async resolve => {
+      await new Promise(r => setTimeout(r.bind(null), 1000))
+      resolve([
+        ...posts,
+        {
+          id: 3,
+          title: 'Not found',
+          content: `-`,
+          createdAt: new Date('2021-01-02'),
+        },
+      ])
+    }),
   }
 }
 
@@ -39,7 +39,7 @@ export default function BlogPage() {
 }
 
 const Posts = () => {
-  const loaderData = useLoaderData()
+  const loaderData = useLoaderData<Route>()
   const posts = use(loaderData.posts)
   return posts.map(({ id, title, createdAt }) => {
     return (

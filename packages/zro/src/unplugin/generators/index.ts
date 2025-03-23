@@ -3,6 +3,7 @@
 import { existsSync } from 'fs'
 import { loadFile } from 'magicast'
 import { exit } from 'process'
+import { createTypesFile } from 'src/unplugin/generators/types'
 import glob from 'tiny-glob'
 import { joinURL } from 'ufo'
 import { logger } from '../../utils/log'
@@ -149,5 +150,6 @@ export const prepare = async ({ routesDir }: PrepareOptions) => {
   const routeTree = await (await buildTree(files, routesDir)).children
 
   await createRouterFile(routeTree, joinURL(process.cwd(), '.zro'))
+  await createTypesFile(routeTree, joinURL(process.cwd(), '.zro'))
   // console.log(routeTree)
 }
