@@ -3,7 +3,7 @@ import { unctxPlugin } from 'unctx/plugin'
 import { createUnplugin, UnpluginOptions } from 'unplugin'
 import { prepare } from './generators'
 
-type ZroUnpluginOptions = {}
+type ZroUnpluginOptions = {} | undefined
 export default createUnplugin<ZroUnpluginOptions>((options, meta) => {
   const routesDir = process.cwd() + '/routes'
   return [
