@@ -1,7 +1,8 @@
 import { toMerged } from 'es-toolkit'
 import { addRoute, createRouter, findRoute } from 'rou3'
 import { createContext, withAsyncContext } from 'unctx'
-import { ResolvableHead } from 'unhead/types'
+import { createHead } from 'unhead/client'
+import { ResolvableHead, Unhead } from 'unhead/types'
 import { Route } from './Route'
 import { abort, isRedirectResponse } from './utils'
 
@@ -16,7 +17,7 @@ export const useRequest = requestContext.use
 export const dataContext = createContext<any>()
 export const useDataContext = dataContext.use as <R extends Route<any, any>>() => R extends Route<any, any, any, any, any, infer P> ? P : any
 
-const HeadContext = createContext<ResolvableHead>()
+const HeadContext = createContext<Unhead<ResolvableHead>>()
 export const useHead = HeadContext.use
 
 export class Router {
@@ -56,39 +57,44 @@ export class Router {
   public async load(request: Request) {
     const path = new URL(request.url).pathname
     const routeInfo = this.findRoute(path)
+    const head = createHead()
     if (routeInfo) {
       const { params, tree: routes } = routeInfo
       return requestContext.callAsync(
         { request, params: params || {} },
         withAsyncContext(async () => {
-          const dataPerRoute: Map<string, any> = new Map()
-
-          const loadRoutes = async (index: number = 0, data: any = {}) => {
-            if (index >= routes.length) {
-              return dataPerRoute
-            }
-            return dataContext.callAsync(
-              data,
-              withAsyncContext(async () => {
-                return await routes[index].load(async (newData: any): Promise<any> => {
-                  dataPerRoute.set(routes[index].getPath(), newData)
-                  // if didn't error, load next route
-                  if (newData instanceof Error) {
-                    return dataPerRoute
-                  }
-                  if (newData instanceof Response && isRedirectResponse(newData)) {
-                    return newData
-                  }
-                  return loadRoutes(index + 1, toMerged(data, newData!))
-                })
-              }),
-            )
-          }
-
-          return await loadRoutes()
+          return HeadContext.callAsync(
+            head,
+            withAsyncContext(async () => {
+              const dataPerRoute: Map<string, any> = new Map()
+              const loadRoutes = async (index: number = 0, data: any = {}) => {
+                if (index >= routes.length) {
+                  return dataPerRoute
+                }
+                return dataContext.callAsync(
+                  data,
+                  withAsyncContext(async () => {
+                    return await routes[index].load(async (newData: any): Promise<any> => {
+                      dataPerRoute.set(routes[index].getPath(), newData)
+                      // if didn't error, load next route
+                      if (newData instanceof Error) {
+                        return dataPerRoute
+                      }
+                      if (newData instanceof Response && isRedirectResponse(newData)) {
+                        return newData
+                      }
+                      return loadRoutes(index + 1, toMerged(data, newData!))
+                    })
+                  }),
+                )
+              }
+              return { data: await loadRoutes(), head }
+            }),
+          )
         }),
       )
     }
+
     throw new Error('Route not found')
   }
 }

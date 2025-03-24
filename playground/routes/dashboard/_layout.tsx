@@ -11,6 +11,7 @@ export const loader = () => {
 
 export const middlewares = [
   new Middleware(async ({ next }) => {
+    // redirect('/') // TODO: bug, when redirect to /, the component renders! and throws error for data access <p>Welcome to the dashboard, {loaderData.user.name}</p>
     return next({
       user: {
         name: 'nariman movaffaghi',

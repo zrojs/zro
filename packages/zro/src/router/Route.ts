@@ -1,13 +1,13 @@
 import { defu } from 'defu'
 import { merge } from 'es-toolkit'
-import { dataContext } from 'src/router/Router'
+import { dataContext, useHead } from 'src/router/Router'
 import { withAsyncContext } from 'unctx'
 import type { ResolvableHead } from 'unhead/types'
 import { Action } from './Action'
 import { Middleware } from './Middleware'
 import { Merge, MergeMiddlewaresReturnType } from './utils/types'
 
-export type MetaFunction<LoaderData> = (data: LoaderData) => ResolvableHead
+export type MetaFunction = () => ResolvableHead
 export type LoaderReturnType<T extends () => any> = T extends () => infer R ? Awaited<R> : never
 export type RouteData<R extends Route<any, any>> = R extends Route<any, any, any, any, infer D> ? D : never
 export type RouteLoaderData<R extends Route<any, any>> = R extends Route<any, any, any, any, any, infer D> ? D : never
@@ -17,7 +17,7 @@ export type LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares extends rea
   loader?: () => LoaderData | Promise<LoaderData>
   middlewares: TMiddlewares
   actions: Action[]
-  meta?: MetaFunction<LoaderData>
+  meta?: MetaFunction
   props?: Record<string, any>
 }
 
@@ -77,6 +77,10 @@ export class Route<
               loaderData = await this.options.loader()
               if (loaderData) {
                 loadedData = merge(loaderData, loadedData)
+              }
+              const head = useHead()
+              if (this.options.meta) {
+                head.push(this.options.meta())
               }
             } catch (e) {
               loadedData = e

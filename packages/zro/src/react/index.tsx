@@ -1,5 +1,6 @@
 import { createContext, FC, HTMLProps, MouseEvent, PropsWithChildren, startTransition, Suspense, use, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
+import { useHeadSafe } from 'unhead'
 import { isRedirectResponse, Route, RouteData, Router as ZroRouter } from '../router'
 import { Cache } from './cache'
 
@@ -26,18 +27,20 @@ export const useNavigate = () => useContext(navigateContext)
 
 export const Router: FC<RouterProps> = ({ router }) => {
   const [url, setUrl] = useState(window.location.pathname)
+
   const { route, params, tree } = useMemo(() => {
     const routeInfo = router.findRoute(url)!
     if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
       const req = new Request(new URL(url, window.location.origin))
       const reqKey = getRouterCacheKey(req)
       const loaderFn = () =>
-        router.load(req).then(data => {
-          if (data instanceof Response && isRedirectResponse(data)) {
+        router.load(req).then(ctx => {
+          if (ctx instanceof Response && isRedirectResponse(ctx)) {
             Cache.delete(reqKey)
-            return data
+            return ctx
           }
-          return data
+          useHeadSafe(ctx.head)
+          return ctx.data
         })
       if (!Cache.getRevalidateCallback(reqKey)) Cache.setRevalidateCallback(reqKey, loaderFn)
       currentLoadingRoute.loader = Cache.get(reqKey) || Cache.set(reqKey, loaderFn())

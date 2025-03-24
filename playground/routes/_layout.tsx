@@ -19,7 +19,7 @@ export const loader = async () => {
 //   }),
 // ]
 
-export const meta: MetaFunction<any> = () => {
+export const meta: MetaFunction = () => {
   return {
     link: [
       {
@@ -33,7 +33,7 @@ export const meta: MetaFunction<any> = () => {
 export default function RootLayout() {
   return (
     <div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 [&>a]:text-blue-700">
         <Link href="/">[HOME]</Link>
         <Link href="/blog">[BLOG]</Link>
         <Link href="/dashboard">[DASHBOARD]</Link>

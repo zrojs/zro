@@ -28,7 +28,7 @@ export default function BlogPage() {
   return (
     <div>
       <p>Blog page</p>
-      <div>
+      <div className="flex flex-col gap-4">
         <span>{loaderData.timestamp.toString()}</span>
         <Suspense fallback={<div>Loading...</div>}>
           <Posts />
@@ -41,14 +41,18 @@ export default function BlogPage() {
 const Posts = () => {
   const loaderData = useLoaderData<Route>()
   const posts = use(loaderData.posts)
-  return posts.map(({ id, title, createdAt }) => {
-    return (
-      <Link href={`/blog/${id}`} key={id}>
-        <h2>{title}</h2>
-        <p>{createdAt.toDateString()}</p>
-      </Link>
-    )
-  })
+  return (
+    <div className="flex gap-2 flex-col">
+      {posts.map(({ id, title, createdAt }) => {
+        return (
+          <Link href={`/blog/${id}`} key={id} className="text-blue-700">
+            <h2 className="text-xl font-bold">{title}</h2>
+            <p className="text-sm font-light">{createdAt.toDateString()}</p>
+          </Link>
+        )
+      })}
+    </div>
+  )
 }
 
 export const Loading = () => {
