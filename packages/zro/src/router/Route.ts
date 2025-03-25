@@ -1,6 +1,6 @@
 import { defu } from 'defu'
 import { merge } from 'es-toolkit'
-import { dataContext, useHead } from 'src/router/Router'
+import { dataContext, getDataContext, getHead } from 'src/router/Router'
 import { withAsyncContext } from 'unctx'
 import type { ResolvableHead } from 'unhead/types'
 import { Action } from './Action'
@@ -66,7 +66,7 @@ export class Route<
 
   public async load(next: (data: any) => Promise<any> = async (data: any) => data): Promise<Data> {
     const middlewares = this.options.middlewares
-    let loadedData: any = {}
+    let loadedData: any = getDataContext()
 
     const runMiddlewares = async (index: number, data: any = {}): Promise<any> => {
       return withAsyncContext(async () => {
@@ -78,10 +78,15 @@ export class Route<
               if (loaderData) {
                 loadedData = merge(loaderData, loadedData)
               }
-              const head = useHead()
-              if (this.options.meta) {
-                head.push(this.options.meta())
-              }
+              dataContext.callAsync(
+                loadedData,
+                withAsyncContext(async () => {
+                  const head = getHead()
+                  if (head && this.options.meta) {
+                    head.push(await this.options.meta())
+                  }
+                }),
+              )
             } catch (e) {
               loadedData = e
             }

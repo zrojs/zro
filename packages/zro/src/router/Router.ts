@@ -12,13 +12,14 @@ type RequestContext = {
 }
 
 const requestContext = createContext<RequestContext>()
-export const useRequest = requestContext.use
+export const getRequest = requestContext.use
 
 export const dataContext = createContext<any>()
-export const useDataContext = dataContext.use as <R extends Route<any, any>>() => R extends Route<any, any, any, any, any, infer P> ? P : any
+export const getDataContext = dataContext.tryUse as <R extends Route<any, any>>() => R extends Route<any, any, any, any, any, infer P> ? P : any
+export const getLoaderData = dataContext.tryUse as <R extends Route<any, any>>() => R extends Route<any, any, any, any, infer P> ? P : any
 
 const HeadContext = createContext<Unhead<ResolvableHead>>()
-export const useHead = HeadContext.use
+export const getHead = HeadContext.tryUse
 
 export class Router {
   private router = createRouter<Route<any, any>>()

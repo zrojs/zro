@@ -1,10 +1,10 @@
 import { useLoaderData } from 'zro/react'
-import { MetaFunction, useDataContext, useHead } from 'zro/router'
+import { getLoaderData, MetaFunction } from 'zro/router'
 
 type Route = Routes['/dashboard/']
 
 export const meta: MetaFunction = () => {
-  const data = useDataContext<Route>()
+  const data = getLoaderData<Route>()
   return {
     title: 'Dashboard',
     titleTemplate(title) {
@@ -14,9 +14,6 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader = async () => {
-  const data = useDataContext<Route>() // merged parent and middlewares
-  const head = useHead()
-
   return {}
 }
 export default function DashboardPage() {
