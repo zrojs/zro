@@ -1,6 +1,4 @@
 import { Link, Outlet } from 'zro/react'
-import { MetaFunction } from 'zro/router'
-import styles from './styles.css?url'
 
 export const loader = async () => {
   return {
@@ -19,16 +17,16 @@ export const loader = async () => {
 //   }),
 // ]
 
-export const meta: MetaFunction = () => {
-  return {
-    link: [
-      {
-        href: styles,
-        rel: 'stylesheet',
-      },
-    ],
-  }
-}
+// export const meta: MetaFunction = () => {
+//   return {
+//     link: [
+//       {
+//         href: styles,
+//         rel: 'stylesheet',
+//       },
+//     ],
+//   }
+// }
 
 export default function RootLayout() {
   return (

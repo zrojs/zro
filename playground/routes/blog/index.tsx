@@ -1,15 +1,14 @@
 import { Suspense, use } from 'react'
 import { Link, useLoaderData } from 'zro/react'
-import { MetaFunction } from 'zro/router'
 import { posts } from '~/data'
 
 type Route = Routes['/blog/']
 
-export const meta: MetaFunction = () => {
-  return {
-    title: 'Blog',
-  }
-}
+// export const meta: MetaFunction = () => {
+//   return {
+//     title: 'Blog',
+//   }
+// }
 
 export const loader = async () => {
   const timestamp = new Date()

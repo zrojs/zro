@@ -1,18 +1,19 @@
 import { useLoaderData } from 'zro/react'
-import { getLoaderData, getRequest, MetaFunction } from 'zro/router'
+import { getRequest } from 'zro/router'
 import { posts } from '~/data'
 
 type Route = Routes['/blog/:id/']
 
-export const meta: MetaFunction = () => {
-  const data = getLoaderData<Route>()
-  return {
-    title: data.title,
-    titleTemplate(title) {
-      return `${title} - Blog`
-    },
-  }
-}
+// export const meta: MetaFunction = () => {
+//   const data = getLoaderData<Route>()
+//   const head = getHead()
+//   return {
+//     title: data.title,
+//     titleTemplate(title) {
+//       return `${title} - Blog`
+//     },
+//   }
+// }
 
 export const loader = () => {
   const requestContext = getRequest()

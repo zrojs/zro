@@ -21,7 +21,6 @@ export type RouteModuleInfo = {
   hasLoader: boolean
   hasMiddleware: boolean
   hasActions: boolean
-  hasMeta: boolean
   hasLoading: boolean
   hasComponent: boolean
   hasErrorBoundary: boolean
@@ -44,7 +43,6 @@ const getModuleInfo = async (file: string) => {
     hasLoader: !!exports.includes('loader'),
     hasMiddleware: !!exports.includes('middlewares'),
     hasActions: !!exports.includes('actions'),
-    hasMeta: !!exports.includes('meta'),
     hasComponent: !!exports.includes('default'),
     hasErrorBoundary: !!exports.includes('ErrorBoundary'),
     hasLoading: !!exports.includes('Loading'),

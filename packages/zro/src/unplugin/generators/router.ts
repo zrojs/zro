@@ -28,7 +28,6 @@ export const createRouterFile = async (tree: Tree['children'], destDir: string) 
     code += `const ${genSafeVariableName(`route_${route.path}`)} = new Route(${JSON.stringify(route.path)}, {
   parent: ${parent ? genSafeVariableName(`route_${parent.path}`) : 'undefined'},
   loader: ${route.moduleInfo?.hasLoader ? `${genSafeVariableName(`import_${route.path}`)}.loader` : undefined},
-  meta: ${route.moduleInfo?.hasMeta ? `${genSafeVariableName(`import_${route.path}`)}.meta` : undefined},
   middlewares: ${route.moduleInfo?.hasMiddleware ? `${genSafeVariableName(`import_${route.path}`)}.middlewares` : undefined},
   actions: ${route.moduleInfo?.hasActions ? `${genSafeVariableName(`import_${route.path}`)}.actions` : undefined},
   props: {
