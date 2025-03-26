@@ -1,14 +1,9 @@
 import { Suspense, use } from 'react'
 import { Link, useLoaderData } from 'zro/react'
+import { useHead } from 'zro/unhead'
 import { posts } from '~/data'
 
 type Route = Routes['/blog/']
-
-// export const meta: MetaFunction = () => {
-//   return {
-//     title: 'Blog',
-//   }
-// }
 
 export const loader = async () => {
   const timestamp = new Date()
@@ -31,6 +26,9 @@ export const loader = async () => {
 
 export default function BlogPage() {
   const loaderData = useLoaderData<Route>()
+  useHead({
+    title: 'Blog',
+  })
   return (
     <div>
       <p>Blog page</p>

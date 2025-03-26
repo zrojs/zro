@@ -1,5 +1,6 @@
 import { useLoaderData } from 'zro/react'
 import { getRequest } from 'zro/router'
+import { useHead } from 'zro/unhead'
 import { posts } from '~/data'
 
 type Route = Routes['/blog/:id/']
@@ -25,6 +26,12 @@ export const loader = () => {
 
 export default function SingleBlog() {
   const loaderData = useLoaderData<Route>()
+  useHead({
+    title: loaderData.title,
+    titleTemplate(title) {
+      return `${title} - Blog`
+    },
+  })
   return (
     <div className="flex flex-col gap-2">
       <h1>{loaderData.title}</h1>

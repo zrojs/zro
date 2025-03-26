@@ -26,6 +26,9 @@ export default createUnplugin<ZroUnpluginOptions>((options, meta) => {
             esbuild: {
               jsx: 'automatic',
             },
+            resolve: {
+              dedupe: ['react', 'react-dom'],
+            },
             ssr: {
               external: ['zro'],
             },

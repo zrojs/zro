@@ -23,6 +23,7 @@
     "strict": true,
     "skipLibCheck": true,
     "declaration": true,
+    "declarationMap": true,
     "emitDeclarationOnly": false,
     "rootDir": ".",
     "outDir": "dist",

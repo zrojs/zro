@@ -1,7 +1,7 @@
 import { toMerged } from 'es-toolkit'
 import { addRoute, createRouter, findRoute } from 'rou3'
 import { createContext, withAsyncContext } from 'unctx'
-import { createHead } from 'unhead/client'
+import { createHead } from 'unhead/server'
 import { ResolvableHead, Unhead } from 'unhead/types'
 import { Route } from './Route'
 import { abort, isRedirectResponse } from './utils'

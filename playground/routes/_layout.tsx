@@ -1,4 +1,6 @@
 import { Link, Outlet } from 'zro/react'
+import { createHead, Head, UnheadProvider } from 'zro/unhead'
+import styles from './styles.css?url'
 
 export const loader = async () => {
   return {
@@ -17,27 +19,22 @@ export const loader = async () => {
 //   }),
 // ]
 
-// export const meta: MetaFunction = () => {
-//   return {
-//     link: [
-//       {
-//         href: styles,
-//         rel: 'stylesheet',
-//       },
-//     ],
-//   }
-// }
-
+const head = createHead()
 export default function RootLayout() {
   return (
-    <div>
-      <div className="flex gap-2 [&>a]:text-blue-700">
-        <Link href="/">[HOME]</Link>
-        <Link href="/blog">[BLOG]</Link>
-        <Link href="/dashboard">[DASHBOARD]</Link>
+    <UnheadProvider head={head}>
+      <Head>
+        <link href={styles} rel="stylesheet" />
+      </Head>
+      <div>
+        <div className="flex gap-2 [&>a]:text-blue-700">
+          <Link href="/">[HOME]</Link>
+          <Link href="/blog">[BLOG]</Link>
+          <Link href="/dashboard">[DASHBOARD]</Link>
+        </div>
+        <Outlet />
       </div>
-      <Outlet />
-    </div>
+    </UnheadProvider>
   )
 }
 

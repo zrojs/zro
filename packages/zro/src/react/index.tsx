@@ -1,6 +1,5 @@
 import { createContext, FC, HTMLProps, MouseEvent, PropsWithChildren, startTransition, Suspense, use, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
-import { useHeadSafe } from 'unhead'
 import { isRedirectResponse, Route, RouteData, Router as ZroRouter } from '../router'
 import { Cache } from './cache'
 
@@ -39,7 +38,6 @@ export const Router: FC<RouterProps> = ({ router }) => {
             Cache.delete(reqKey)
             return ctx
           }
-          useHeadSafe(ctx.head)
           return ctx.data
         })
       if (!Cache.getRevalidateCallback(reqKey)) Cache.setRevalidateCallback(reqKey, loaderFn)

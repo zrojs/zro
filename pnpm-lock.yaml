@@ -18,6 +18,9 @@ importers:
       '@types/react':
         specifier: ^19.0.11
         version: 19.0.11
+      '@unhead/react':
+        specifier: ^2.0.1
+        version: 2.0.1(react@19.0.0)
       citty:
         specifier: ^0.1.6
         version: 0.1.6
@@ -81,9 +84,6 @@ importers:
       unctx:
         specifier: ^2.4.1
         version: 2.4.1
-      unhead:
-        specifier: 2.0.0-rc.13
-        version: 2.0.0-rc.13
       unimport:
         specifier: ^4.1.2
         version: 4.1.2
@@ -103,6 +103,9 @@ importers:
       typescript:
         specifier: ^5.5.4
         version: 5.8.2
+      unhead:
+        specifier: ^2.0.1
+        version: 2.0.1
 
   playground:
     dependencies:
@@ -594,6 +597,11 @@ packages:
 
   '@types/react@19.0.11':
     resolution: {integrity: sha512-vrdxRZfo9ALXth6yPfV16PYTLZwsUWhVjjC+DkfE5t1suNSbBrWC9YqSuuxJZ8Ps6z1o2ycRpIqzZJIgklq4Tw==}
+
+  '@unhead/react@2.0.1':
+    resolution: {integrity: sha512-D7MeyvvJGSbAvqi7yWua8AwbRbzdnEPOruix7+FDGKcnbN7dHHSBVmKQILYpkjAdvxzT8jo3r5f5W/aVj67hGA==}
+    peerDependencies:
+      react: '>=19'
 
   '@vitest/expect@3.0.8':
     resolution: {integrity: sha512-Xu6TTIavTvSSS6LZaA3EebWFr6tsoXPetOWNMOlc7LO88QVVBwq2oQWBoDiLCN6YTvNYsGSjqOO8CAdjom5DCQ==}
@@ -1339,8 +1347,8 @@ packages:
   undefsafe@2.0.5:
     resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==}
 
-  unhead@2.0.0-rc.13:
-    resolution: {integrity: sha512-cuG4Uu6kS9/zF2+XL/5od6S1J4GJqm3xB/I6PVoXgqEVCKryziGdLo+uaqewgOWnv5y5kDRiSuRQz/7fh0nUfw==}
+  unhead@2.0.1:
+    resolution: {integrity: sha512-OiZ/3lQTbcdSUwSVtIK9U+cmf9uJYVdDA0BbY7rFcdUv1YFdyCWb+QmOzFyMoUNbwkqOLUqDQISWegXJXjCjSA==}
 
   unimport@4.1.2:
     resolution: {integrity: sha512-oVUL7PSlyVV3QRhsdcyYEMaDX8HJyS/CnUonEJTYA3//bWO+o/4gG8F7auGWWWkrrxBQBYOO8DKe+C53ktpRXw==}
@@ -1767,6 +1775,11 @@ snapshots:
   '@types/react@19.0.11':
     dependencies:
       csstype: 3.1.3
+
+  '@unhead/react@2.0.1(react@19.0.0)':
+    dependencies:
+      react: 19.0.0
+      unhead: 2.0.1
 
   '@vitest/expect@3.0.8':
     dependencies:
@@ -2495,7 +2508,7 @@ snapshots:
 
   undefsafe@2.0.5: {}
 
-  unhead@2.0.0-rc.13:
+  unhead@2.0.1:
     dependencies:
       hookable: 5.5.3
 
