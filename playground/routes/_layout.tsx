@@ -22,10 +22,10 @@ import styles from './styles.css?url'
 export default function RootLayout() {
   useHead({
     htmlAttrs: {
-      // lang: 'en',
+      lang: 'en',
     },
     bodyAttrs: {
-      // class: 'bg-red-300',
+      class: 'bg-red-300',
     },
     link: [
       {

@@ -1,7 +1,6 @@
 import { createContext, FC, HTMLProps, MouseEvent, PropsWithChildren, startTransition, Suspense, use, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
-import { UnheadProvider } from 'src/unhead'
-import { createHead } from 'unhead/client'
+import { createHead, UnheadProvider } from 'src/unhead'
 import { ResolvableHead, Unhead } from 'unhead/types'
 import { isRedirectResponse, Route, RouteData, Router as ZroRouter } from '../router'
 import { Cache } from './cache'
@@ -93,14 +92,13 @@ export const Router: FC<RouterProps> = ({ router, initialUrl, cache = new Cache(
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
-
   return (
     <UnheadProvider head={head}>
-      <html lang="en">
+      <html suppressHydrationWarning>
         <head>
           <Meta />
         </head>
-        <body>
+        <body suppressHydrationWarning>
           <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
             <navigateContext.Provider value={navigateValue}>
               <RenderTree tree={tree} />
@@ -214,5 +212,6 @@ export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
 
 export const Meta = () => {
   // const head = useHead()
+  return <></>
   return <Suspense></Suspense>
 }
