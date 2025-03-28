@@ -24,6 +24,10 @@
       "types": "./dist/src/unhead/index.d.ts",
       "import": "./dist/src/unhead/index.js"
     },
+    "./unhead/server": {
+      "types": "./dist/src/unhead/server.d.ts",
+      "import": "./dist/src/unhead/server.js"
+    },
     "./unplugin/vite": {
       "types": "./dist/src/unplugin/vite.d.ts",
       "import": "./dist/src/unplugin/vite.js"
@@ -49,6 +53,8 @@
     "vite": "^6.2.2"
   },
   "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "@types/esprima": "^4.0.6",
     "@types/react": "^19.0.11",
     "@unhead/react": "^2.0.1",
@@ -63,8 +69,6 @@
     "listhen": "^1.9.0",
     "magicast": "^0.3.5",
     "pkg-types": "^2.1.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "react-error-boundary": "^5.0.0",
     "recast": "^0.23.11",
     "rou3": "^0.5.1",
@@ -80,6 +84,7 @@
     "yocto-spinner": "^0.2.1"
   },
   "devDependencies": {
+    "@types/react-dom": "^19.0.4",
     "typescript": "^5.5.4",
     "unhead": "^2.0.1"
   },

@@ -1,12 +1,11 @@
 import { Link, Outlet } from 'zro/react'
-import { createHead, Head, UnheadProvider } from 'zro/unhead'
 import styles from './styles.css?url'
 
-export const loader = async () => {
-  return {
-    version: '1.2',
-  }
-}
+// export const loader = async () => {
+//   return {
+//     version: '1.2',
+//   }
+// }
 
 // export const middlewares = [
 //   new Middleware(async ({ next }) => {
@@ -19,25 +18,29 @@ export const loader = async () => {
 //   }),
 // ]
 
-const head = createHead()
 export default function RootLayout() {
   return (
-    <UnheadProvider head={head}>
-      <Head>
+    <html>
+      <head>
         <link href={styles} rel="stylesheet" />
-      </Head>
-      <div>
-        <div className="flex gap-2 [&>a]:text-blue-700">
-          <Link href="/">[HOME]</Link>
-          <Link href="/blog">[BLOG]</Link>
-          <Link href="/dashboard">[DASHBOARD]</Link>
+      </head>
+      <body>
+        <div>
+          <div className="flex gap-2 [&>a]:text-blue-700">
+            <Link href="/">[HOME]</Link>
+            <Link href="/blog">[BLOG]</Link>
+            <Link href="/dashboard">[DASHBOARD]</Link>
+          </div>
+          <Outlet />
         </div>
-        <Outlet />
-      </div>
-    </UnheadProvider>
+        <script type="module" src="/app.tsx"></script>
+      </body>
+    </html>
   )
 }
 
-export const Loading = () => {
-  return <div>Loading...</div>
-}
+// TODO: fix this
+
+// export const Loading = () => {
+//   return <div>Loading...</div>
+// }

@@ -100,6 +100,9 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
     devDependencies:
+      '@types/react-dom':
+        specifier: ^19.0.4
+        version: 19.0.4(@types/react@19.0.11)
       typescript:
         specifier: ^5.5.4
         version: 5.8.2
@@ -115,6 +118,12 @@ importers:
       nodemon:
         specifier: ^3.1.9
         version: 3.1.9
+      react:
+        specifier: ^19.0.0
+        version: 19.0.0
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.0(react@19.0.0)
       tailwindcss:
         specifier: ^4.0.14
         version: 4.0.14

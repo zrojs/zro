@@ -1,11 +1,16 @@
 import { colors } from 'consola/utils'
 import { upperFirst } from 'es-toolkit'
-import { App, createApp, eventHandler, fromNodeMiddleware, proxyRequest, toNodeListener } from 'h3'
+import { App, createApp, eventHandler, fromNodeMiddleware, getRequestURL, setHeader, toNodeListener } from 'h3'
 import { listen, Listener } from 'listhen'
 import { AsyncLocalStorage } from 'node:async_hooks'
+import React from 'react'
+// @ts-expect-error
+import { renderToReadableStream } from 'react-dom/server.browser'
+import { Router } from 'src/react'
 import { createContext } from 'unctx'
 import { createServer, ViteDevServer } from 'vite'
 import loadingSpinner from 'yocto-spinner'
+import { Cache } from './react/cache'
 
 const serverContext = createContext<App>({
   asyncContext: true,
@@ -42,8 +47,13 @@ export const bootstrapDevServer = async ({ host = false }: { host: boolean }) =>
     return viteContext.call(vite, async () => {
       app.use(fromNodeMiddleware(vite.middlewares))
       app.use(
-        eventHandler(e => {
-          return proxyRequest(e, 'http://localhost:3000/index.html')
+        eventHandler(async e => {
+          const { router } = await vite.ssrLoadModule('/.zro/router.server')
+          const initialUrl = getRequestURL(e)
+          const cache = new Cache()
+          setHeader(e, 'Content-Type', 'text/html')
+          return renderToReadableStream(React.createElement(Router, { router, initialUrl, cache }))
+          // return 'hi'
         }),
       )
       const listener = await listen(toNodeListener(app), {

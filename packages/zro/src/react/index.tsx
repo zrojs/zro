@@ -1,10 +1,14 @@
 import { createContext, FC, HTMLProps, MouseEvent, PropsWithChildren, startTransition, Suspense, use, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
+import { UnheadProvider } from 'src/unhead'
+import { createHead } from 'unhead/client'
 import { isRedirectResponse, Route, RouteData, Router as ZroRouter } from '../router'
 import { Cache } from './cache'
 
 export type RouterProps = {
   router: ZroRouter
+  initialUrl?: URL
+  cache?: Cache
 }
 
 let currentLoadingRoute: { path: string; loader: Promise<any> | null; cacheKey: string } = {
@@ -18,30 +22,35 @@ let currentLoadingRoute: { path: string; loader: Promise<any> | null; cacheKey: 
 }
 
 const getRouterCacheKey = (request: Request) => JSON.stringify(request.url)
+const head = createHead()
+head.hooks.hook('entries:updated', ctx => {
+  // ctx.resolveTags().then(console.log)
+  // renderSSRHead(ctx).then(console.log)
+})
 
 type NavigateFn = (url: string, options: { replace?: boolean }) => void
-type NavigateContext = { navigate: NavigateFn }
+type NavigateContext = { navigate: NavigateFn; url: string }
 const navigateContext = createContext<NavigateContext>(null!)
 export const useNavigate = () => useContext(navigateContext)
 
-export const Router: FC<RouterProps> = ({ router }) => {
-  const [url, setUrl] = useState(window.location.pathname)
+export const Router: FC<RouterProps> = ({ router, initialUrl, cache = new Cache() }) => {
+  const [url, setUrl] = useState(initialUrl?.pathname || window.location.pathname)
 
   const { route, params, tree } = useMemo(() => {
     const routeInfo = router.findRoute(url)!
     if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
-      const req = new Request(new URL(url, window.location.origin))
+      const req = new Request(new URL(url, initialUrl?.origin || window.location.origin))
       const reqKey = getRouterCacheKey(req)
       const loaderFn = () =>
         router.load(req).then(ctx => {
           if (ctx instanceof Response && isRedirectResponse(ctx)) {
-            Cache.delete(reqKey)
+            cache.delete(reqKey)
             return ctx
           }
           return ctx.data
         })
-      if (!Cache.getRevalidateCallback(reqKey)) Cache.setRevalidateCallback(reqKey, loaderFn)
-      currentLoadingRoute.loader = Cache.get(reqKey) || Cache.set(reqKey, loaderFn())
+      if (!cache.getRevalidateCallback(reqKey)) cache.setRevalidateCallback(reqKey, loaderFn)
+      currentLoadingRoute.loader = cache.get(reqKey) || cache.set(reqKey, loaderFn())
       currentLoadingRoute.path = routeInfo.route.getPath()
       currentLoadingRoute.cacheKey = reqKey
     }
@@ -50,12 +59,13 @@ export const Router: FC<RouterProps> = ({ router }) => {
 
   const navigateValue = useMemo((): NavigateContext => {
     return {
+      url,
       navigate: (url, { replace = false }) => {
         if (replace) window.history.replaceState({}, '', url)
         else window.history.pushState({}, '', url)
       },
     } as NavigateContext
-  }, [])
+  }, [url])
 
   useLayoutEffect(() => {
     window.history.pushState = new Proxy(window.history.pushState, {
@@ -88,11 +98,13 @@ export const Router: FC<RouterProps> = ({ router }) => {
   }, [])
 
   return (
-    <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
-      <navigateContext.Provider value={navigateValue}>
-        <RenderTree tree={tree} />
-      </navigateContext.Provider>
-    </ErrorBoundary>
+    <UnheadProvider head={head}>
+      <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
+        <navigateContext.Provider value={navigateValue}>
+          <RenderTree tree={tree} />
+        </navigateContext.Provider>
+      </ErrorBoundary>
+    </UnheadProvider>
   )
 }
 
@@ -130,7 +142,7 @@ export const Outlet = () => {
   const routeProps = route.getProps() as any
   const childRoute = tree[0]
   const remainingTree = tree.slice(1)
-
+  const { url } = useNavigate()
   const children = useMemo(() => {
     return (
       <OutletContext.Provider
@@ -139,22 +151,24 @@ export const Outlet = () => {
           tree: remainingTree,
         }}
       >
-        <RouteErrorBoundary key={`${route.getPath()}-${window.location.pathname}`}>
+        <RouteErrorBoundary key={`${route.getPath()}-${url}`}>
           <RenderRouteComponent />
         </RouteErrorBoundary>
       </OutletContext.Provider>
     )
   }, [childRoute, remainingTree])
+
   if (routeProps.loading) {
     return <Suspense fallback={<routeProps.loading />}>{children}</Suspense>
   }
+
   return children
 }
 
 const RouteErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
   const { route } = useContext(OutletContext)
   const routeProps = route.getProps() as any
-  if (routeProps.errorBoundary) return <ErrorBoundary FallbackComponent={routeProps.errorBoundary}>{children}</ErrorBoundary>
+  if (routeProps?.errorBoundary) return <ErrorBoundary FallbackComponent={routeProps.errorBoundary}>{children}</ErrorBoundary>
   return children
 }
 
@@ -163,6 +177,7 @@ const RenderRouteComponent: FC = () => {
   const loaderData = useLoaderData()
 
   const routeProps = route.getProps() as any
+  if (!routeProps?.component) return null
   return <routeProps.component loaderData={loaderData} />
 }
 
