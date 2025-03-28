@@ -21,8 +21,8 @@ export default createUnplugin<ZroUnpluginOptions>((options, meta) => {
             ...config,
             logLevel: 'warn',
             optimizeDeps: {
-              include: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client', 'zro/react'],
-              exclude: ['zro/router'],
+              include: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client'],
+              exclude: ['zro/router', 'zro/react'],
             },
             esbuild: {
               jsx: 'automatic',
@@ -33,6 +33,10 @@ export default createUnplugin<ZroUnpluginOptions>((options, meta) => {
             ssr: {
               external: ['zro/react'],
               noExternal: ['zro/router'],
+              optimizeDeps: {
+                include: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client'],
+                exclude: ['zro/react', 'zro/router'],
+              },
             },
           }
         },

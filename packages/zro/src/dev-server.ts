@@ -8,6 +8,7 @@ import React from 'react'
 import { renderToReadableStream } from 'react-dom/server.browser'
 import { Router } from 'src/react'
 import { createContext } from 'unctx'
+import { createHead, transformHtmlTemplate } from 'unhead/server'
 import { createServer, ViteDevServer } from 'vite'
 import loadingSpinner from 'yocto-spinner'
 import { Cache } from './react/cache'
@@ -51,9 +52,21 @@ export const bootstrapDevServer = async ({ host = false }: { host: boolean }) =>
           const { router } = await vite.ssrLoadModule('/.zro/router.server')
           const initialUrl = getRequestURL(e)
           const cache = new Cache()
+          const head = createHead()
+
           setHeader(e, 'Content-Type', 'text/html')
-          return renderToReadableStream(React.createElement(Router, { router, initialUrl, cache }))
-          // return 'hi'
+          const stream = (await renderToReadableStream(React.createElement(Router, { router, initialUrl, cache, head }))) as ReadableStream
+          let transformed = false
+          const transformedStream = stream.pipeThrough(
+            new TransformStream({
+              transform: async (chunk, controller) => {
+                const text = new TextDecoder().decode(chunk)
+                const transformed = await transformHtmlTemplate(head, text)
+                controller.enqueue(new TextEncoder().encode(transformed))
+              },
+            }),
+          )
+          return transformedStream
         }),
       )
       const listener = await listen(toNodeListener(app), {

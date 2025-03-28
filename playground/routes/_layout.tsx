@@ -1,4 +1,5 @@
 import { Link, Outlet } from 'zro/react'
+import { useHead } from 'zro/unhead'
 import styles from './styles.css?url'
 
 // export const loader = async () => {
@@ -19,23 +20,37 @@ import styles from './styles.css?url'
 // ]
 
 export default function RootLayout() {
+  useHead({
+    htmlAttrs: {
+      // lang: 'en',
+    },
+    bodyAttrs: {
+      // class: 'bg-red-300',
+    },
+    link: [
+      {
+        href: styles,
+        rel: 'stylesheet',
+      },
+    ],
+    script: [
+      {
+        type: 'module',
+        src: '/app.tsx',
+        tagPosition: 'bodyClose',
+      },
+    ],
+  })
   return (
-    <html>
-      <head>
-        <link href={styles} rel="stylesheet" />
-      </head>
-      <body>
-        <div>
-          <div className="flex gap-2 [&>a]:text-blue-700">
-            <Link href="/">[HOME]</Link>
-            <Link href="/blog">[BLOG]</Link>
-            <Link href="/dashboard">[DASHBOARD]</Link>
-          </div>
-          <Outlet />
-        </div>
-        <script type="module" src="/app.tsx"></script>
-      </body>
-    </html>
+    <div>
+      <div className="flex gap-2 [&>a]:text-blue-700">
+        <Link href="/">[HOME]</Link>
+        <Link href="/blog">[BLOG]</Link>
+        <Link href="/dashboard">[DASHBOARD]</Link>
+      </div>
+      <div id="app" />
+      <Outlet />
+    </div>
   )
 }
 

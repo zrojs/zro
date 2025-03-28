@@ -2,6 +2,7 @@ import { createContext, FC, HTMLProps, MouseEvent, PropsWithChildren, startTrans
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 import { UnheadProvider } from 'src/unhead'
 import { createHead } from 'unhead/client'
+import { ResolvableHead, Unhead } from 'unhead/types'
 import { isRedirectResponse, Route, RouteData, Router as ZroRouter } from '../router'
 import { Cache } from './cache'
 
@@ -9,6 +10,7 @@ export type RouterProps = {
   router: ZroRouter
   initialUrl?: URL
   cache?: Cache
+  head?: Unhead<ResolvableHead>
 }
 
 let currentLoadingRoute: { path: string; loader: Promise<any> | null; cacheKey: string } = {
@@ -22,18 +24,13 @@ let currentLoadingRoute: { path: string; loader: Promise<any> | null; cacheKey: 
 }
 
 const getRouterCacheKey = (request: Request) => JSON.stringify(request.url)
-const head = createHead()
-head.hooks.hook('entries:updated', ctx => {
-  // ctx.resolveTags().then(console.log)
-  // renderSSRHead(ctx).then(console.log)
-})
 
 type NavigateFn = (url: string, options: { replace?: boolean }) => void
 type NavigateContext = { navigate: NavigateFn; url: string }
 const navigateContext = createContext<NavigateContext>(null!)
 export const useNavigate = () => useContext(navigateContext)
 
-export const Router: FC<RouterProps> = ({ router, initialUrl, cache = new Cache() }) => {
+export const Router: FC<RouterProps> = ({ router, initialUrl, cache = new Cache(), head = createHead() }) => {
   const [url, setUrl] = useState(initialUrl?.pathname || window.location.pathname)
 
   const { route, params, tree } = useMemo(() => {
@@ -99,11 +96,19 @@ export const Router: FC<RouterProps> = ({ router, initialUrl, cache = new Cache(
 
   return (
     <UnheadProvider head={head}>
-      <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
-        <navigateContext.Provider value={navigateValue}>
-          <RenderTree tree={tree} />
-        </navigateContext.Provider>
-      </ErrorBoundary>
+      <html lang="en">
+        <head>
+          <Meta />
+        </head>
+        <body>
+          <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
+            <navigateContext.Provider value={navigateValue}>
+              <RenderTree tree={tree} />
+            </navigateContext.Provider>
+          </ErrorBoundary>
+        </body>
+      </html>
+      {/* <StreamHeadContent />  */}
     </UnheadProvider>
   )
 }
@@ -205,4 +210,9 @@ export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
   const data = currentData instanceof Map ? currentData.get(route.getPath()) : null
   if (data instanceof Error) throw data
   return data
+}
+
+export const Meta = () => {
+  // const head = useHead()
+  return <Suspense></Suspense>
 }
