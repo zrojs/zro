@@ -24,14 +24,10 @@ export const loader = async () => {
 
 export default function RootLayout() {
   useHead({
-    link: [
-      {
-        rel: "stylesheet",
-        href: styles,
-      },
-    ],
+    link: [{ rel: "stylesheet", href: styles }],
   });
   const loaderData = useLoaderData<Route>();
+
   return (
     <div>
       <Head>

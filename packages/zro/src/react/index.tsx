@@ -355,7 +355,6 @@ const RouteErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
 
 const RenderRouteComponent: FC = () => {
   const { route } = use(OutletContext);
-  // const loaderData = useLoaderData();
 
   const routeProps = route.getProps() as any;
   if (!routeProps?.component) return null;
