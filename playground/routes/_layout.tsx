@@ -24,12 +24,7 @@ export const loader = async () => {
 
 export default function RootLayout() {
   const loaderData = useLoaderData<Route>();
-  const [title, setTitle] = useState(loaderData.version)
-  useEffect(()=>{
-    setTimeout(()=>{
-      setTitle('ho ho ho ho ')
-    }, 2000)
-  }, [])
+  const [title, setTitle] = useState(loaderData.version);
 
   return (
     <div>

@@ -70,10 +70,13 @@ export const bootstrapDevServer = async ({
           const cache = new Cache();
           const head = createHead();
           const accpet = getHeader(e, "accept");
+          const req = toWebRequest(e);
+          const data = (await (router as ZroRouter).load(req)).data;
+          if (data instanceof Response) return data;
           if (accpet === "text/x-script") {
-            const req = toWebRequest(e);
             setHeader(e, "Content-Type", "text/x-script");
-            return encode((await (router as ZroRouter).load(req)).data);
+            if (data instanceof Response) return data;
+            return encode(data);
           }
           head.push({
             script: [

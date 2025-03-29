@@ -7,10 +7,12 @@ import {
   startTransition,
   Suspense,
   use,
+  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
@@ -24,6 +26,7 @@ import {
 } from "../router";
 import { Cache } from "./cache";
 import { encode, decode } from "turbo-stream";
+import { normalizeURL, withTrailingSlash } from "ufo";
 
 export type RouterProps = {
   router: ZroRouter;
@@ -46,7 +49,8 @@ let currentLoadingRoute: {
   cacheKey: "",
 };
 
-const getRouterCacheKey = (request: Request) => JSON.stringify(request.url);
+const getRouterCacheKey = (url: string) =>
+  JSON.stringify(withTrailingSlash(url));
 
 type NavigateFn = (url: string, options: { replace?: boolean }) => void;
 type NavigateContext = { navigate: NavigateFn; url: string };
@@ -75,13 +79,13 @@ export const Router: FC<RouterProps> = ({
     initialUrl?.pathname || window.location.pathname
   );
 
-  const { route, params, tree } = useMemo(() => {
+  const findTree = useCallback((url: string) => {
     const routeInfo = router.findRoute(url)!;
     if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
       const req = new Request(
         new URL(url, initialUrl?.origin || window.location.origin)
       );
-      const reqKey = getRouterCacheKey(req);
+      let reqKey = getRouterCacheKey(req.url);
       const loaderFn = () => {
         if (typeof window !== "undefined" && !hydrated) {
           hydrated = true;
@@ -89,11 +93,29 @@ export const Router: FC<RouterProps> = ({
           return decode(window._readableStream);
         }
         if (!ssr) {
-          console.log("called");
           req.headers.set("accept", "text/x-script");
           return fetch(req).then((response) => {
+            let redirect = false;
+            if (response.redirected && response.url !== req.url) {
+              redirect = true;
+              cache.delete(reqKey);
+            }
             if (response.body) {
-              return decode(response.body.pipeThrough(new TextDecoderStream()));
+              const res = decode(
+                response.body.pipeThrough(new TextDecoderStream())
+              );
+              if (redirect) {
+                let reqKey = getRouterCacheKey(response.url);
+                cache.set(reqKey, res);
+                currentLoadingRoute.path = withTrailingSlash(
+                  new URL(response.url).pathname
+                );
+                currentLoadingRoute.cacheKey = reqKey;
+                navigateValue.navigate(new URL(response.url).pathname, {
+                  replace: true,
+                });
+              }
+              return res;
             }
           });
         }
@@ -106,15 +128,20 @@ export const Router: FC<RouterProps> = ({
         });
       };
 
-      if (!cache.getRevalidateCallback(reqKey))
-        cache.setRevalidateCallback(reqKey, loaderFn);
+      // if (!cache.getRevalidateCallback(reqKey))
+      //   cache.setRevalidateCallback(reqKey, loaderFn);
+      // console.log("here", reqKey, cache.get(reqKey));
       currentLoadingRoute.loader =
         cache.get(reqKey) || cache.set(reqKey, loaderFn());
-      currentLoadingRoute.path = routeInfo.route.getPath();
+      currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
       currentLoadingRoute.cacheKey = reqKey;
     }
-    return routeInfo;
-  }, [url]);
+    return routeInfo.tree;
+  }, []);
+
+  const [tree, setTree] = useState<Route<any, any, any, readonly any[]>[]>(
+    findTree(url)
+  );
 
   const navigateValue = useMemo((): NavigateContext => {
     return {
@@ -131,6 +158,7 @@ export const Router: FC<RouterProps> = ({
       apply: (target, thisArg, argArray) => {
         startTransition(() => {
           setUrl(argArray[2]);
+          setTree(findTree(argArray[2]));
         });
         return target.apply(thisArg, argArray as [any, string, string?]);
       },
@@ -139,6 +167,7 @@ export const Router: FC<RouterProps> = ({
       apply: (target, thisArg, argArray) => {
         startTransition(() => {
           setUrl(argArray[2]);
+          setTree(findTree(argArray[2]));
         });
         return target.apply(thisArg, argArray as [any, string, string?]);
       },
@@ -149,6 +178,7 @@ export const Router: FC<RouterProps> = ({
     const handlePopState = () => {
       startTransition(async () => {
         setUrl(window.location.pathname);
+        setTree(findTree(window.location.pathname));
       });
     };
 
