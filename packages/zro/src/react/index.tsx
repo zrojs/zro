@@ -58,6 +58,7 @@ const navigateContext = createContext<NavigateContext>(null!);
 export const useNavigate = () => useContext(navigateContext);
 let hydrated = false;
 const ssr = typeof window === "undefined";
+export type ErrorBoundaryProps = FallbackProps;
 const fallbackHead = createHead();
 fallbackHead.push({
   script: [
@@ -68,11 +69,11 @@ fallbackHead.push({
     },
   ],
 });
-
+const fallbackCache = new Cache();
 export const Router: FC<RouterProps> = ({
   router,
   initialUrl,
-  cache = new Cache(),
+  cache = fallbackCache,
   head = fallbackHead,
 }) => {
   const [url, setUrl] = useState(
@@ -90,7 +91,9 @@ export const Router: FC<RouterProps> = ({
         if (typeof window !== "undefined" && !hydrated) {
           hydrated = true;
           // @ts-ignore
-          return decode(window._readableStream);
+          const res = decode(window._readableStream);
+
+          return res;
         }
         if (!ssr) {
           req.headers.set("accept", "text/x-script");

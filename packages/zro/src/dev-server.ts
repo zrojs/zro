@@ -76,7 +76,9 @@ export const bootstrapDevServer = async ({
           if (accpet === "text/x-script") {
             setHeader(e, "Content-Type", "text/x-script");
             if (data instanceof Response) return data;
-            return encode(data);
+            return encode(data, {
+              redactErrors: false,
+            });
           }
           head.push({
             script: [
