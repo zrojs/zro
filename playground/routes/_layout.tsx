@@ -1,12 +1,15 @@
-import { Link, Outlet } from 'zro/react'
-import { useHead } from 'zro/unhead'
-import styles from './styles.css?url'
+import { Link, Outlet, useLoaderData } from "zro/react";
+import { Head } from "zro/unhead";
+import styles from "./styles.css?url";
+import { useEffect, useState } from "react";
 
-// export const loader = async () => {
-//   return {
-//     version: '1.2',
-//   }
-// }
+type Route = Routes["/_layout"];
+
+export const loader = async () => {
+  return {
+    version: "1.2",
+  };
+};
 
 // export const middlewares = [
 //   new Middleware(async ({ next }) => {
@@ -20,29 +23,20 @@ import styles from './styles.css?url'
 // ]
 
 export default function RootLayout() {
-  useHead({
-    htmlAttrs: {
-      lang: 'en',
-    },
-    bodyAttrs: {
-      class: 'bg-red-300',
-    },
-    link: [
-      {
-        href: styles,
-        rel: 'stylesheet',
-      },
-    ],
-    script: [
-      {
-        type: 'module',
-        src: '/app.tsx',
-        tagPosition: 'bodyClose',
-      },
-    ],
-  })
+  const loaderData = useLoaderData<Route>();
+  const [title, setTitle] = useState(loaderData.version)
+  useEffect(()=>{
+    setTimeout(()=>{
+      setTitle('ho ho ho ho ')
+    }, 2000)
+  }, [])
+
   return (
     <div>
+      <Head>
+        <link href={styles} rel="stylesheet" />
+        <title>{loaderData.version}</title>
+      </Head>
       <div className="flex gap-2 [&>a]:text-blue-700">
         <Link href="/">[HOME]</Link>
         <Link href="/blog">[BLOG]</Link>
@@ -51,7 +45,7 @@ export default function RootLayout() {
       <div id="app" />
       <Outlet />
     </div>
-  )
+  );
 }
 
 // TODO: fix this

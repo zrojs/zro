@@ -1,34 +1,35 @@
-import { Suspense, use } from 'react'
-import { Link, useLoaderData } from 'zro/react'
-import { useHead } from 'zro/unhead'
-import { posts } from '~/data'
+import { Suspense, use } from "react";
+import { Link, useLoaderData } from "zro/react";
+import { useHead } from "zro/unhead";
+import { posts } from "~/data";
 
-type Route = Routes['/blog/']
+type Route = Routes["/blog/"];
 
 export const loader = async () => {
-  const timestamp = new Date()
+  const timestamp = new Date();
   return {
     timestamp,
-    posts: new Promise<typeof posts>(async resolve => {
-      await new Promise(r => setTimeout(r.bind(null), 1000))
+    posts: new Promise<typeof posts>(async (resolve) => {
+      await new Promise((r) => setTimeout(r.bind(null), 1000));
       resolve([
         ...posts,
         {
           id: 3,
-          title: 'Not found',
+          title: "Not found",
           content: `-`,
-          createdAt: new Date('2021-01-02'),
+          createdAt: new Date("2021-01-02"),
         },
-      ])
+      ]);
     }),
-  }
-}
+  };
+};
 
 export default function BlogPage() {
-  const loaderData = useLoaderData<Route>()
+  const loaderData = useLoaderData<Route>();
   useHead({
-    title: 'Blog',
-  })
+    title: "Blog",
+  });
+
   return (
     <div>
       <p>Blog page</p>
@@ -39,12 +40,12 @@ export default function BlogPage() {
         </Suspense>
       </div>
     </div>
-  )
+  );
 }
 
 const Posts = () => {
-  const loaderData = useLoaderData<Route>()
-  const posts = use(loaderData.posts)
+  const loaderData = useLoaderData<Route>();
+  const posts = use(loaderData.posts);
   return (
     <div className="flex gap-2 flex-col">
       {posts.map(({ id, title, createdAt }) => {
@@ -53,16 +54,16 @@ const Posts = () => {
             <h2 className="text-xl font-bold">{title}</h2>
             <p className="text-sm font-light">{createdAt.toDateString()}</p>
           </Link>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};
 
 export const Loading = () => {
-  return <div>Loading...</div>
-}
+  return <div>Loading...</div>;
+};
 
 export const ErrorBoundary = () => {
-  return 'Something went wrong!'
-}
+  return "Something went wrong!";
+};
