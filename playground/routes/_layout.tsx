@@ -1,5 +1,5 @@
 import { Link, Outlet, useLoaderData } from "zro/react";
-import { Head } from "zro/unhead";
+import { Head, useHead } from "zro/unhead";
 import styles from "./styles.css?url";
 import { useEffect, useState } from "react";
 
@@ -23,13 +23,18 @@ export const loader = async () => {
 // ]
 
 export default function RootLayout() {
+  useHead({
+    link: [
+      {
+        rel: "stylesheet",
+        href: styles,
+      },
+    ],
+  });
   const loaderData = useLoaderData<Route>();
-  const [title, setTitle] = useState(loaderData.version);
-
   return (
     <div>
       <Head>
-        <link href={styles} rel="stylesheet" />
         <title>{loaderData.version}</title>
       </Head>
       <div className="flex gap-2 [&>a]:text-blue-700">
@@ -37,14 +42,11 @@ export default function RootLayout() {
         <Link href="/blog">[BLOG]</Link>
         <Link href="/dashboard">[DASHBOARD]</Link>
       </div>
-      <div id="app" />
       <Outlet />
     </div>
   );
 }
 
-// TODO: fix this
-
-// export const Loading = () => {
-//   return <div>Loading...</div>
-// }
+export const Loading = () => {
+  return <div>Loading main layout...</div>;
+};

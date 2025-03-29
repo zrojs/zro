@@ -133,7 +133,6 @@ export const Router: FC<RouterProps> = ({
 
       // if (!cache.getRevalidateCallback(reqKey))
       //   cache.setRevalidateCallback(reqKey, loaderFn);
-      // console.log("here", reqKey, cache.get(reqKey));
       currentLoadingRoute.loader =
         cache.get(reqKey) || cache.set(reqKey, loaderFn());
       currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
@@ -209,7 +208,10 @@ export const Router: FC<RouterProps> = ({
 const DataStreammer = () => {
   if (typeof window !== "undefined") return null;
   const globalReaderStream = useMemo(
-    () => encode(currentLoadingRoute.loader),
+    () =>
+      encode(currentLoadingRoute.loader, {
+        redactErrors: false,
+      }),
     []
   );
   const reader = useMemo(() => globalReaderStream.getReader(), []);
@@ -287,11 +289,22 @@ const RenderTree: FC<{ tree: any[] }> = ({ tree }) => {
           tree: remainingTree,
         }}
       >
-        <Outlet />
+        <RouteLoading route={route}>
+          <Outlet />
+        </RouteLoading>
       </OutletContext.Provider>
     );
 };
 
+const RouteLoading: FC<PropsWithChildren<{ route: Route<any, any> }>> = ({
+  route,
+  children,
+}) => {
+  const routeProps = route.getProps();
+  if (routeProps?.loading)
+    return <Suspense fallback={<routeProps.loading />}>{children}</Suspense>;
+  return children;
+};
 const OutletContext = createContext<{
   route: Route<any, any>;
   tree: Route<any, any>[];
@@ -312,9 +325,11 @@ export const Outlet = () => {
           tree: remainingTree,
         }}
       >
-        <RouteErrorBoundary key={`${route.getPath()}-${url}`}>
-          <RenderRouteComponent />
-        </RouteErrorBoundary>
+        <RouteLoading route={childRoute}>
+          <RouteErrorBoundary key={`${route.getPath()}-${url}`}>
+            <RenderRouteComponent />
+          </RouteErrorBoundary>
+        </RouteLoading>
       </OutletContext.Provider>
     );
   }, [childRoute, remainingTree]);
@@ -340,11 +355,11 @@ const RouteErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
 
 const RenderRouteComponent: FC = () => {
   const { route } = use(OutletContext);
-  const loaderData = useLoaderData();
+  // const loaderData = useLoaderData();
 
   const routeProps = route.getProps() as any;
   if (!routeProps?.component) return null;
-  return <routeProps.component loaderData={loaderData} />;
+  return <routeProps.component />;
 };
 
 export const Link: FC<HTMLProps<HTMLAnchorElement>> = (props) => {

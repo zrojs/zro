@@ -61,7 +61,7 @@ const Posts = () => {
 };
 
 export const Loading = () => {
-  return <div>Loading...</div>;
+  return <div>Loading blog...</div>;
 };
 
 export const ErrorBoundary = () => {
