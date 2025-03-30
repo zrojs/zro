@@ -1,12 +1,14 @@
-type Route = Routes['/']
+import { getHead } from "zro/router";
+
+type Route = Routes["/"];
 
 export const loader = () => {
   return {
-    title: 'Welcome to playground',
-    description: 'This is a playground for testing zro',
-  }
-}
+    title: "Welcome to playground",
+    description: "This is a playground for testing zro",
+  };
+};
 
 export default function HomePage() {
-  return <span>Welcome to homepage</span>
+  return <span>Welcome to homepage</span>;
 }

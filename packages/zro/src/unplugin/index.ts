@@ -1,47 +1,59 @@
-import { joinURL } from 'ufo'
-import { unctxPlugin } from 'unctx/plugin'
-import { createUnplugin, UnpluginOptions } from 'unplugin'
-import { prepare } from './generators'
+import { joinURL } from "ufo";
+import { unctxPlugin } from "unctx/plugin";
+import { createUnplugin, UnpluginOptions } from "unplugin";
+import { prepare } from "./generators";
 
-type ZroUnpluginOptions = {} | undefined
+type ZroUnpluginOptions = {} | undefined;
 export default createUnplugin<ZroUnpluginOptions>((options, meta) => {
-  const routesDir = process.cwd() + '/routes'
+  const routesDir = process.cwd() + "/routes";
   return [
     {
-      name: 'zro-vite-plugin',
+      name: "zro-vite-plugin",
       async buildStart() {
-        await prepare({ routesDir })
+        await prepare({ routesDir });
       },
       async watchChange(id, change) {
-        if (!id.startsWith(joinURL(process.cwd(), '.zro'))) await prepare({ routesDir })
+        if (!id.startsWith(joinURL(process.cwd(), ".zro"))) {
+          await prepare({ routesDir });
+        }
       },
       vite: {
         config(config, env) {
           return {
             ...config,
-            logLevel: 'warn',
+            logLevel: "warn",
             optimizeDeps: {
-              include: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client'],
-              exclude: ['zro/router', 'zro/react'],
+              include: [
+                "react",
+                "react/jsx-runtime",
+                "react/jsx-dev-runtime",
+                "react-dom/client",
+              ],
+              exclude: ["zro/router", "zro/react"],
             },
             esbuild: {
-              jsx: 'automatic',
+              jsx: "automatic",
             },
             resolve: {
-              dedupe: ['react', 'react-dom', 'zro', 'zro/router', 'zro/react'],
+              dedupe: ["react", "react-dom", "zro", "zro/router", "zro/react"],
             },
             ssr: {
-              external: ['zro/react'],
-              noExternal: ['zro/router'],
+              external: ["zro/react"],
+              noExternal: ["zro/router"],
               optimizeDeps: {
-                include: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client'],
-                exclude: ['zro/react', 'zro/router'],
+                include: [
+                  "react",
+                  "react/jsx-runtime",
+                  "react/jsx-dev-runtime",
+                  "react-dom/client",
+                ],
+                exclude: ["zro/react", "zro/router"],
               },
             },
-          }
+          };
         },
       },
     },
     unctxPlugin.raw({}, meta) as UnpluginOptions,
-  ]
-})
+  ];
+});

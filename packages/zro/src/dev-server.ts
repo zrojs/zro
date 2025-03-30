@@ -17,7 +17,11 @@ import React from "react";
 // @ts-expect-error
 import { renderToReadableStream } from "react-dom/server.browser";
 import { Router } from "src/react";
-import { createHead, transformHtmlTemplate } from "src/unhead/server";
+import {
+  createHead,
+  extractUnheadInputFromHtml,
+  transformHtmlTemplate,
+} from "src/unhead/server";
 import { createContext } from "unctx";
 import { createServer, ViteDevServer } from "vite";
 import loadingSpinner from "yocto-spinner";
@@ -68,10 +72,9 @@ export const bootstrapDevServer = async ({
           const { router } = await vite.ssrLoadModule("/.zro/router.server");
           const initialUrl = getRequestURL(e);
           const cache = new Cache();
-          const head = createHead();
           const accpet = getHeader(e, "accept");
           const req = toWebRequest(e);
-          const data = (await (router as ZroRouter).load(req)).data;
+          const { data, head } = await (router as ZroRouter).load(req);
           if (data instanceof Response) return data;
           if (accpet === "text/x-script") {
             setHeader(e, "Content-Type", "text/x-script");
@@ -90,6 +93,12 @@ export const bootstrapDevServer = async ({
             ],
           });
           setHeader(e, "Content-Type", "text/html");
+          const viteHtml = await vite.transformIndexHtml(
+            req.url,
+            "<html><head></head><body></body></html>"
+          );
+          const { input } = extractUnheadInputFromHtml(viteHtml);
+          head.push(input);
           const stream = (await renderToReadableStream(
             React.createElement(Router, { router, initialUrl, cache, head })
           )) as ReadableStream;
