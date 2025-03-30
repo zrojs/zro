@@ -1,0 +1,23 @@
+{
+  "name": "@zro/logger",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Request logger for ZRO apps",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "tsc-watch",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "Nariman Movaffaghi",
+  "license": "MIT",
+  "packageManager": "pnpm@10.6.3",
+  "devDependencies": {
+    "tsc-watch": "^6.2.1",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "defu": "^6.1.4"
+  }
+}

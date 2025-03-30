@@ -50,43 +50,41 @@
     "react": ">=19",
     "react-dom": ">=19",
     "typescript": "^5.5.4",
-    "vite": "^6.2.2"
+    "vite": ">=6"
   },
   "dependencies": {
-    "@types/esprima": "^4.0.6",
-    "@types/react": "^19.0.11",
     "@unhead/react": "^2.0.1",
     "citty": "^0.1.6",
     "consola": "^3.4.0",
     "defu": "^6.1.4",
     "es-module-lexer": "^1.6.0",
     "es-toolkit": "^1.33.0",
-    "esprima": "^4.0.1",
     "h3": "npm:h3-nightly@latest",
     "knitwork": "^1.2.0",
     "listhen": "^1.9.0",
     "magicast": "^0.3.5",
+    "nypm": "^0.6.0",
     "pkg-types": "^2.1.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "react-error-boundary": "^5.0.0",
-    "recast": "^0.23.11",
     "rou3": "^0.5.1",
     "tiny-glob": "^0.2.9",
-    "tsc-alias": "^1.8.11",
-    "tsc-watch": "^6.2.1",
     "ufo": "^1.5.4",
     "unctx": "^2.4.1",
     "unimport": "^4.1.2",
     "unplugin": "^2.2.0",
-    "vite": "^6.2.2",
-    "vitest": "^3.0.8",
     "yocto-spinner": "^0.2.1"
   },
   "devDependencies": {
+    "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsc-alias": "^1.8.11",
+    "tsc-watch": "^6.2.1",
     "typescript": "^5.5.4",
-    "unhead": "^2.0.1"
+    "unhead": "^2.0.1",
+    "vite": "^6.2.2",
+    "vitest": "^3.0.8"
   },
   "packageManager": "pnpm@10.6.3"
 }

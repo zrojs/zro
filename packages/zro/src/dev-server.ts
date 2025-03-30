@@ -5,30 +5,17 @@ import {
   createApp,
   eventHandler,
   fromNodeMiddleware,
-  getHeader,
-  getRequestURL,
-  setHeader,
   toNodeListener,
   toWebRequest,
 } from "h3";
 import { listen, Listener } from "listhen";
 import { AsyncLocalStorage } from "node:async_hooks";
-import React from "react";
-// @ts-expect-error
-import { renderToReadableStream } from "react-dom/server.browser";
-import { Router } from "src/react";
-import {
-  createHead,
-  extractUnheadInputFromHtml,
-  transformHtmlTemplate,
-} from "src/unhead/server";
+import { Router as ZroRouter } from "src/router";
+import { handleRequest } from "src/server";
+import { extractUnheadInputFromHtml } from "src/unhead/server";
 import { createContext } from "unctx";
 import { createServer, ViteDevServer } from "vite";
 import loadingSpinner from "yocto-spinner";
-import { Cache } from "./react/cache";
-import { encode } from "turbo-stream";
-import { Router as ZroRouter } from "src/router";
-import { handleRequest } from "src/server";
 
 const serverContext = createContext<App>({
   asyncContext: true,
@@ -67,6 +54,7 @@ export const bootstrapDevServer = async ({
       appType: "custom",
     });
     return viteContext.call(vite, async () => {
+      // load zro options here
       app.use(fromNodeMiddleware(vite.middlewares));
       app.use(
         eventHandler(async (e) => {
