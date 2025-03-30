@@ -28,6 +28,7 @@ import loadingSpinner from "yocto-spinner";
 import { Cache } from "./react/cache";
 import { encode } from "turbo-stream";
 import { Router as ZroRouter } from "src/router";
+import { handleRequest } from "src/server";
 
 const serverContext = createContext<App>({
   asyncContext: true,
@@ -69,49 +70,16 @@ export const bootstrapDevServer = async ({
       app.use(fromNodeMiddleware(vite.middlewares));
       app.use(
         eventHandler(async (e) => {
-          const { router } = await vite.ssrLoadModule("/.zro/router.server");
-          const initialUrl = getRequestURL(e);
-          const cache = new Cache();
-          const accpet = getHeader(e, "accept");
+          const { router } = (await vite.ssrLoadModule(
+            "/.zro/router.server"
+          )) as { router: ZroRouter };
           const req = toWebRequest(e);
-          const { data, head } = await (router as ZroRouter).load(req);
-          if (data instanceof Response) return data;
-          if (accpet === "text/x-script") {
-            setHeader(e, "Content-Type", "text/x-script");
-            if (data instanceof Response) return data;
-            return encode(data, {
-              redactErrors: false,
-            });
-          }
-          head.push({
-            script: [
-              {
-                type: "module",
-                src: "/app.tsx",
-                tagPosition: "bodyClose",
-              },
-            ],
-          });
-          setHeader(e, "Content-Type", "text/html");
           const viteHtml = await vite.transformIndexHtml(
             req.url,
             "<html><head></head><body></body></html>"
           );
           const { input } = extractUnheadInputFromHtml(viteHtml);
-          head.push(input);
-          const stream = (await renderToReadableStream(
-            React.createElement(Router, { router, initialUrl, cache, head })
-          )) as ReadableStream;
-          const transformedStream = stream.pipeThrough(
-            new TransformStream({
-              transform: async (chunk, controller) => {
-                let text = new TextDecoder().decode(chunk);
-                text = await transformHtmlTemplate(head, text);
-                controller.enqueue(new TextEncoder().encode(text));
-              },
-            })
-          );
-          return transformedStream;
+          return handleRequest(e, router, input);
         })
       );
       const listener = await listen(toNodeListener(app), {
