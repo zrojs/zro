@@ -1,6 +1,6 @@
 import { use } from "react";
 import { ErrorBoundaryProps, useLoaderData } from "zro/react";
-import { getRequest } from "zro/router";
+import { abort, getRequest } from "zro/router";
 import { useHead } from "zro/unhead";
 import { posts } from "~/data";
 
@@ -10,7 +10,7 @@ export const loader = async () => {
   const requestContext = getRequest();
   const { id } = requestContext.params;
   const post = posts.find((post) => String(post.id) == id);
-  if (!post) throw new Error("Post not found");
+  if (!post) abort(404, "Post not found");
   return {
     post: new Promise<(typeof posts)[number]>(async (resolve) => {
       await new Promise((r) => setTimeout(r, 1000));

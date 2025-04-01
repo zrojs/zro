@@ -9,6 +9,7 @@ import { abort, isRedirectResponse } from "./utils";
 type RequestContext = {
   request: Request;
   params: Record<string, string>;
+  status: number;
 };
 
 const requestContext = createContext<RequestContext>();
@@ -70,9 +71,9 @@ export class Router {
     const head = createHead();
     if (routeInfo) {
       const { params, tree: routes } = routeInfo;
-
+      const ctx = { request, params: params || {}, status: 200 };
       return requestContext.callAsync(
-        { request, params: params || {} },
+        ctx,
         withAsyncContext(async () => {
           return HeadContext.callAsync(
             head,
@@ -90,13 +91,12 @@ export class Router {
                         dataPerRoute.set(routes[index].getPath(), newData);
                         // if didn't error, load next route
                         if (newData instanceof Error) {
+                          ctx.status = 401;
                           return dataPerRoute;
                         }
-                        if (
-                          newData instanceof Response &&
-                          isRedirectResponse(newData)
-                        ) {
-                          return newData;
+                        if (newData instanceof Response) {
+                          ctx.status = newData.status;
+                          if (isRedirectResponse(newData)) return newData;
                         }
                         return loadRoutes(index + 1, toMerged(data, newData!));
                       }
@@ -104,7 +104,7 @@ export class Router {
                   })
                 );
               };
-              return { data: await loadRoutes(), head };
+              return { data: await loadRoutes(), head, status: ctx.status };
             })
           );
         })

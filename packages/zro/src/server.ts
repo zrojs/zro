@@ -1,4 +1,10 @@
-import { getHeader, H3Event, setHeader, toWebRequest } from "h3";
+import {
+  getHeader,
+  H3Event,
+  setHeader,
+  setResponseStatus,
+  toWebRequest,
+} from "h3";
 import React from "react";
 import { Router as ZroRouter } from "src/router";
 import { encode } from "turbo-stream";
@@ -18,7 +24,7 @@ export const handleRequest = async (
   const initialUrl = new URL(req.url);
   const cache = new Cache();
   const accpet = getHeader(e, "accept");
-  const { data, head } = await router.load(req);
+  const { data, head, status } = await router.load(req);
 
   if (data instanceof Response) return data;
   if (accpet === "text/x-script") {
@@ -43,7 +49,7 @@ export const handleRequest = async (
   setHeader(e, "Content-Type", "text/html");
 
   cache.set(JSON.stringify(initialUrl.href), Promise.resolve(data));
-
+  setResponseStatus(e, status);
   const stream = (await renderToReadableStream(
     React.createElement(Router, {
       router,
