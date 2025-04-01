@@ -156,6 +156,9 @@ importers:
       typescript:
         specifier: ^5.5.4
         version: 5.8.2
+      zro:
+        specifier: workspace:*
+        version: link:../../packages/zro
 
 packages:
 
@@ -2239,10 +2242,6 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  debug@4.4.0:
-    dependencies:
-      ms: 2.1.3
-
   debug@4.4.0(supports-color@5.5.0):
     dependencies:
       ms: 2.1.3
@@ -2908,7 +2907,7 @@ snapshots:
   vite-node@3.0.8(jiti@2.4.2)(lightningcss@1.29.2):
     dependencies:
       cac: 6.7.14
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
       es-module-lexer: 1.6.0
       pathe: 2.0.3
       vite: 6.2.2(jiti@2.4.2)(lightningcss@1.29.2)
@@ -2957,7 +2956,7 @@ snapshots:
       '@vitest/spy': 3.0.8
       '@vitest/utils': 3.0.8
       chai: 5.2.0
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
       expect-type: 1.2.0
       magic-string: 0.30.17
       pathe: 2.0.3

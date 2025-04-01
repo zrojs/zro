@@ -1,13 +1,13 @@
-import { getHeader, getRequestURL, H3Event, setHeader, toWebRequest } from "h3";
+import { getHeader, H3Event, setHeader, toWebRequest } from "h3";
+import React from "react";
 import { Router as ZroRouter } from "src/router";
-import { Router } from "./react";
 import { encode } from "turbo-stream";
 import { SerializableHead } from "unhead/types";
+import { Router } from "./react";
 // @ts-expect-error
 import { renderToReadableStream } from "react-dom/server.browser";
-import React from "react";
-import { transformHtmlTemplate } from "unhead/server";
 import { Cache } from "src/react/cache";
+import { transformHtmlTemplate } from "unhead/server";
 
 export const handleRequest = async (
   e: H3Event,
@@ -19,6 +19,7 @@ export const handleRequest = async (
   const cache = new Cache();
   const accpet = getHeader(e, "accept");
   const { data, head } = await router.load(req);
+
   if (data instanceof Response) return data;
   if (accpet === "text/x-script") {
     setHeader(e, "Content-Type", "text/x-script");
@@ -41,8 +42,15 @@ export const handleRequest = async (
 
   setHeader(e, "Content-Type", "text/html");
 
+  cache.set(JSON.stringify(initialUrl.href), Promise.resolve(data));
+
   const stream = (await renderToReadableStream(
-    React.createElement(Router, { router, initialUrl, cache, head })
+    React.createElement(Router, {
+      router,
+      initialUrl,
+      cache,
+      head,
+    })
   )) as ReadableStream;
   const transformedStream = stream.pipeThrough(
     new TransformStream({

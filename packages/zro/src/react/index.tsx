@@ -12,11 +12,12 @@ import {
   useEffect,
   useLayoutEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { createHead, UnheadProvider } from "src/unhead";
+import { decode, encode } from "turbo-stream";
+import { withTrailingSlash } from "ufo";
 import { ResolvableHead, Unhead } from "unhead/types";
 import {
   isRedirectResponse,
@@ -25,8 +26,6 @@ import {
   Router as ZroRouter,
 } from "../router";
 import { Cache } from "./cache";
-import { encode, decode } from "turbo-stream";
-import { normalizeURL, withTrailingSlash } from "ufo";
 
 export type RouterProps = {
   router: ZroRouter;
@@ -79,7 +78,6 @@ export const Router: FC<RouterProps> = ({
   const [url, setUrl] = useState(
     initialUrl?.pathname || window.location.pathname
   );
-
   const findTree = useCallback((url: string) => {
     const routeInfo = router.findRoute(url)!;
     if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
@@ -133,8 +131,10 @@ export const Router: FC<RouterProps> = ({
 
       // if (!cache.getRevalidateCallback(reqKey))
       //   cache.setRevalidateCallback(reqKey, loaderFn);
+
       currentLoadingRoute.loader =
         cache.get(reqKey) || cache.set(reqKey, loaderFn());
+      // console.log(currentLoadingRoute.loader);
       currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
       currentLoadingRoute.cacheKey = reqKey;
     }

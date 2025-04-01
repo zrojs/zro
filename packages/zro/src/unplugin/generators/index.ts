@@ -3,7 +3,8 @@
 import { existsSync } from "fs";
 import { loadFile } from "magicast";
 import { exit } from "process";
-import { registerPlugins } from "src/plugin";
+import { registerPlugins } from "src/plugin/register";
+import { RouteTree } from "src/plugin/RouteTree";
 import { ZroUnpluginOptions } from "src/unplugin";
 import { createTypesFile } from "src/unplugin/generators/types";
 import glob from "tiny-glob";
@@ -32,7 +33,7 @@ export type Tree = {
   path: string;
   filePath: string;
   isLeaf: boolean;
-  moduleInfo?: RouteModuleInfo;
+  moduleInfo: RouteModuleInfo;
   children: {
     [file: string]: Tree | null;
   };
@@ -102,6 +103,14 @@ async function buildTree(files: string[], cwd: string): Promise<Tree> {
     isLeaf: false,
     path: "",
     children: {},
+    moduleInfo: {
+      hasActions: false,
+      hasComponent: false,
+      hasErrorBoundary: false,
+      hasLoader: false,
+      hasLoading: false,
+      hasMiddleware: false,
+    },
   };
 
   // Process files in order of increasing path depth so that parent layouts are handled first.
@@ -160,7 +169,11 @@ export const prepare = async ({ routesDir, options }: PrepareOptions) => {
   });
 
   // it must return an class/obj to be able to traverse tree
-  const routeTree = await (await buildTree(files, routesDir)).children;
+  const routeTree = new RouteTree(
+    await (
+      await buildTree(files, routesDir)
+    ).children
+  );
 
   // register plugins
   await registerPlugins(options.plugins, routeTree);

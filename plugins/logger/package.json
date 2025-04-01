@@ -15,7 +15,8 @@
   "packageManager": "pnpm@10.6.3",
   "devDependencies": {
     "tsc-watch": "^6.2.1",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "zro": "workspace:*"
   },
   "dependencies": {
     "defu": "^6.1.4"
