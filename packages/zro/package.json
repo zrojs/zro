@@ -57,6 +57,8 @@
     "vite": ">=6"
   },
   "dependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/types": "^7.27.0",
     "@unhead/react": "^2.0.1",
     "citty": "^0.1.6",
     "consola": "^3.4.0",
@@ -64,6 +66,7 @@
     "es-module-lexer": "^1.6.0",
     "es-toolkit": "^1.33.0",
     "h3": "npm:h3-nightly@latest",
+    "jiti": "^2.4.2",
     "knitwork": "^1.2.0",
     "listhen": "^1.9.0",
     "magicast": "^0.3.5",
@@ -79,6 +82,7 @@
     "yocto-spinner": "^0.2.1"
   },
   "devDependencies": {
+    "@types/babel__core": "^7.20.5",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "react": "^19.0.0",

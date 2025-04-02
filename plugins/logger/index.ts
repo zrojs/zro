@@ -1,7 +1,7 @@
 import defu from "defu";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { RouteTree } from "zro/plugin";
+import { getConfig, type RouteTree } from "zro/plugin";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,7 +19,7 @@ export const defineConfig = (config?: Partial<Config>) => {
   return defu(config, defaultConfig);
 };
 
-const configName = "logger";
+export const configName = "logger";
 
 export const setup = (tree: RouteTree) => {
   /**
@@ -28,12 +28,16 @@ export const setup = (tree: RouteTree) => {
    * tree.getRoute("_id").addChildRoute(filePath)
    * tree.getRoute("_id").addMiddleware(unImportObj)
    */
-  Object.keys(tree).forEach((file) => {});
+  const config = getConfig();
+  console.log(config);
   tree.findRootRoutes().forEach((route) => {
-    route?.addMiddleware({
-      name: "logger",
-      from: __dirname + "/plugin",
-    });
+    route?.addMiddleware(
+      {
+        name: "logger",
+        from: __dirname + "/plugin",
+      },
+      configName
+    );
   });
   // console.log("logger setup");
 };

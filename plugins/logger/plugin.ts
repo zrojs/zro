@@ -1,3 +1,4 @@
+import { getConfig } from "zro/plugin";
 import { getRequest, Middleware } from "zro/router";
 
 const redBg = (str: string) => `\x1b[41m${str}\x1b[0m`;
@@ -34,6 +35,8 @@ const getMethodColor = (method: string) => {
 };
 
 export const logger = new Middleware(async ({ next }) => {
+  const config = getConfig();
+  console.log(config);
   const startTime = Date.now();
   const { request } = getRequest();
   const data = await next();

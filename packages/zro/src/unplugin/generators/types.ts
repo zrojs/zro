@@ -1,7 +1,7 @@
 import { genSafeVariableName } from "knitwork";
 import { mkdir, writeFile } from "node:fs/promises";
 import { relative } from "node:path";
-import { RouteTree, TreeRoute } from "src/plugin/RouteTree";
+import { RouteTree, TreeRoute } from "src/plugin";
 import { joinURL } from "ufo";
 import { createUnimport, Import } from "unimport";
 

@@ -45,7 +45,6 @@ export class Cache {
         );
       }
     }
-
     return item.data;
   }
 

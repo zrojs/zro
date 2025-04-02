@@ -7,7 +7,8 @@ import { createUnimport, Import } from "unimport";
 
 export const createRouterFile = async (tree: RouteTree, destDir: string) => {
   const imports: Import[] = [];
-  let code = "\n\n export const router = new Router();\n\n";
+  let serverCode = "\n\n export const router = new Router();\n\n";
+  let clientCode = "\n\n export const router = new Router();\n\n";
 
   imports.push({
     name: "Route",
@@ -17,6 +18,10 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
     name: "Router",
     from: "zro/router",
   });
+  imports.push({
+    name: "withPluginContext",
+    from: "zro/plugin",
+  });
 
   const walkRoutes = (route: TreeRoute, parent?: TreeRoute) => {
     imports.push({
@@ -25,7 +30,7 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
       from: relative(destDir, route.filePath).replace(/\.[^/.]+$/, ""),
     });
 
-    code += `const ${genSafeVariableName(
+    serverCode += `const ${genSafeVariableName(
       `route_${route.path}`
     )} = new Route(${JSON.stringify(route.path)}, {
   parent: ${parent ? genSafeVariableName(`route_${parent.path}`) : "undefined"},
@@ -62,12 +67,56 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
     },
   }
 })${route.extraMiddlewares
-      .map((middlewareImport) => {
-        const as = genSafeVariableName(`import_${middlewareImport.name}`);
-        imports.push({ ...middlewareImport, as });
+      .map((middlewareInfo) => {
+        const { unImport, configFileName } = middlewareInfo;
+        const as = genSafeVariableName(`import_${unImport.name}`);
+        imports.push({
+          ...{
+            ...unImport,
+            from: relative(joinURL(process.cwd(), ".zro"), unImport.from),
+          },
+          as,
+        });
+        if (configFileName) {
+          imports.push({
+            name: "default",
+            as: `import_config_${unImport.name}`,
+            from: `configs/${configFileName}`,
+          });
+          return `.addMiddleware(withPluginContext(${`import_config_${unImport.name}`}, ${as}))`;
+        }
         return `.addMiddleware(${as})`;
       })
       .join("\n")}
+${
+  route.isLeaf
+    ? `router.addRoute(${genSafeVariableName(`route_${route.path}`)})\n`
+    : ""
+}
+\n`;
+
+    clientCode += `const ${genSafeVariableName(
+      `route_${route.path}`
+    )} = new Route(${JSON.stringify(route.path)}, {
+  parent: ${parent ? genSafeVariableName(`route_${parent.path}`) : "undefined"},
+  props: {
+    component: ${
+      route.moduleInfo?.hasComponent
+        ? `${genSafeVariableName(`import_${route.path}`)}.default`
+        : undefined
+    },
+    errorBoundary: ${
+      route.moduleInfo?.hasErrorBoundary
+        ? `${genSafeVariableName(`import_${route.path}`)}.ErrorBoundary`
+        : undefined
+    },
+    loading: ${
+      route.moduleInfo?.hasLoading
+        ? `${genSafeVariableName(`import_${route.path}`)}.Loading`
+        : undefined
+    },
+  }
+})
 ${
   route.isLeaf
     ? `router.addRoute(${genSafeVariableName(`route_${route.path}`)})\n`
@@ -87,10 +136,19 @@ ${
 
   const { injectImports } = createUnimport({ imports });
   await mkdir(destDir, { recursive: true });
-  await writeFile(
-    joinURL(destDir, "router.server.ts"),
-    (
-      await injectImports(code)
-    ).code
-  );
+
+  await Promise.allSettled([
+    writeFile(
+      joinURL(destDir, "router.client.ts"),
+      (
+        await injectImports(clientCode)
+      ).code
+    ),
+    writeFile(
+      joinURL(destDir, "router.server.ts"),
+      (
+        await injectImports(serverCode)
+      ).code
+    ),
+  ]);
 };

@@ -24,6 +24,7 @@ export const handleRequest = async (
   const initialUrl = new URL(req.url);
   const cache = new Cache();
   const accpet = getHeader(e, "accept");
+
   const { data, head, status } = await router.load(req);
 
   if (data instanceof Response) return data;

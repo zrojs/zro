@@ -23,7 +23,7 @@ const serverContext = createContext<App>({
 });
 export const useServer = serverContext.use;
 
-const viteContext = createContext<ViteDevServer>({
+export const viteContext = createContext<ViteDevServer>({
   asyncContext: true,
   AsyncLocalStorage,
 });

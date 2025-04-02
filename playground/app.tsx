@@ -1,6 +1,6 @@
 import { hydrateRoot } from "react-dom/client";
 import { Router } from "zro/react";
-import { router } from "./.zro/router.server";
+import { router } from "./.zro/router.client";
 
 hydrateRoot(
   document,

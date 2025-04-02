@@ -37,7 +37,7 @@ export class RouteTree {
 }
 
 export class TreeRoute {
-  public extraMiddlewares: Import[];
+  public extraMiddlewares: { unImport: Import; configFileName?: string }[];
   constructor(
     public path: string,
     public parentId: string | undefined,
@@ -48,8 +48,11 @@ export class TreeRoute {
   ) {
     this.extraMiddlewares = [];
   }
-  public addMiddleware(unImport: Import) {
-    this.extraMiddlewares.push(unImport);
+  public addMiddleware(unImport: Import, configFileName?: string) {
+    this.extraMiddlewares.push({
+      unImport,
+      configFileName,
+    });
   }
   public addChildRoute(filePath: string) {}
 }

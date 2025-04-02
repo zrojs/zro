@@ -1,5 +1,3 @@
-// import { parse as parseModule } from 'es-module-lexer'
-
 import { existsSync } from "fs";
 import { loadFile } from "magicast";
 import { exit } from "process";
@@ -11,6 +9,7 @@ import glob from "tiny-glob";
 import { joinURL } from "ufo";
 import { logger } from "../../utils/log";
 import { createRouterFile } from "./router";
+
 const filePathToRoutePath = (file: string, cwd: string) => {
   return file
     .replace(cwd, "")

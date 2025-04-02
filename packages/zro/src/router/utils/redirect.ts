@@ -1,6 +1,6 @@
 import { getRequest } from "src/router/Router";
 
-export const redirect = (url: string, code: number = 301) => {
+export const redirect = (url: string, code: number = 302) => {
   const { request } = getRequest();
   const origin = new URL(request.url).origin;
   let dest = "";
