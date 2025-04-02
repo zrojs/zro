@@ -74,7 +74,7 @@
     "pkg-types": "^2.1.0",
     "react-error-boundary": "^5.0.0",
     "rou3": "^0.5.1",
-    "tiny-glob": "^0.2.9",
+    "tinyglobby": "^0.2.12",
     "ufo": "^1.5.4",
     "unctx": "^2.4.1",
     "unimport": "^4.1.2",

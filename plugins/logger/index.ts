@@ -6,16 +6,16 @@ import { getConfig, type RouteTree } from "zro/plugin";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-type Config = {
+export type LoggerConfig = {
   /** @default true */
-  colorized: boolean;
+  enabled: boolean;
 };
 
-const defaultConfig: Config = {
-  colorized: true,
+const defaultConfig: LoggerConfig = {
+  enabled: true,
 };
 
-export const defineConfig = (config?: Partial<Config>) => {
+export const defineConfig = (config?: Partial<LoggerConfig>) => {
   return defu(config, defaultConfig);
 };
 
@@ -28,16 +28,16 @@ export const setup = (tree: RouteTree) => {
    * tree.getRoute("_id").addChildRoute(filePath)
    * tree.getRoute("_id").addMiddleware(unImportObj)
    */
-  const config = getConfig();
-  console.log(config);
-  tree.findRootRoutes().forEach((route) => {
-    route?.addMiddleware(
-      {
-        name: "logger",
-        from: __dirname + "/plugin",
-      },
-      configName
-    );
-  });
+  const config = getConfig<LoggerConfig>();
+  if (config.enabled)
+    tree.findRootRoutes().forEach((route) => {
+      route?.addMiddleware(
+        {
+          name: "logger",
+          from: __dirname + "/plugin",
+        },
+        configName
+      );
+    });
   // console.log("logger setup");
 };

@@ -5,7 +5,7 @@ import { registerPlugins } from "src/plugin/register";
 import { RouteTree } from "src/plugin/RouteTree";
 import { ZroUnpluginOptions } from "src/unplugin";
 import { createTypesFile } from "src/unplugin/generators/types";
-import glob from "tiny-glob";
+import { glob } from "tinyglobby";
 import { joinURL } from "ufo";
 import { logger } from "../../utils/log";
 import { createRouterFile } from "./router";
@@ -163,8 +163,8 @@ export const prepare = async ({ routesDir, options }: PrepareOptions) => {
   // more precise glob to includes only _layout.tsx and index.tsx
   const files = await glob("**/*.{ts,tsx,js,jsx}", {
     cwd: routesDir,
-    filesOnly: true,
     absolute: true,
+    onlyFiles: true,
   });
 
   // it must return an class/obj to be able to traverse tree
@@ -176,10 +176,7 @@ export const prepare = async ({ routesDir, options }: PrepareOptions) => {
 
   // register plugins
   await registerPlugins(options.plugins, routeTree);
-  // const plugins = usePluginContainer();
-  // console.log(plugins);
 
   await createRouterFile(routeTree, joinURL(process.cwd(), ".zro"));
   await createTypesFile(routeTree, joinURL(process.cwd(), ".zro"));
-  // console.log(routeTree)
 };
