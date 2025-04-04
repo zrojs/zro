@@ -1,10 +1,9 @@
 import { createRequire } from "module";
 import { addDependency } from "nypm";
 import { useVite } from "src/dev-server";
-import { PluginConfigContext } from "src/plugin";
 import { joinURL } from "ufo";
 import { withAsyncContext } from "unctx";
-import { RouteTree } from "zro/plugin";
+import { Plugin, PluginConfigContext, RouteTree } from ".";
 
 const require = createRequire(process.cwd());
 
@@ -13,15 +12,20 @@ export const registerPlugins = async (
   routeTree: RouteTree
 ) => {
   for (const plugin of plugins) {
-    const { setup, configName } = await importPlugin(plugin);
+    const { default: pluginModule } = (await importPlugin(plugin)) as {
+      default: Plugin<any>;
+    };
+    const { configFileName, setup } = pluginModule;
     const vite = useVite();
     const config = (
-      await vite.ssrLoadModule(joinURL(process.cwd(), `configs/${configName}`))
+      await vite.ssrLoadModule(
+        joinURL(process.cwd(), `configs/${configFileName}`)
+      )
     ).default;
     PluginConfigContext.callAsync(
       config,
       withAsyncContext(async () => {
-        return setup(routeTree);
+        return setup.call(pluginModule, routeTree);
       }, true)
     );
   }

@@ -1,7 +1,6 @@
-import { Link, Outlet, useLoaderData } from "zro/react";
+import { ErrorBoundaryProps, Link, Outlet, useLoaderData } from "zro/react";
 import { Head, useHead } from "zro/unhead";
 import styles from "./styles.css?url";
-import { useEffect, useState } from "react";
 
 type Route = Routes["/_layout"];
 
@@ -45,4 +44,8 @@ export default function RootLayout() {
 
 export const Loading = () => {
   return <div>Loading main layout...</div>;
+};
+
+export const ErrorBoundary = (props: ErrorBoundaryProps) => {
+  return props.error.message;
 };

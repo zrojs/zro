@@ -1,7 +1,7 @@
 import defu from "defu";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { getConfig, type RouteTree } from "zro/plugin";
+import { getConfig, type Plugin } from "zro/plugin";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,33 +11,29 @@ export type LoggerConfig = {
   enabled: boolean;
 };
 
-const defaultConfig: LoggerConfig = {
-  enabled: true,
+const plugin: Plugin<LoggerConfig> = {
+  name: "logger",
+  configFileName: "logger",
+  setup(tree) {
+    const config = getConfig<LoggerConfig>();
+    if (config.enabled)
+      tree.findRootRoutes().forEach((route) => {
+        route?.addMiddleware(
+          {
+            name: "logger",
+            from: __dirname + "/plugin",
+          },
+          this.configFileName
+        );
+      });
+  },
 };
 
-export const defineConfig = (config?: Partial<LoggerConfig>) => {
+export default plugin;
+
+export const defineConfig = (config: Partial<LoggerConfig>) => {
+  const defaultConfig: LoggerConfig = {
+    enabled: true,
+  };
   return defu(config, defaultConfig);
-};
-
-export const configName = "logger";
-
-export const setup = (tree: RouteTree) => {
-  /**
-   * get config // getConfig<Config>
-   * tree.findRootRoutes()[0].addMiddleware(unImportObj)
-   * tree.getRoute("_id").addChildRoute(filePath)
-   * tree.getRoute("_id").addMiddleware(unImportObj)
-   */
-  const config = getConfig<LoggerConfig>();
-  if (config.enabled)
-    tree.findRootRoutes().forEach((route) => {
-      route?.addMiddleware(
-        {
-          name: "logger",
-          from: __dirname + "/plugin",
-        },
-        configName
-      );
-    });
-  // console.log("logger setup");
 };
