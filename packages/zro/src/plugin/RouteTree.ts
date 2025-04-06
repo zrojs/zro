@@ -4,6 +4,8 @@ import { Import } from "unimport";
 
 export class RouteTree {
   private tree = createRouter<TreeRoute>();
+  private bootstrapScripts: { unImport: Import; configFileName?: string }[] =
+    [];
   private _tree: Tree["children"];
   constructor(tree: Tree["children"]) {
     // traverse tree and create Route objects
@@ -33,6 +35,12 @@ export class RouteTree {
   }
   public getRoute(id: string) {
     return findRoute(this.tree, "", id)?.data;
+  }
+  public addBootstrapScript(imp: Import, configFileName?: string) {
+    this.bootstrapScripts.push({ unImport: imp, configFileName });
+  }
+  public getBootstrapScripts() {
+    return this.bootstrapScripts;
   }
 }
 

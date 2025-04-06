@@ -19,9 +19,35 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
     from: "zro/router",
   });
   imports.push({
-    name: "withPluginContext",
+    name: "middlewareWithPluginContext",
     from: "zro/plugin",
   });
+  imports.push({
+    name: "fnWithPluginContext",
+    from: "zro/plugin",
+  });
+
+  for (const bootstrapScript of tree.getBootstrapScripts()) {
+    const { unImport, configFileName } = bootstrapScript;
+    imports.push({
+      name: "default",
+      as: `import_config_${unImport.name}`,
+      from: `configs/${configFileName}`,
+    });
+
+    imports.push({
+      ...{
+        ...unImport,
+        from: relative(joinURL(process.cwd(), ".zro"), unImport.from),
+      },
+      as: genSafeVariableName(`import_${unImport.name}`),
+    });
+    serverCode += `await fnWithPluginContext(${`import_config_${unImport.name}`}, ${genSafeVariableName(
+      `import_${unImport.name}`
+    )})\n`;
+  }
+
+  serverCode += `\n`;
 
   const walkRoutes = (route: TreeRoute, parent?: TreeRoute) => {
     imports.push({
@@ -83,7 +109,7 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
             as: `import_config_${unImport.name}`,
             from: `configs/${configFileName}`,
           });
-          return `.addMiddleware(withPluginContext(${`import_config_${unImport.name}`}, ${as}))`;
+          return `.addMiddleware(middlewareWithPluginContext(${`import_config_${unImport.name}`}, ${as}))`;
         }
         return `.addMiddleware(${as})`;
       })

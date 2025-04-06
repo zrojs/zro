@@ -5,7 +5,7 @@ export * from "./RouteTree";
 
 export const PluginConfigContext = createContext();
 export const getConfig = PluginConfigContext.tryUse as <T>() => T;
-export const withPluginContext = <T extends Middleware<any, any>>(
+export const middlewareWithPluginContext = <T extends Middleware<any, any>>(
   config: any,
   fn: T
 ) => {
@@ -17,4 +17,13 @@ export const withPluginContext = <T extends Middleware<any, any>>(
       })
     );
   });
+};
+
+export const fnWithPluginContext = <T extends Function>(config: any, fn: T) => {
+  return PluginConfigContext.callAsync(
+    config,
+    withAsyncContext(async () => {
+      return await fn();
+    })
+  );
 };

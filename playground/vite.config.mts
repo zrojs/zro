@@ -10,7 +10,7 @@ export default defineConfig({
     tsconfigPaths(),
     tailwindcss(),
     zro({
-      plugins: ["@zro/logger"],
+      plugins: ["@zro/logger", "@zro/db"],
     }),
     react(),
     inspect(),

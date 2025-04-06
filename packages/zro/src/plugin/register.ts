@@ -35,6 +35,7 @@ const importPlugin = async (plugin: string) => {
   try {
     return await require(plugin);
   } catch (e) {
+    console.error(e);
     await addDependency(plugin, { cwd: process.cwd(), silent: true });
     return importPlugin(plugin);
   }

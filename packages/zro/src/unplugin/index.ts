@@ -77,6 +77,7 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
             });
           },
           async watchChange(id, change) {
+            // console.log(id);
             if (!id.startsWith(joinURL(process.cwd(), ".zro"))) {
               vite!.moduleGraph.invalidateModule(
                 vite?.moduleGraph.getModuleById(id)!

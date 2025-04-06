@@ -10,7 +10,9 @@
   "author": "Nariman Movaffaghi",
   "license": "MIT",
   "dependencies": {
+    "@zro/db": "workspace:*",
     "@zro/logger": "workspace:*",
+    "drizzle-orm": "^0.41.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "unctx": "^2.4.1",

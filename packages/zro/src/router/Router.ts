@@ -91,7 +91,7 @@ export class Router {
                         dataPerRoute.set(routes[index].getPath(), newData);
                         // if didn't error, load next route
                         if (newData instanceof Error) {
-                          ctx.status = 401;
+                          ctx.status = 400;
                           return dataPerRoute;
                         }
                         if (newData instanceof Response) {

@@ -1,6 +1,6 @@
 {
   "name": "@zro/logger",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "type": "module",
   "description": "Request logger for ZRO apps",
   "main": "./dist/index.js",

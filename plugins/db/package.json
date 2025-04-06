@@ -1,0 +1,38 @@
+{
+  "name": "@zro/db",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "unjs/db0 integration for ZRO apps",
+  "scripts": {
+    "dev": "tsc-watch",
+    "build": "tsc"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./connectors/*": {
+      "types": "./dist/connectors/*.d.ts",
+      "default": "./dist/connectors/*.js"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [],
+  "author": "Nariman Movaffaghi",
+  "license": "MIT",
+  "packageManager": "pnpm@10.6.3",
+  "devDependencies": {
+    "tsc-watch": "^6.2.1",
+    "typescript": "^5.5.4",
+    "zro": "workspace:*"
+  },
+  "dependencies": {
+    "db0": "^0.3.1",
+    "defu": "^6.1.4",
+    "drizzle-orm": "^0.41.0"
+  }
+}

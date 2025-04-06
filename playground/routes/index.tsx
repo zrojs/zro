@@ -1,5 +1,3 @@
-import { getHead } from "zro/router";
-
 type Route = Routes["/"];
 
 export const loader = () => {
