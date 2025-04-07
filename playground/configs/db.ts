@@ -3,7 +3,14 @@ import sqlite from "@zro/db/connectors/node-sqlite";
 
 export default defineConfig({
   connector: sqlite({
-    name: ":memory:",
+    path: "db.sqlite",
   }),
   orm: "drizzle",
+  /*
+  production:{
+    connector: cloudflareD1({
+      bindingName: "DB",
+    })
+  }
+  */
 });

@@ -5,6 +5,7 @@ import defu from "defu";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Plugin } from "zro/plugin";
+export * from "db0";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

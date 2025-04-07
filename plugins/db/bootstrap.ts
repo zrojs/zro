@@ -1,6 +1,6 @@
 import { createDatabase } from "db0";
-import { DBConfig } from "index";
 import { getConfig } from "zro/plugin";
+import { DBConfig } from ".";
 
 export const bootstrap = async () => {
   const config = getConfig<DBConfig>();

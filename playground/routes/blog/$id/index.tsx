@@ -1,27 +1,30 @@
-import { use } from "react";
+import { getOrm } from "@zro/db";
+import * as schema from "configs/db.schema";
+import { eq } from "drizzle-orm";
 import { ErrorBoundaryProps, useLoaderData } from "zro/react";
 import { abort, getRequest } from "zro/router";
 import { useHead } from "zro/unhead";
-import { posts } from "~/data";
 
 type Route = Routes["/blog/:id/"];
 
 export const loader = async () => {
   const requestContext = getRequest();
   const { id } = requestContext.params;
-  const post = posts.find((post) => String(post.id) == id);
+  const orm = getOrm();
+  const post = await orm
+    .select()
+    .from(schema.posts)
+    .where(eq(schema.posts.id, parseInt(id)))
+    .get();
+
   if (!post) abort(404, "Post not found");
   return {
-    post: new Promise<(typeof posts)[number]>(async (resolve) => {
-      await new Promise((r) => setTimeout(r, 1000));
-      resolve(posts.find((post) => String(post.id) == id)!);
-    }),
+    post,
   };
 };
 
 export default function SingleBlog() {
-  const loaderData = useLoaderData<Route>();
-  const post = use(loaderData.post);
+  const { post } = useLoaderData<Route>();
   useHead({
     title: post.title,
     titleTemplate(title) {

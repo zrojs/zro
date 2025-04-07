@@ -53,6 +53,7 @@ export const bootstrapDevServer = async ({
       clearScreen: false,
       appType: "custom",
     });
+
     return viteContext.call(vite, async () => {
       // load zro options here
       app.use(fromNodeMiddleware(vite.middlewares));
