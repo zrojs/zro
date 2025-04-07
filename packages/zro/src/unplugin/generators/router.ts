@@ -32,7 +32,10 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
     imports.push({
       name: "default",
       as: `import_config_${unImport.name}`,
-      from: `configs/${configFileName}`,
+      from: relative(
+        joinURL(process.cwd(), ".zro"),
+        `configs/${configFileName}`
+      ),
     });
 
     imports.push({
@@ -107,7 +110,10 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
           imports.push({
             name: "default",
             as: `import_config_${unImport.name}`,
-            from: `configs/${configFileName}`,
+            from: relative(
+              joinURL(process.cwd(), ".zro"),
+              `configs/${configFileName}`
+            ),
           });
           return `.addMiddleware(middlewareWithPluginContext(${`import_config_${unImport.name}`}, ${as}))`;
         }

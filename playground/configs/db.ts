@@ -1,16 +1,10 @@
 import { defineConfig } from "@zro/db";
-import sqlite from "@zro/db/connectors/node-sqlite";
+import libsql from "@zro/db/connectors/libsql";
 
 export default defineConfig({
-  connector: sqlite({
-    path: "db.sqlite",
+  connector: libsql({
+    url: process.env.TURSO_DATABASE_URL!,
+    authToken: process.env.TURSO_AUTH_TOKEN!,
   }),
   orm: "drizzle",
-  /*
-  production:{
-    connector: cloudflareD1({
-      bindingName: "DB",
-    })
-  }
-  */
 });

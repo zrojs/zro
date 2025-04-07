@@ -6,7 +6,7 @@ import serverCodeRemover from "src/unplugin/babel/server-code-remover";
 import { joinURL } from "ufo";
 import { unctxPlugin } from "unctx/plugin";
 import { createUnplugin, UnpluginOptions } from "unplugin";
-import { createFilter, ViteDevServer } from "vite";
+import { createFilter, loadEnv, ViteDevServer } from "vite";
 import { prepare } from "./generators";
 
 export type ZroUnpluginOptions = {
@@ -26,13 +26,14 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
       ["configs/**/*.{js,jsx,ts,tsx}"],
       null
     );
-
     // import plugins one by one, then set them up here
     return [
       {
         name: "zro-vite-plugin",
         vite: {
           config(config, env) {
+            const vars = loadEnv(env.mode, process.cwd(), "");
+            Object.assign(process.env, vars);
             return {
               ...config,
               logLevel: "warn",
