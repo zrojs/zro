@@ -11,11 +11,11 @@ import {
 import { listen, Listener } from "listhen";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { Router as ZroRouter } from "src/router";
-import { handleRequest } from "src/server";
 import { extractUnheadInputFromHtml } from "src/unhead/server";
 import { createContext } from "unctx";
 import { createServer, ViteDevServer } from "vite";
 import loadingSpinner from "yocto-spinner";
+import { handleRequest } from "./server";
 
 const serverContext = createContext<App>({
   asyncContext: true,
@@ -62,7 +62,9 @@ export const bootstrapDevServer = async ({
           const { router } = (await vite.ssrLoadModule(
             "/.zro/router.server"
           )) as { router: ZroRouter };
+
           const req = toWebRequest(e);
+
           const viteHtml = await vite.transformIndexHtml(
             req.url,
             "<html><head></head><body></body></html>"

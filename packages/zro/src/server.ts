@@ -25,7 +25,7 @@ export const handleRequest = async (
   const cache = new Cache();
   const accpet = getHeader(e, "accept");
 
-  const { data, head, status } = await router.load(req);
+  const { data, head, status } = await router.load(req, { event: e });
 
   if (data instanceof Response) return data;
   if (accpet === "text/x-script") {

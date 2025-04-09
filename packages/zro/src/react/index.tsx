@@ -191,7 +191,7 @@ export const Router: FC<RouterProps> = ({
   return (
     <UnheadProvider head={head}>
       <html suppressHydrationWarning>
-        <head></head>
+        <head suppressHydrationWarning></head>
         <body suppressHydrationWarning>
           <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
             <navigateContext.Provider value={navigateValue}>

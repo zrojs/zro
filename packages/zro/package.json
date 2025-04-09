@@ -39,6 +39,14 @@
     "./plugin": {
       "types": "./dist/src/plugin/index.d.ts",
       "import": "./dist/src/plugin/index.js"
+    },
+    "./server": {
+      "types": "./dist/src/server.d.ts",
+      "import": "./dist/src/server.js"
+    },
+    "./router/server": {
+      "types": "./dist/src/router/server/index.d.ts",
+      "import": "./dist/src/router/server/index.js"
     }
   },
   "scripts": {
