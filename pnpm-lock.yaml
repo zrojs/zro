@@ -118,6 +118,9 @@ importers:
 
   playground:
     dependencies:
+      '@zro/auth':
+        specifier: workspace:*
+        version: link:../plugins/auth
       '@zro/db':
         specifier: workspace:*
         version: link:../plugins/db
@@ -173,6 +176,22 @@ importers:
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.8.2)(vite@6.2.2(jiti@2.4.2)(lightningcss@1.29.2))
+
+  plugins/auth:
+    dependencies:
+      defu:
+        specifier: ^6.1.4
+        version: 6.1.4
+    devDependencies:
+      tsc-watch:
+        specifier: ^6.2.1
+        version: 6.2.1(typescript@5.8.2)
+      typescript:
+        specifier: ^5.5.4
+        version: 5.8.2
+      zro:
+        specifier: workspace:*
+        version: link:../../packages/zro
 
   plugins/db:
     dependencies:

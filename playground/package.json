@@ -14,6 +14,7 @@
   "dependencies": {
     "@zro/db": "workspace:*",
     "@zro/logger": "workspace:*",
+    "@zro/auth": "workspace:*",
     "drizzle-kit": "^0.30.6",
     "drizzle-orm": "^0.41.0",
     "react": "^19.0.0",

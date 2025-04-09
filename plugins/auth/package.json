@@ -1,0 +1,32 @@
+{
+  "name": "@zro/auth",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Auth integration for ZRO",
+  "scripts": {
+    "dev": "tsc-watch",
+    "build": "tsc"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./providers/*": {
+      "types": "./dist/providers/*.d.ts",
+      "default": "./dist/providers/*.js"
+    }
+  },
+  "keywords": [],
+  "author": "Nariman Movaffaghi",
+  "license": "MIT",
+  "packageManager": "pnpm@10.6.3",
+  "devDependencies": {
+    "tsc-watch": "^6.2.1",
+    "typescript": "^5.5.4",
+    "zro": "workspace:*"
+  },
+  "dependencies": {
+    "defu": "^6.1.4"
+  }
+}
