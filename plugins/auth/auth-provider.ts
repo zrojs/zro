@@ -1,3 +1,4 @@
+import { AuthConfig } from "index";
 import { RouteTree } from "zro/plugin";
 
 export type AuthConstructorOptions<
@@ -27,7 +28,7 @@ export class AuthProvider<
     this.authenticate = options.authenticate;
   }
 
-  async registerRotes(tree: RouteTree) {
+  async registerRotes(tree: RouteTree, config: AuthConfig) {
     throw new Error("Each Provider needs to implement registerRotes method");
   }
 }

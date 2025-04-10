@@ -1,17 +1,30 @@
-import { getRequest } from "zro/router";
-import { deleteCookie, getSession } from "zro/router/server";
+import z from "zod";
+import { Action, getRequest } from "zro/router";
 
 type Route = Routes["/"];
+
+export const actions = {
+  login: new Action({
+    input: z.object({
+      username: z.string(),
+      password: z.string(),
+    }),
+    async handler({ password, username }) {
+      console.log(username, password);
+      return true;
+    },
+  }),
+};
 
 export const loader = async () => {
   const { request } = getRequest();
 
-  const session = await getSession<{ user?: string }>({
-    password: process.env.AUTH_SESSION_KEY!,
-  });
+  // const session = await getSession<{ user?: string }>({
+  //   password: process.env.AUTH_SESSION_KEY!,
+  // });
 
-  console.log(session.id);
-  console.log(deleteCookie("hello"));
+  // console.log(session.id);
+  // console.log(deleteCookie("hello"));
 
   /*
   const session = getSession();

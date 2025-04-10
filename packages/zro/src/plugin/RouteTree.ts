@@ -1,5 +1,5 @@
 import { addRoute, createRouter, findRoute } from "rou3";
-import { RouteModuleInfo, Tree } from "src/unplugin/generators";
+import { getModuleInfo, RouteModuleInfo, Tree } from "src/unplugin/generators";
 import { Import } from "unimport";
 
 export class RouteTree {
@@ -42,6 +42,30 @@ export class RouteTree {
   public getBootstrapScripts() {
     return this.bootstrapScripts;
   }
+  public async addRootRoute(
+    filePath: string,
+    path: string,
+    configFileName?: string
+  ) {
+    const moduleInfo = await getModuleInfo(filePath);
+    const route = new TreeRoute(
+      path,
+      undefined,
+      filePath,
+      true,
+      moduleInfo,
+      [],
+      configFileName
+    );
+    addRoute(this.tree, "", filePath, route);
+    this._tree[filePath] = {
+      children: {},
+      filePath,
+      isLeaf: true,
+      moduleInfo,
+      path,
+    };
+  }
 }
 
 export class TreeRoute {
@@ -52,7 +76,8 @@ export class TreeRoute {
     public filePath: string,
     public isLeaf: boolean,
     public moduleInfo: RouteModuleInfo,
-    public children?: TreeRoute[]
+    public children?: TreeRoute[],
+    public configFileName?: string
   ) {
     this.extraMiddlewares = [];
   }

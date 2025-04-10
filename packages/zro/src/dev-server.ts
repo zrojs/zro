@@ -5,8 +5,8 @@ import {
   createApp,
   eventHandler,
   fromNodeMiddleware,
+  getRequestURL,
   toNodeListener,
-  toWebRequest,
 } from "h3";
 import { listen, Listener } from "listhen";
 import { AsyncLocalStorage } from "node:async_hooks";
@@ -59,18 +59,17 @@ export const bootstrapDevServer = async ({
       app.use(fromNodeMiddleware(vite.middlewares));
       app.use(
         eventHandler(async (e) => {
-          const { router } = (await vite.ssrLoadModule(
+          const { createRouter } = (await vite.ssrLoadModule(
             "/.zro/router.server"
-          )) as { router: ZroRouter };
+          )) as { createRouter: () => Promise<ZroRouter> };
 
-          const req = toWebRequest(e);
-
+          const url = getRequestURL(e).href;
           const viteHtml = await vite.transformIndexHtml(
-            req.url,
+            url,
             "<html><head></head><body></body></html>"
           );
           const { input } = extractUnheadInputFromHtml(viteHtml);
-          return handleRequest(e, router, input);
+          return handleRequest(e, await createRouter(), input);
         })
       );
       const listener = await listen(toNodeListener(app), {

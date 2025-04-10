@@ -5,7 +5,7 @@ import { createContext, withAsyncContext } from "unctx";
 import { createHead } from "unhead/server";
 import { ResolvableHead, Unhead } from "unhead/types";
 import { Route } from "./Route";
-import { abort, isRedirectResponse } from "./utils";
+import { abort } from "./utils";
 
 type RequestContext = {
   request: Request;
@@ -68,6 +68,7 @@ export class Router {
   public async load(request: Request, serverCtxData?: ServerContextValue) {
     const path = new URL(request.url).pathname;
     const routeInfo = this.findRoute(path);
+
     const head = createHead();
     if (routeInfo) {
       const { params, tree: routes } = routeInfo;
@@ -102,7 +103,8 @@ export class Router {
                             }
                             if (newData instanceof Response) {
                               ctx.status = newData.status;
-                              if (isRedirectResponse(newData)) return newData;
+                              // if (isRedirectResponse(newData))
+                              return newData;
                             }
                             return loadRoutes(
                               index + 1,

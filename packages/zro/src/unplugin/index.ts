@@ -48,7 +48,6 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                   "zro/plugin",
                   "zro/router",
                   "zro/react",
-                  "zro/server",
                   ...options.plugins,
                 ],
               },
@@ -62,17 +61,11 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                   "zro/router",
                   "zro/react",
                   "zro/plugin",
-                  "zro/server",
                 ],
               },
               ssr: {
                 external: ["zro/react"],
-                noExternal: [
-                  "zro/router",
-                  "zro/plugin",
-                  "zro/server",
-                  ...options.plugins,
-                ],
+                noExternal: ["zro/router", "zro/plugin", ...options.plugins],
               },
             };
           },

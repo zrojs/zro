@@ -22,10 +22,10 @@ export const registerPlugins = async (
         joinURL(process.cwd(), `configs/${configFileName}`)
       )
     ).default;
-    PluginConfigContext.callAsync(
+    await PluginConfigContext.callAsync(
       config,
       withAsyncContext(async () => {
-        return setup.call(pluginModule, routeTree);
+        return await setup.call(pluginModule, routeTree);
       }, true)
     );
   }

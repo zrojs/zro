@@ -1,6 +1,7 @@
 import { defu } from "defu";
 import { merge } from "es-toolkit";
-import { dataContext, getDataContext } from "src/router/Router";
+import { dataContext, getDataContext, getRequest } from "src/router/Router";
+import { getQuery } from "ufo";
 import { withAsyncContext } from "unctx";
 import { Action } from "./Action";
 import { Middleware } from "./Middleware";
@@ -37,7 +38,7 @@ export type LoaderOptions<
   parent?: Route<any, ParentLoaderData>;
   loader?: () => LoaderData | Promise<LoaderData>;
   middlewares: TMiddlewares;
-  actions: Action[];
+  actions: Record<string, Action<any, any>>;
   props?: Record<string, any>;
 };
 
@@ -109,6 +110,29 @@ export class Route<
     return routes;
   };
 
+  private getActionName(request: Request) {
+    const actionName = getQuery(request.url).action;
+    if (Array.isArray(actionName)) return actionName[0];
+    return actionName;
+  }
+
+  public async handleAction() {
+    const { request } = getRequest();
+    const actionName = this.getActionName(request);
+    const action = this.options.actions[actionName];
+    if (!action) throw new Error(`Action ${actionName} not found`);
+    const res = await action.run();
+    if (!(res instanceof Response)) {
+      const isJSON = typeof res === "object";
+      return new Response(isJSON ? JSON.stringify(res) : res, {
+        headers: {
+          "Content-Type": isJSON ? "application/json" : "text/plain",
+        },
+      });
+    }
+    return res;
+  }
+
   public async load(
     next: (data: any) => Promise<any> = async (data: any) => data
   ): Promise<Data> {
@@ -119,8 +143,21 @@ export class Route<
       index: number,
       data: any = {}
     ): Promise<any> => {
+      const { request } = getRequest();
       return withAsyncContext(async () => {
         if (index >= middlewares.length) {
+          if (request.method === "POST") {
+            let actionData;
+            try {
+              actionData = await this.handleAction();
+              if (actionData) {
+                loadedData = merge(actionData, loadedData);
+              }
+            } catch (e) {
+              actionData = e;
+            }
+            return await next(actionData);
+          }
           if (this.options.loader) {
             let loaderData;
             try {

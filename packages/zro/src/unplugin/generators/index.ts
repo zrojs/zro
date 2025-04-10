@@ -38,7 +38,7 @@ export type Tree = {
   };
 };
 
-const getModuleInfo = async (file: string) => {
+export const getModuleInfo = async (file: string) => {
   const module = await loadFile(file);
   const exports = Object.keys(module.exports);
   const d = {

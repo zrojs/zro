@@ -27,6 +27,7 @@
     "zro": "workspace:*"
   },
   "dependencies": {
-    "defu": "^6.1.4"
+    "defu": "^6.1.4",
+    "zod": "^3.24.2"
   }
 }

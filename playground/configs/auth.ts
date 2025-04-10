@@ -1,5 +1,5 @@
 import { defineConfig } from "@zro/auth";
-import { PasswordProvider } from "@zro/auth/providers/password";
+import { PasswordProvider } from "@zro/auth/providers/password/index";
 import { getOrm } from "@zro/db";
 import { and, eq } from "drizzle-orm";
 import { users } from "~/configs/db.schema";
@@ -12,7 +12,9 @@ type User = {
 export default defineConfig<User>({
   authPrefix: "/auth",
   loginPage: "/login",
-  appKey: process.env.AUTH_SESSION_KEY!,
+  session: {
+    password: process.env.AUTH_SESSION_KEY!,
+  },
   verifyToken: async (token) => {
     return {
       id: 1234,

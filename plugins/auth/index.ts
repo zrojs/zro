@@ -1,4 +1,5 @@
 import { AuthProvider } from "auth-provider";
+import { SessionConfig } from "h3";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getConfig, type Plugin } from "zro/plugin";
@@ -10,7 +11,7 @@ const __dirname = dirname(__filename);
 export type AuthConfig<TUser = unknown> = {
   authPrefix: string;
   loginPage: string;
-  appKey: string;
+  session: SessionConfig;
   verifyToken: (token: string) => TUser | Promise<TUser>;
   generateToken: (user: TUser) => Promise<string> | string;
   providers: [AuthProvider<TUser>, ...AuthProvider<TUser>[]];
@@ -19,8 +20,11 @@ export type AuthConfig<TUser = unknown> = {
 const plugin: Plugin<AuthConfig> = {
   name: "auth",
   configFileName: "auth",
-  setup(tree) {
+  async setup(tree) {
     const config = getConfig<AuthConfig>();
+    for (const provider of config.providers) {
+      await provider.registerRotes(tree, config);
+    }
     // register some routes based on the config
   },
 };

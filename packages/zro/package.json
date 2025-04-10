@@ -40,10 +40,6 @@
       "types": "./dist/src/plugin/index.d.ts",
       "import": "./dist/src/plugin/index.js"
     },
-    "./server": {
-      "types": "./dist/src/server.d.ts",
-      "import": "./dist/src/server.js"
-    },
     "./router/server": {
       "types": "./dist/src/router/server/index.d.ts",
       "import": "./dist/src/router/server/index.js"
@@ -67,6 +63,7 @@
   "dependencies": {
     "@babel/core": "^7.26.10",
     "@babel/types": "^7.27.0",
+    "@standard-schema/spec": "^1.0.0",
     "@unhead/react": "^2.0.1",
     "citty": "^0.1.6",
     "consola": "^3.4.0",

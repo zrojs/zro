@@ -9,7 +9,7 @@ export default defineConfig({
     tsconfigPaths(),
     tailwindcss(),
     zro({
-      plugins: ["@zro/logger", "@zro/db"],
+      plugins: ["@zro/logger", "@zro/db", "@zro/auth"],
     }),
     react(),
   ],
