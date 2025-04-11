@@ -6,7 +6,8 @@ import {
   SessionConfig,
   useSession,
 } from "h3";
-import { getServerContext } from "src/router/server/context";
+import { getServerContext } from "./context";
+export { ServerContext } from "./context";
 
 export const getEvent = (): H3Event => {
   return getServerContext()?.event as H3Event;

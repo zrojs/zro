@@ -69,6 +69,7 @@ export const bootstrapDevServer = async ({
             "<html><head></head><body></body></html>"
           );
           const { input } = extractUnheadInputFromHtml(viteHtml);
+
           return handleRequest(e, await createRouter(), input);
         })
       );
