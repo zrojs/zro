@@ -50,7 +50,7 @@ export class Action<TSchema extends StandardSchemaV1, ReturnType> {
     );
     return handler(body);
   }
-
+  // @remove
   public wrapWithConfig(config: any) {
     let _handler = this.options.handler;
     this.options.handler = (input: StandardSchemaV1.InferInput<TSchema>) =>
@@ -60,12 +60,3 @@ export class Action<TSchema extends StandardSchemaV1, ReturnType> {
     return this;
   }
 }
-
-/**
- * const actions = {
- *  login: new Action({
- *    input:
- *  })
- * }
- *
- */

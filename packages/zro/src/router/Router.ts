@@ -1,11 +1,11 @@
 import { toMerged } from "es-toolkit";
 import { addRoute, createRouter, findRoute } from "rou3";
 import { ServerContext, ServerContextValue } from "src/router/server/context";
+import { getQuery } from "ufo";
 import { createContext, withAsyncContext } from "unctx";
 import { createHead } from "unhead/server";
 import { ResolvableHead, Unhead } from "unhead/types";
 import { Route } from "./Route";
-import { abort } from "./utils";
 
 type RequestContext = {
   request: Request;
@@ -33,7 +33,13 @@ export class Router {
 
   public addRoute(route: Route<any, any>) {
     if (route.getPath() === "_root") this.rootRoute = route;
-    addRoute(this.router, "", route.getPath(), route);
+    addRoute(this.router, "get", route.getPath(), route);
+
+    // add route to actions
+    for (const actionKey of route.getActionKeys()) {
+      addRoute(this.router, `action-${actionKey}`, route.getPath(), route);
+    }
+
     // add not found route
     if (route.getParent()) {
       const currentParent = route.getParent()!;
@@ -44,7 +50,9 @@ export class Router {
           "",
           notFoundRoute,
           new Route<any, any>(notFoundRoute, {
-            loader: async () => abort(404, "Page not found"),
+            loader: async () => {
+              throw new Error("Page not found");
+            },
             parent: currentParent,
           })
         );
@@ -55,8 +63,15 @@ export class Router {
     return this.rootRoute;
   }
 
-  public findRoute(path: string) {
-    const destRoute = findRoute(this.router, "", path);
+  public findRoute(request: Request) {
+    const path = new URL(request.url).pathname;
+    const isAction = request.method.toLowerCase() === "post";
+    let method = "get";
+    if (isAction) {
+      const actionName = getQuery(request.url).action;
+      method = `action-${actionName}`;
+    }
+    const destRoute = findRoute(this.router, method, path);
     if (destRoute)
       return {
         route: destRoute.data,
@@ -66,64 +81,60 @@ export class Router {
     return null;
   }
   public async load(request: Request, serverCtxData?: ServerContextValue) {
-    const path = new URL(request.url).pathname;
-    const routeInfo = this.findRoute(path);
-
+    const routeInfo = this.findRoute(request);
     const head = createHead();
-    if (routeInfo) {
-      const { params, tree: routes } = routeInfo;
-      const ctx = { request, params: params || {}, status: 200 };
-      return ServerContext.callAsync(
-        serverCtxData,
-        withAsyncContext(async () => {
-          return requestContext.callAsync(
-            ctx,
-            withAsyncContext(async () => {
-              return HeadContext.callAsync(
-                head,
-                withAsyncContext(async () => {
-                  const dataPerRoute: Map<string, any> = new Map();
-                  const loadRoutes = async (
-                    index: number = 0,
-                    data: any = {}
-                  ) => {
-                    if (index >= routes.length) {
-                      return dataPerRoute;
-                    }
-                    return dataContext.callAsync(
-                      data,
-                      withAsyncContext(async () => {
-                        return await routes[index].load(
-                          async (newData: any): Promise<any> => {
-                            dataPerRoute.set(routes[index].getPath(), newData);
-                            // if didn't error, load next route
-                            if (newData instanceof Error) {
-                              ctx.status = 400;
-                              return dataPerRoute;
-                            }
-                            if (newData instanceof Response) {
-                              ctx.status = newData.status;
-                              // if (isRedirectResponse(newData))
-                              return newData;
-                            }
-                            return loadRoutes(
-                              index + 1,
-                              toMerged(data, newData!)
-                            );
-                          }
-                        );
-                      })
-                    );
-                  };
-                  return { data: await loadRoutes(), head, status: ctx.status };
-                })
-              );
-            })
-          );
-        })
-      );
-    }
 
-    throw new Error("Route not found");
+    const { params, tree: routes } = routeInfo!;
+    const ctx = { request, params: params || {}, status: 200 };
+    return ServerContext.callAsync(
+      serverCtxData,
+      withAsyncContext(async () => {
+        return requestContext.callAsync(
+          ctx,
+          withAsyncContext(async () => {
+            return HeadContext.callAsync(
+              head,
+              withAsyncContext(async () => {
+                const dataPerRoute: Map<string, any> = new Map();
+                const loadRoutes = async (
+                  index: number = 0,
+                  data: any = {}
+                ) => {
+                  if (index >= routes.length) {
+                    return dataPerRoute;
+                  }
+                  return dataContext.callAsync(
+                    data,
+                    withAsyncContext(async () => {
+                      return await routes[index].load(
+                        async (newData: any): Promise<any> => {
+                          dataPerRoute.set(routes[index].getPath(), newData);
+                          // if didn't error, load next route
+                          if (newData instanceof Error) {
+                            ctx.status = 400;
+                            return dataPerRoute;
+                          }
+                          if (newData instanceof Response) {
+                            ctx.status = newData.status;
+                            // if (isRedirectResponse(newData))
+                            return newData;
+                          }
+                          return loadRoutes(
+                            index + 1,
+                            toMerged(data, newData!)
+                          );
+                        },
+                        index === routes.length - 1
+                      );
+                    })
+                  );
+                };
+                return { data: await loadRoutes(), head, status: ctx.status };
+              })
+            );
+          })
+        );
+      })
+    );
   }
 }

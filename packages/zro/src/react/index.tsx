@@ -79,11 +79,11 @@ export const Router: FC<RouterProps> = ({
     initialUrl?.pathname || window.location.pathname
   );
   const findTree = useCallback((url: string) => {
-    const routeInfo = router.findRoute(url)!;
+    const req = new Request(
+      new URL(url, initialUrl?.origin || window.location.origin)
+    );
+    const routeInfo = router.findRoute(req)!;
     if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
-      const req = new Request(
-        new URL(url, initialUrl?.origin || window.location.origin)
-      );
       let reqKey = getRouterCacheKey(req.url);
       const loaderFn = () => {
         if (typeof window !== "undefined" && !hydrated) {

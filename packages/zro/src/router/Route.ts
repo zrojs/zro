@@ -95,6 +95,10 @@ export class Route<
     return this.options.props;
   }
 
+  public getActionKeys() {
+    return Object.keys(this.options.actions || {});
+  }
+
   public getRouteTree = (): Route<
     any,
     any,
@@ -134,7 +138,8 @@ export class Route<
   }
 
   public async load(
-    next: (data: any) => Promise<any> = async (data: any) => data
+    next: (data: any) => Promise<any> = async (data: any) => data,
+    isDestRoute?: boolean
   ): Promise<Data> {
     const middlewares = this.options.middlewares;
     let loadedData: any = getDataContext();
@@ -146,7 +151,7 @@ export class Route<
       const { request } = getRequest();
       return withAsyncContext(async () => {
         if (index >= middlewares.length) {
-          if (request.method === "POST") {
+          if (request.method.toLowerCase() === "post" && isDestRoute) {
             let actionData;
             try {
               actionData = await this.handleAction();

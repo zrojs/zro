@@ -39,17 +39,18 @@ export const logger = new Middleware(async ({ next }) => {
   const data = await next();
   const { status } = getRequest();
   const responseTime = Date.now() - startTime;
-  const pathname = new URL(request.url).pathname;
+  const url = new URL(request.url);
+  const path = url.pathname + url.search;
   const responseStatus = status || 200;
   const LINE_WIDTH = process.stdout.columns - 1 || 50;
   const logString = `${getMethodColor(
     request.method
-  )} ${pathname} ${responseTime}ms ${getBgColor(responseStatus)(
+  )} ${path} ${responseTime}ms ${getBgColor(responseStatus)(
     String(" " + responseStatus + " ")
   )} `;
   const dotsLength = Math.max(0, LINE_WIDTH - stripAnsi(logString).length);
   const dots = ".".repeat(dotsLength);
-  const log = `${getMethodColor(request.method)} ${pathname} ${dim(dots)} ${dim(
+  const log = `${getMethodColor(request.method)} ${path} ${dim(dots)} ${dim(
     responseTime + "ms"
   )} ${getBgColor(responseStatus)(String(" " + responseStatus + " "))} `;
   console.log(log);

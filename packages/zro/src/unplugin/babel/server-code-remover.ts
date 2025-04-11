@@ -41,3 +41,26 @@ export default function serverCodeRemover(): PluginObj {
     },
   };
 }
+
+export function stripAnnotatedBlocks(): PluginObj {
+  return {
+    visitor: {
+      Program(path) {
+        path.traverse({
+          enter(path) {
+            const leadingComments = path.node.leadingComments;
+            if (!leadingComments) return;
+
+            const shouldRemove = leadingComments.some((comment) =>
+              /@remove|@strip/.test(comment.value)
+            );
+
+            if (shouldRemove) {
+              path.remove();
+            }
+          },
+        });
+      },
+    },
+  };
+}

@@ -2,7 +2,9 @@ import { transform } from "@babel/core";
 import defu from "defu";
 import { viteContext } from "src/dev-server";
 import deadImportsRemover from "src/unplugin/babel/dead-imports-remover";
-import serverCodeRemover from "src/unplugin/babel/server-code-remover";
+import serverCodeRemover, {
+  stripAnnotatedBlocks,
+} from "src/unplugin/babel/server-code-remover";
 import { joinURL } from "ufo";
 import { unctxPlugin } from "unctx/plugin";
 import { createUnplugin, UnpluginOptions } from "unplugin";
@@ -18,6 +20,10 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
     const routesDir = process.cwd() + "/routes";
     const options = defu(_options, { plugins: [] });
     let vite: ViteDevServer | null = null;
+    const ziroRouterLibFilter = createFilter(
+      ["**/zro/dist/src/router/*.{js,jsx,ts,tsx}"],
+      null
+    );
     const routeFilesFilter = createFilter(
       ["routes/**/index.{js,jsx,ts,tsx}", "routes/**/_layout.{js,jsx,ts,tsx}"],
       null
@@ -93,13 +99,30 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
           },
           async transform(code, id, options) {
             const { ssr } = options || { ssr: false };
-            if (_options && !ssr && routeFilesFilter(id)) {
+            if (_options && !ssr && ziroRouterLibFilter(id)) {
               const res = transform(code, {
                 filename: id,
                 targets: {
                   esmodules: true,
                 },
-                plugins: [serverCodeRemover(), deadImportsRemover()],
+                plugins: [stripAnnotatedBlocks()],
+              });
+
+              return transform(res!.code!, {
+                filename: id,
+                targets: {
+                  esmodules: true,
+                },
+                plugins: [deadImportsRemover()],
+              })!.code!;
+            }
+            if (_options && !ssr && routeFilesFilter(id)) {
+              let res = transform(code, {
+                filename: id,
+                targets: {
+                  esmodules: true,
+                },
+                plugins: [serverCodeRemover()],
               });
 
               return transform(res!.code!, {
