@@ -37,7 +37,7 @@ export default defineConfig<User>({
           .where(and(eq(users.email, username), eq(users.password, password)))
           .get();
 
-        if (!user) throw new Error("User not found");
+        if (!user) throw new Error("Invalid credentials");
         return {
           email: username,
           id: user.id,

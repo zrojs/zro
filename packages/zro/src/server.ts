@@ -27,6 +27,7 @@ export const handleRequest = async (
 
   const { data, head, status } = await router.load(req, { event: e });
 
+  // we need this for redirections or other throwing responses
   if (data instanceof Response) return data;
   if (accpet === "text/x-script") {
     setHeader(e, "Content-Type", "text/x-script");

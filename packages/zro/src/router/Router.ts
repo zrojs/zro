@@ -1,6 +1,7 @@
 import { toMerged } from "es-toolkit";
 import { addRoute, createRouter, findRoute } from "rou3";
 import { ServerContext } from "src/router/server";
+import { abort } from "src/router/utils";
 import { getQuery } from "ufo";
 import { createContext, withAsyncContext } from "unctx";
 import { createHead } from "unhead/server";
@@ -51,7 +52,7 @@ export class Router {
           notFoundRoute,
           new Route<any, any>(notFoundRoute, {
             loader: async () => {
-              throw new Error("Page not found");
+              abort(404, "Page not found");
             },
             parent: currentParent,
           })
@@ -91,44 +92,41 @@ export class Router {
       ServerContext.unset();
       ServerContext.set(serverCtx);
     }
+    requestContext.unset();
+    requestContext.set(ctx);
 
-    return requestContext.callAsync(
-      ctx,
+    return HeadContext.callAsync(
+      head,
       withAsyncContext(async () => {
-        return HeadContext.callAsync(
-          head,
-          withAsyncContext(async () => {
-            const dataPerRoute: Map<string, any> = new Map();
-            const loadRoutes = async (index: number = 0, data: any = {}) => {
-              if (index >= routes.length) {
-                return dataPerRoute;
-              }
-              return dataContext.callAsync(
-                data,
-                withAsyncContext(async () => {
-                  return await routes[index].load(
-                    async (newData: any): Promise<any> => {
-                      dataPerRoute.set(routes[index].getPath(), newData);
-                      // if didn't error, load next route
-                      if (newData instanceof Error) {
-                        ctx.status = 400;
-                        return dataPerRoute;
-                      }
-                      if (newData instanceof Response) {
-                        ctx.status = newData.status;
-                        // if (isRedirectResponse(newData))
-                        return newData;
-                      }
-                      return loadRoutes(index + 1, toMerged(data, newData!));
-                    },
-                    index === routes.length - 1
-                  );
-                })
+        const dataPerRoute: Map<string, any> = new Map();
+        const loadRoutes = async (index: number = 0, data: any = {}) => {
+          if (index >= routes.length) {
+            return dataPerRoute;
+          }
+          return dataContext.callAsync(
+            data,
+            withAsyncContext(async () => {
+              return await routes[index].load(
+                async (newData: any): Promise<any> => {
+                  dataPerRoute.set(routes[index].getPath(), newData);
+                  // if didn't error, load next route
+                  if (newData instanceof Error) {
+                    if (ctx.status < 400) ctx.status = 400;
+                    return dataPerRoute;
+                  }
+                  if (newData instanceof Response) {
+                    ctx.status = newData.status;
+                    // if (isRedirectResponse(newData))
+                    return newData;
+                  }
+                  return loadRoutes(index + 1, toMerged(data, newData!));
+                },
+                index === routes.length - 1
               );
-            };
-            return { data: await loadRoutes(), head, status: ctx.status };
-          })
-        );
+            })
+          );
+        };
+        return { data: await loadRoutes(), head, status: ctx.status };
       })
     );
   }

@@ -33,11 +33,7 @@ export class Action<TSchema extends StandardSchemaV1, ReturnType> {
     let result = this.options.input["~standard"].validate(input);
     if (result instanceof Promise) result = await result;
     if (result.issues) {
-      abort(400, JSON.stringify(result.issues), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      abort(400, "Invalid input", result.issues);
       return;
     }
     return result.value;

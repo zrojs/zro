@@ -15,11 +15,12 @@ export const actions = {
       const config = getConfig<AuthConfig>();
       const providerConfig = config.providers[0] as PasswordProvider<{}>;
       const user = await providerConfig.authenticate(input);
+      const session = await getSession(config.session);
       if (!user) {
+        session.clear();
         throw new Error("Invalid credentials");
       }
       const token = await config.generateToken(user);
-      const session = await getSession(config.session);
       await session.update({
         token,
       });

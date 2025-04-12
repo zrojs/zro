@@ -1,6 +1,7 @@
 import { defu } from "defu";
 import { merge } from "es-toolkit";
 import { dataContext, getDataContext, getRequest } from "src/router/Router";
+import { safeRespose } from "src/router/utils/safe-response";
 import { getQuery } from "ufo";
 import { withAsyncContext } from "unctx";
 import { Action } from "./Action";
@@ -124,11 +125,12 @@ export class Route<
     const { request } = getRequest();
     const actionName = this.getActionName(request);
     const action = this.options.actions[actionName];
-    if (!action) throw new Error(`Action ${actionName} not found`);
-    const res = await action.run();
+
+    const res = await safeRespose(action.run.bind(action));
+
     if (!(res instanceof Response)) {
       const isJSON = typeof res === "object";
-      return new Response(isJSON ? JSON.stringify(res) : res, {
+      return new Response(isJSON ? JSON.stringify(res) : String(res), {
         headers: {
           "Content-Type": isJSON ? "application/json" : "text/plain",
         },
