@@ -2,7 +2,7 @@ import { AuthConfig } from "index";
 import { PasswordProvider } from "providers/password";
 import z from "zod";
 import { getConfig } from "zro/plugin";
-import { Action } from "zro/router";
+import { Action, redirect } from "zro/router";
 import { getSession } from "zro/router/server";
 
 export const actions = {
@@ -24,6 +24,8 @@ export const actions = {
       await session.update({
         token,
       });
+      if (config.onLoginSuccessRedirect)
+        return redirect(config.onLoginSuccessRedirect);
       return user;
     },
   }),

@@ -11,6 +11,7 @@ export const redirect = (url: string, code: number = 302) => {
   } catch (e) {
     dest = new URL(url, origin).href;
   }
+  getRequest().status = code;
   throw Response.redirect(dest, code);
 };
 

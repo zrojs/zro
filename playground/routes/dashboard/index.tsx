@@ -15,5 +15,5 @@ export default function DashboardPage() {
       return `${title} | ${data.user.name}`;
     },
   });
-  return <div>hi</div>;
+  return <div>dashboard is here {JSON.stringify(data.user)}</div>;
 }

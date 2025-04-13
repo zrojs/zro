@@ -4,7 +4,7 @@ import { getOrm } from "@zro/db";
 import { and, eq } from "drizzle-orm";
 import { users } from "~/configs/db.schema";
 
-type User = {
+export type User = {
   id: number;
   email: string;
 };
@@ -12,6 +12,7 @@ type User = {
 export default defineConfig<User>({
   authPrefix: "/auth",
   loginPage: "/login",
+  onLoginSuccessRedirect: "/dashboard",
   session: {
     password: process.env.AUTH_SESSION_KEY!,
   },

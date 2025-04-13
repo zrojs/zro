@@ -36,6 +36,7 @@ export default function RootLayout() {
         <Link href="/">[HOME]</Link>
         <Link href="/blog">[BLOG]</Link>
         <Link href="/dashboard">[DASHBOARD]</Link>
+        <Link href="/login">[Login]</Link>
       </div>
       <Outlet />
     </div>

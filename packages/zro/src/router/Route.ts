@@ -1,6 +1,7 @@
 import { defu } from "defu";
 import { merge } from "es-toolkit";
 import { dataContext, getDataContext, getRequest } from "src/router/Router";
+import { abort } from "src/router/utils";
 import { safeRespose } from "src/router/utils/safe-response";
 import { getQuery } from "ufo";
 import { withAsyncContext } from "unctx";
@@ -125,8 +126,10 @@ export class Route<
     const { request } = getRequest();
     const actionName = this.getActionName(request);
     const action = this.options.actions[actionName];
-
+    if (!action) abort(404, "Action not found");
     const res = await safeRespose(action.run.bind(action));
+
+    const status = getRequest().status;
 
     if (!(res instanceof Response)) {
       const isJSON = typeof res === "object";
@@ -134,6 +137,7 @@ export class Route<
         headers: {
           "Content-Type": isJSON ? "application/json" : "text/plain",
         },
+        status,
       });
     }
     return res;
@@ -199,5 +203,9 @@ export class Route<
     };
 
     return (await runMiddlewares(0)) as Data;
+  }
+
+  public hasGet() {
+    return !!this.options.loader || this.options.props?.["component"];
   }
 }

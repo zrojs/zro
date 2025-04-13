@@ -34,7 +34,8 @@ export class Router {
 
   public addRoute(route: Route<any, any>) {
     if (route.getPath() === "_root") this.rootRoute = route;
-    addRoute(this.router, "get", route.getPath(), route);
+
+    if (route.hasGet()) addRoute(this.router, "get", route.getPath(), route);
 
     // add route to actions
     for (const actionKey of route.getActionKeys()) {
@@ -81,9 +82,19 @@ export class Router {
       };
     return null;
   }
+
+  public setUpRequest(request: Request) {
+    const routeInfo = this.findRoute(request);
+    const { params } = routeInfo!;
+    const ctx = { request, params: params || {}, status: 200 };
+    requestContext.unset();
+    requestContext.set(ctx);
+  }
+
   public async load(request: Request, serverCtx?: any) {
     const routeInfo = this.findRoute(request);
     const head = createHead();
+    this.setUpRequest(request);
 
     const { params, tree: routes } = routeInfo!;
     const ctx = { request, params: params || {}, status: 200 };
@@ -92,8 +103,6 @@ export class Router {
       ServerContext.unset();
       ServerContext.set(serverCtx);
     }
-    requestContext.unset();
-    requestContext.set(ctx);
 
     return HeadContext.callAsync(
       head,

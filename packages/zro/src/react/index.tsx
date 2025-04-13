@@ -86,11 +86,11 @@ export const Router: FC<RouterProps> = ({
     if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
       let reqKey = getRouterCacheKey(req.url);
       const loaderFn = () => {
+        router.setUpRequest(req);
         if (typeof window !== "undefined" && !hydrated) {
           hydrated = true;
           // @ts-ignore
           const res = decode(window._readableStream);
-
           return res;
         }
         if (!ssr) {
@@ -389,3 +389,5 @@ export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
   if (data instanceof Error) throw data;
   return data;
 };
+
+export * from "./useAction";
