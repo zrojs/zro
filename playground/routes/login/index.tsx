@@ -1,5 +1,5 @@
 import { guest } from "@zro/auth";
-import { Link, useAction } from "zro/react";
+import { useAction } from "zro/react";
 
 export const middlewares = [guest("/dashboard")];
 
@@ -24,9 +24,9 @@ export default function LoginPage() {
       <button className="bg-gray-700 px-2 py-1 rounded-md text-white">
         login
       </button>
-      <Link href="/auth/github">
+      <a href="/auth/github">
         <button type="button">Login with github</button>
-      </Link>
+      </a>
     </form>
   );
 }

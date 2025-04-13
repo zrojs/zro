@@ -94,6 +94,9 @@ export const Router: FC<RouterProps> = ({
           return res;
         }
         if (!ssr) {
+          const reqUrl = new URL(req.url);
+          if (reqUrl.origin !== window.location.origin)
+            window.location.href = reqUrl.href;
           req.headers.set("accept", "text/x-script");
           return fetch(req).then((response) => {
             let redirect = false;
