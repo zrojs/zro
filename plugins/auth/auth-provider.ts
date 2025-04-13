@@ -1,30 +1,14 @@
-import { AuthConfig } from "index";
 import { RouteTree } from "zro/plugin";
+import { AuthConfig, User } from ".";
 
-export type AuthConstructorOptions<
-  TUser,
-  TAuthenticationProps,
-  TOptions = Record<string, unknown>
-> = {
-  name: string;
-  options: TOptions;
-  authenticate: (data: TAuthenticationProps) => TUser | Promise<TUser>;
+export type AuthConstructorOptions<TAuthenticationProps> = {
+  authenticate: (data: TAuthenticationProps) => User | Promise<User>;
 };
 
-export class AuthProvider<
-  TUser,
-  TAuthenticationProps = unknown,
-  TOptions = Record<string, unknown>
-> {
-  name: string;
-  options: TOptions;
-  authenticate: (data: TAuthenticationProps) => TUser | Promise<TUser>;
+export class AuthProvider<TAuthenticationProps = unknown> {
+  authenticate: (data: TAuthenticationProps) => User | Promise<User>;
 
-  constructor(
-    options: AuthConstructorOptions<TUser, TAuthenticationProps, TOptions>
-  ) {
-    this.name = options.name;
-    this.options = options.options;
+  constructor(options: AuthConstructorOptions<TAuthenticationProps>) {
     this.authenticate = options.authenticate;
   }
 

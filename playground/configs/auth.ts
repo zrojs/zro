@@ -1,15 +1,18 @@
-import { defineConfig } from "@zro/auth";
-import { PasswordProvider } from "@zro/auth/providers/password/index";
+import { defineConfig, User } from "@zro/auth";
+import { GithubProvider } from "@zro/auth/providers/github";
+import { PasswordProvider } from "@zro/auth/providers/password";
 import { getOrm } from "@zro/db";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { users } from "~/configs/db.schema";
 
-export type User = {
-  id: number;
-  email: string;
-};
+declare module "@zro/auth" {
+  export interface User {
+    id: number;
+    email: string;
+  }
+}
 
-export default defineConfig<User>({
+export default defineConfig({
   authPrefix: "/auth",
   loginPage: "/login",
   onLoginSuccessRedirect: "/dashboard",
@@ -17,33 +20,81 @@ export default defineConfig<User>({
     password: process.env.AUTH_SESSION_KEY!,
   },
   verifyToken: async (token) => {
-    return {
-      id: 1234,
-      email: "me@nariman.mov",
-    };
+    const user = JSON.parse(token) as User;
+    const orm = getOrm();
+    const foundUser = await orm
+      .select()
+      .from(users)
+      .where(eq(users.id, user.id))
+      .get();
+    if (!foundUser) throw new Error("Invalid token");
+    return foundUser;
   },
   generateToken: async (user) => {
-    return "token1234";
+    return JSON.stringify(user);
   },
   providers: [
-    new PasswordProvider<User>({
-      name: "password",
-      options: {},
-      authenticate: async ({ username, password }) => {
-        // hashed password is here
+    new PasswordProvider({
+      async authenticate(data) {
         const orm = getOrm();
         const user = await orm
           .select()
           .from(users)
-          .where(and(eq(users.email, username), eq(users.password, password)))
+          .where(
+            and(
+              eq(users.email, data.username),
+              eq(users.password, data.password)
+            )
+          )
           .get();
 
         if (!user) throw new Error("Invalid credentials");
         return {
-          email: username,
+          email: data.username,
           id: user.id,
         };
       },
     }),
+    new GithubProvider(
+      {
+        clientId: process.env.GITHUB_CLIENT_ID!,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+        scopes: ["read:user", "user:email"],
+      },
+      {
+        async authenticate({ access_token, fetchUser }) {
+          const userEmails = (await fetch(
+            "https://api.github.com/user/emails",
+            {
+              headers: {
+                Authorization: `Bearer ${access_token}`,
+              },
+            }
+          ).then((r) => r.json())) as {
+            email: string;
+            primary: boolean;
+            verified: boolean;
+          }[];
+          const verifiedEmails = userEmails.filter((email) => email.verified);
+          if (!verifiedEmails.length) throw new Error("Permission Denied");
+          const orm = getOrm();
+          const user = await orm
+            .select()
+            .from(users)
+            .where(
+              inArray(
+                users.email,
+                verifiedEmails.map((e) => e.email)
+              )
+            )
+            .get();
+          if (!user) throw new Error("Unauthorized");
+          return {
+            id: user.id,
+            email: user.email,
+          };
+        },
+      }
+    ),
   ],
 });

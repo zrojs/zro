@@ -35,11 +35,13 @@ declare global {
     });
     code = code.replace(
       "--code",
-      `${JSON.stringify(route.path)}: Route<${JSON.stringify(
-        route.path
-      )}, LoaderReturnType<typeof ${genSafeVariableName(
-        `import_${route.path}`
-      )}.loader>, ${
+      `${JSON.stringify(route.path)}: Route<${JSON.stringify(route.path)}, ${
+        route.moduleInfo.hasLoader
+          ? `LoaderReturnType<typeof ${genSafeVariableName(
+              `import_${route.path}`
+            )}.loader>`
+          : "{}"
+      }, ${
         parent ? `RouteData<Routes[${JSON.stringify(parent?.path)}]>` : `{}`
       }, ${
         route.moduleInfo?.hasMiddleware

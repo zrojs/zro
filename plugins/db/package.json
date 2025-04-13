@@ -5,7 +5,8 @@
   "description": "unjs/db0 integration for ZRO apps",
   "scripts": {
     "dev": "tsc-watch",
-    "build": "tsc"
+    "build": "tsc",
+    "postinstall": "node ./dist/post-install.js"
   },
   "exports": {
     ".": {

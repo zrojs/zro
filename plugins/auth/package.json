@@ -5,7 +5,8 @@
   "description": "Auth integration for ZRO",
   "scripts": {
     "dev": "tsc-watch",
-    "build": "tsc"
+    "build": "tsc",
+    "postinstall": "node ./dist/post-install.js"
   },
   "exports": {
     ".": {
@@ -13,8 +14,8 @@
       "default": "./dist/index.js"
     },
     "./providers/*": {
-      "types": "./dist/providers/*.d.ts",
-      "default": "./dist/providers/*.js"
+      "types": "./dist/providers/*/index.d.ts",
+      "default": "./dist/providers/*/index.js"
     }
   },
   "keywords": [],

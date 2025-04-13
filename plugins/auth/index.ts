@@ -9,7 +9,9 @@ import { getSession } from "zro/router/server";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export type AuthConfig<TUser = unknown> = {
+export interface User {}
+
+export type AuthConfig<TUser = User> = {
   authPrefix: string;
   loginPage: string;
   onLoginSuccessRedirect?: string;
@@ -39,7 +41,7 @@ const plugin: Plugin<AuthConfig> = {
 
 export default plugin;
 
-export const defineConfig = <User>(config: AuthConfig<User>) => {
+export const defineConfig = <TUser = User>(config: AuthConfig<TUser>) => {
   // const defaultConfig: AuthConfig = {
   //   enabled: true,
   // };
@@ -47,11 +49,11 @@ export const defineConfig = <User>(config: AuthConfig<User>) => {
   return config;
 };
 
-export const getUser = <TUser = unknown>() => {
+export const getUser = <TUser = User>() => {
   return (globalThis as any).__user as TUser | undefined;
 };
 
-export const auth = <TUser>() =>
+export const auth = <TUser = User>() =>
   new Middleware(async ({ next }) => {
     const config = (globalThis as any).__auth as AuthConfig;
     const session = await getSession(config.session);
