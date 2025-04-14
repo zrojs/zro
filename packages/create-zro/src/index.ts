@@ -10,14 +10,15 @@ import {
   text,
 } from "@clack/prompts";
 import chalk from "chalk";
-import fs from "fs";
+import fs from "node:fs";
+import path, { relative } from "node:path";
+import { fileURLToPath } from "node:url";
 import { installDependencies, PackageManagerName } from "nypm";
-import path, { relative } from "path";
-import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const templatesDir = path.resolve(__dirname, "templates");
+
+const templatesDir = path.resolve(__filename, "../..", `templates`);
 const availableTemplates = fs.readdirSync(templatesDir);
 
 (async () => {

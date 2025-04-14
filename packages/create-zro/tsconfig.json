@@ -15,7 +15,7 @@
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,
-    "rootDir": ".",
+    "rootDir": "src",
     "outDir": "dist",
     "jsx": "react-jsx",
     "baseUrl": ".",
@@ -23,8 +23,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "./**/*",
-    "index.ts"
+    "src/index.ts"
   ],
   "exclude": [
     "node_modules",

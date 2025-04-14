@@ -1,6 +1,7 @@
 {
   "name": "create-zro",
-  "version": "0.0.3",
+  "version": "0.0.4",
+  "type": "module",
   "description": "Create ZRO App CLI",
   "keywords": [],
   "author": "Nariman Movaffaghi",
@@ -12,11 +13,11 @@
     "prepublishOnly": "npm run build"
   },
   "files": [
-    "template-*",
+    "templates",
     "dist"
   ],
   "bin": {
-    "create-zro": "dist/index.mjs"
+    "create-zro": "index.js"
   },
   "engines": {
     "node": "^18.0.0 || ^20.0.0 || >=22.0.0"
