@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.5
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.4...v0.0.5)
+
+### 🚀 Enhancements
+
+- Update package.json and pnpm workspace configuration; improve Router class logic ([bf3ae81](https://github.com/zrojs/zro/commit/bf3ae81))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.4
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.3...v0.0.4)
