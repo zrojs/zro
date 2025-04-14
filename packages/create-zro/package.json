@@ -3,7 +3,31 @@
   "version": "0.0.1",
   "description": "Create ZRO App CLI",
   "keywords": [],
-  "author": "",
+  "author": "Nariman Movaffaghi",
   "license": "MIT",
-  "packageManager": "pnpm@10.6.3"
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "unbuild",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "template-*",
+    "dist"
+  ],
+  "bin": {
+    "create-zro": "dist/index.mjs"
+  },
+  "engines": {
+    "node": "^18.0.0 || ^20.0.0 || >=22.0.0"
+  },
+  "packageManager": "pnpm@10.6.3",
+  "devDependencies": {
+    "unbuild": "^3.5.0"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.10.1",
+    "chalk": "^5.4.1",
+    "nypm": "^0.6.0"
+  }
 }

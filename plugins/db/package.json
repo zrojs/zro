@@ -4,9 +4,9 @@
   "type": "module",
   "description": "unjs/db0 integration for ZRO apps",
   "scripts": {
-    "dev": "tsc-watch",
+    "dev": "tsc-watch --onSuccess \"pnpm run postbuild\"",
     "build": "tsc",
-    "postinstall": "node ./dist/post-install.js"
+    "postbuild": "tsc-alias"
   },
   "exports": {
     ".": {
@@ -27,6 +27,7 @@
   "license": "MIT",
   "packageManager": "pnpm@10.6.3",
   "devDependencies": {
+    "tsc-alias": "^1.8.11",
     "tsc-watch": "^6.2.1",
     "typescript": "^5.5.4",
     "zro": "workspace:*"

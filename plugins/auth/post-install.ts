@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import plugin from ".";
+import plugin from "./index";
 
 async function createConfigFileIfNotExists() {
   const configDir = path.join(process.env.INIT_CWD || process.cwd(), "configs");
@@ -42,11 +42,11 @@ export default defineConfig({
     // Check if the config file already exists
     try {
       await fs.access(configFilePath);
-      console.log(`Config file already exists at: ${configFilePath}`);
+      // console.log(`Config file already exists at: ${configFilePath}`);
     } catch {
       // If the file doesn't exist, create it with default content
-      await fs.writeFile(configFilePath, defaultContent, "utf8");
-      console.log(`Config file created at: ${configFilePath}`);
+      await fs.writeFile(`${configFilePath}.ts`, defaultContent, "utf8");
+      console.log(`Config file created at: ${configFilePath}.ts`);
     }
   } catch (error) {
     console.error("Error creating config file:", error);
