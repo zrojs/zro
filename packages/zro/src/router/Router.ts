@@ -53,7 +53,6 @@ export class Router {
         (r) => r.data.getPath() === notFoundRoute
       );
       if (!allRoutes) {
-        console.log("adding not found entry to", notFoundRoute);
         addRoute(
           this.router,
           "",
@@ -106,10 +105,12 @@ export class Router {
 
   public setUpRequest(request: Request) {
     const routeInfo = this.findRoute(request);
-    const { params } = routeInfo!;
-    const ctx = { request, params: params || {}, status: 200 };
-    requestContext.unset();
-    requestContext.set(ctx);
+    if (routeInfo) {
+      const { params } = routeInfo!;
+      const ctx = { request, params: params || {}, status: 200 };
+      requestContext.unset();
+      requestContext.set(ctx);
+    }
   }
 
   public async load(request: Request, serverCtx?: any) {

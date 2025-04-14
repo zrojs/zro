@@ -2,6 +2,3 @@ packages:
   - packages/*
   - playground
   - plugins/*
-onlyBuiltDependencies:
-  - "@parcel/watcher"
-  - esbuild
