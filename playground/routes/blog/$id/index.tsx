@@ -17,7 +17,11 @@ export const loader = async () => {
       .select()
       .from(schema.posts)
       .where(eq(schema.posts.id, parseInt(id)))
-      .get(),
+      .get()
+      .then((post) => {
+        if (!post) throw new Error("Post not found!");
+        return post;
+      }),
   };
 };
 

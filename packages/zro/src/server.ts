@@ -13,6 +13,7 @@ import { Router } from "./react";
 // @ts-expect-error
 import { renderToReadableStream } from "react-dom/server.browser";
 import { Cache } from "src/react/cache";
+import { withTrailingSlash } from "ufo";
 import { transformHtmlTemplate } from "unhead/server";
 
 export const handleRequest = async (
@@ -36,7 +37,7 @@ export const handleRequest = async (
       redactErrors: false,
     });
   }
-  // push client-entry
+
   head.push({
     script: [
       {
@@ -49,9 +50,13 @@ export const handleRequest = async (
   if (extraHead) head.push(extraHead);
 
   setHeader(e, "Content-Type", "text/html");
-
-  cache.set(JSON.stringify(initialUrl.href), Promise.resolve(data));
+  // set current loading to the router cache
+  cache.set(
+    JSON.stringify(withTrailingSlash(initialUrl.href)),
+    Promise.resolve(data)
+  );
   setResponseStatus(e, status);
+
   const stream = (await renderToReadableStream(
     React.createElement(Router, {
       router,
@@ -60,6 +65,7 @@ export const handleRequest = async (
       head,
     })
   )) as ReadableStream;
+
   const transformedStream = stream.pipeThrough(
     new TransformStream({
       transform: async (chunk, controller) => {

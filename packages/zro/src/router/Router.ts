@@ -96,8 +96,7 @@ export class Router {
     const head = createHead();
     this.setUpRequest(request);
 
-    const { params, tree: routes } = routeInfo!;
-    const ctx = { request, params: params || {}, status: 200 };
+    const { tree: routes } = routeInfo!;
 
     if (serverCtx) {
       ServerContext.unset();
@@ -120,11 +119,12 @@ export class Router {
                   dataPerRoute.set(routes[index].getPath(), newData);
                   // if didn't error, load next route
                   if (newData instanceof Error) {
-                    if (ctx.status < 400) ctx.status = 400;
+                    if (requestContext.use().status < 400)
+                      requestContext.use().status = 400;
                     return dataPerRoute;
                   }
                   if (newData instanceof Response) {
-                    ctx.status = newData.status;
+                    requestContext.use().status = newData.status;
                     // if (isRedirectResponse(newData))
                     return newData;
                   }
@@ -135,7 +135,11 @@ export class Router {
             })
           );
         };
-        return { data: await loadRoutes(), head, status: ctx.status };
+        return {
+          data: await loadRoutes(),
+          head,
+          status: requestContext.use().status,
+        };
       })
     );
   }
