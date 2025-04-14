@@ -85,7 +85,6 @@ export const Router: FC<RouterProps> = ({
     const routeInfo = router.findRoute(req)!;
     if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
       let reqKey = getRouterCacheKey(req.url);
-      console.log(reqKey);
       const loaderFn = () => {
         router.setUpRequest(req);
         if (typeof window !== "undefined" && !hydrated) {
@@ -358,10 +357,14 @@ const RouteErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
 
 const RenderRouteComponent: FC = () => {
   const { route } = use(OutletContext);
-
   const routeProps = route.getProps() as any;
+  const data = useLoaderData();
+  if (!routeProps?.component) return null;
 
-  if (!routeProps?.component) return <EmptyComponent />;
+  if (data instanceof Error) {
+    return <routeProps.errorBoundary error={data} />;
+  }
+
   return <routeProps.component />;
 };
 
@@ -395,7 +398,8 @@ export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
   }, [currentData]);
   const data =
     currentData instanceof Map ? currentData.get(route.getPath()) : null;
-  if (data instanceof Error) throw data;
+
+  if (data instanceof Error && !ssr) throw data;
 
   return data;
 };

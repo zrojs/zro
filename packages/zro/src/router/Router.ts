@@ -1,5 +1,5 @@
 import { toMerged } from "es-toolkit";
-import { addRoute, createRouter, findRoute } from "rou3";
+import { addRoute, createRouter, findAllRoutes, findRoute } from "rou3";
 import { ServerContext } from "src/router/server";
 import { abort } from "src/router/utils";
 import { getQuery } from "ufo";
@@ -43,10 +43,17 @@ export class Router {
     }
 
     // add not found route
-    if (route.getParent()) {
+    if (
+      route.getParent() &&
+      (route.getParent()!.getPath() as string).endsWith("_layout")
+    ) {
       const currentParent = route.getParent()!;
       const notFoundRoute = currentParent.getPath().replace("_layout", "**");
-      if (!findRoute(this.router, "", notFoundRoute))
+      const allRoutes = findAllRoutes(this.router, "", notFoundRoute).find(
+        (r) => r.data.getPath() === notFoundRoute
+      );
+      if (!allRoutes) {
+        console.log("adding not found entry to", notFoundRoute);
         addRoute(
           this.router,
           "",
@@ -56,8 +63,12 @@ export class Router {
               abort(404, "Page not found");
             },
             parent: currentParent,
+            props: {
+              info: "not-found",
+            },
           })
         );
+      }
     }
   }
 
@@ -74,12 +85,22 @@ export class Router {
       method = `action-${actionName}`;
     }
     const destRoute = findRoute(this.router, method, path);
-    if (destRoute)
+    if (destRoute) {
+      if (destRoute.data.getProps()?.info === "not-found") {
+        // find the parent and throw error on the loader
+        const parent = destRoute.data.getParent();
+        const _loader = parent?.getLoader();
+        parent?.setLoader(() => {
+          if (_loader) parent.setLoader(_loader);
+          abort(404, "Page not found");
+        });
+      }
       return {
         route: destRoute.data,
         params: destRoute.params,
         tree: destRoute.data.getRouteTree(),
       };
+    }
     return null;
   }
 

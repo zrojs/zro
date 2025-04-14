@@ -9,6 +9,8 @@ import { Action } from "./Action";
 import { Middleware } from "./Middleware";
 import { Merge, MergeMiddlewaresReturnType } from "./utils/types";
 
+type MaybePromise<T> = T | Promise<T>;
+
 export type LoaderReturnType<T extends () => any> = T extends () => infer R
   ? Awaited<R>
   : never;
@@ -38,7 +40,7 @@ export type LoaderOptions<
   TMiddlewares extends readonly Middleware<any, any>[]
 > = {
   parent?: Route<any, ParentLoaderData>;
-  loader?: () => LoaderData | Promise<LoaderData>;
+  loader?: () => MaybePromise<LoaderData>;
   middlewares: TMiddlewares;
   actions: Record<string, Action<any, any>>;
   props?: Record<string, any>;
@@ -141,6 +143,14 @@ export class Route<
       });
     }
     return res;
+  }
+
+  public setLoader(fn: () => MaybePromise<LoaderData>) {
+    this.options.loader = fn;
+  }
+
+  public getLoader() {
+    return this.options.loader;
   }
 
   public async load(
