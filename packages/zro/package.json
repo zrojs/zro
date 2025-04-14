@@ -1,6 +1,6 @@
 {
   "name": "zro",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ZRO framework",
   "keywords": [],
   "license": "MIT",
@@ -51,8 +51,7 @@
     "postbuild": "tsc-alias",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "pre-publish": "pnpx changelogen --release --push && pnpm build",
-    "publish-package": "pnpm run pre-publish && pnpm publish"
+    "prepublishOnly": "pnpm build && pnpx changelogen --release --push"
   },
   "peerDependencies": {
     "react": ">=19",
