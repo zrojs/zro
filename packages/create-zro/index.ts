@@ -13,7 +13,10 @@ import chalk from "chalk";
 import fs from "fs";
 import { installDependencies, PackageManagerName } from "nypm";
 import path, { relative } from "path";
+import { fileURLToPath } from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const templatesDir = path.resolve(__dirname, "templates");
 const availableTemplates = fs.readdirSync(templatesDir);
 
