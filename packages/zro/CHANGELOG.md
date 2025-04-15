@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.13
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.12...v0.0.13)
+
+### 💅 Refactors
+
+- Simplify React imports and update usage across components ([7f753fc](https://github.com/zrojs/zro/commit/7f753fc))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.12
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.11...v0.0.12)
