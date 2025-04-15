@@ -42,6 +42,11 @@ export default defineBuildConfig({
       input: "./src/router/server/index",
       outDir: "./dist/router/server",
     },
+    {
+      builder: "rollup",
+      input: "./src/server",
+      outDir: "./dist/server",
+    },
   ],
   externals: ["react", "react/jsx-runtime"],
   rollup: {
