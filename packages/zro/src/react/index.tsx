@@ -19,12 +19,9 @@ import { createHead, UnheadProvider } from "src/unhead";
 import { decode, encode } from "turbo-stream";
 import { withTrailingSlash } from "ufo";
 import type { ResolvableHead, Unhead } from "unhead/types";
-import {
-  isRedirectResponse,
-  Route,
-  RouteData,
-  Router as ZroRouter,
-} from "../router";
+import { Route, RouteData } from "../router/Route";
+import { Router as ZroRouter } from "../router/Router";
+import { isRedirectResponse } from "../router/redirect";
 import { Cache } from "./cache";
 
 export type RouterProps = {

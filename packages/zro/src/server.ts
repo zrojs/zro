@@ -6,7 +6,7 @@ import {
   toWebRequest,
 } from "h3";
 import React from "react";
-import { Router as ZroRouter } from "src/router";
+import { Router as ZroRouter } from "src/router/Router";
 import { encode } from "turbo-stream";
 import { SerializableHead } from "unhead/types";
 import { Router } from "./react";

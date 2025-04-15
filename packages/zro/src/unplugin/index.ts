@@ -51,23 +51,17 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                   "react-dom/client",
                   "zro/react",
                 ],
-                exclude: ["zro/router", "zro/plugin", ...options.plugins],
+                exclude: ["zro/plugin", ...options.plugins],
               },
               esbuild: {
                 jsx: "automatic",
               },
               resolve: {
-                dedupe: [
-                  "react",
-                  "react-dom",
-                  "zro/router",
-                  "zro/react",
-                  "zro/plugin",
-                ],
+                dedupe: ["react", "react-dom", "zro/react", "zro/plugin"],
               },
               ssr: {
                 external: ["zro/react"],
-                noExternal: ["zro/router", "zro/plugin", ...options.plugins],
+                noExternal: ["zro/plugin", ...options.plugins],
               },
             };
           },

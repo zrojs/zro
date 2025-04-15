@@ -4,9 +4,9 @@ import { getQuery } from "ufo";
 import { createContext, withAsyncContext } from "unctx";
 import { createHead } from "unhead/server";
 import { ResolvableHead, Unhead } from "unhead/types";
+import { abort } from "./abort";
 import { Route } from "./Route";
 import { ServerContext } from "./server/context";
-import { abort } from "./utils";
 
 type RequestContext = {
   request: Request;

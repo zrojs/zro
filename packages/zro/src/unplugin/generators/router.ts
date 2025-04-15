@@ -26,11 +26,11 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
 
   imports.push({
     name: "Route",
-    from: "zro/router",
+    from: "zro/router/Route",
   });
   imports.push({
     name: "Router",
-    from: "zro/router",
+    from: "zro/router/Router",
   });
   imports.push({
     name: "middlewareWithPluginContext",

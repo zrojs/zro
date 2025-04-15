@@ -1,6 +1,6 @@
 import z from "zod";
-import { Action, getRequest } from "zro/router";
-
+import { Action } from "zro/router/Action";
+import { getRequest } from "zro/router/Router";
 type Route = Routes["/"];
 
 export const actions = {

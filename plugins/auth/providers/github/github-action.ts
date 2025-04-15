@@ -1,6 +1,7 @@
 import { AuthConfig } from "index";
 import { getConfig } from "zro/plugin";
-import { getRequest, redirect } from "zro/router";
+import { getRequest } from "zro/router/Router";
+import { redirect } from "zro/router/redirect";
 import { GithubProvider } from "./index";
 
 export const loader = () => {

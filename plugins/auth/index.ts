@@ -3,7 +3,8 @@ import { SessionConfig } from "h3";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getConfig, type Plugin } from "zro/plugin";
-import { Middleware, redirect } from "zro/router";
+import { Middleware } from "zro/router/Middleware";
+import { redirect } from "zro/router/redirect";
 import { getSession } from "zro/router/server";
 
 const __filename = fileURLToPath(import.meta.url);

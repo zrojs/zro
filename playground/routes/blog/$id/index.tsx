@@ -3,7 +3,7 @@ import * as schema from "configs/db.schema";
 import { eq } from "drizzle-orm";
 import { use } from "react";
 import { ErrorBoundaryProps, useLoaderData } from "zro/react";
-import { getRequest } from "zro/router";
+import { getRequest } from "zro/router/Router";
 import { useHead } from "zro/unhead";
 
 type Route = Routes["/blog/:id/"];

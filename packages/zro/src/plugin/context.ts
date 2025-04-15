@@ -1,4 +1,4 @@
-import { Middleware } from "src/router";
+import { Middleware } from "src/router/Middleware";
 import { createContext } from "unctx";
 export * from "./RouteTree";
 
