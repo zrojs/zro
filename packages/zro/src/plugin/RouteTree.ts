@@ -1,6 +1,6 @@
 import { addRoute, createRouter, findRoute } from "rou3";
-import { getModuleInfo, RouteModuleInfo, Tree } from "src/unplugin/generators";
 import { Import } from "unimport";
+import { getModuleInfo, RouteModuleInfo, Tree } from "../unplugin/generators";
 
 export class RouteTree {
   private tree = createRouter<TreeRoute>();

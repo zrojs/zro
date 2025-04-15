@@ -1,9 +1,9 @@
 import { genSafeVariableName } from "knitwork";
 import { mkdir, writeFile } from "node:fs/promises";
 import { relative } from "node:path";
-import { RouteTree, TreeRoute } from "src/plugin/RouteTree";
 import { joinURL } from "ufo";
 import { createUnimport, Import } from "unimport";
+import { RouteTree, TreeRoute } from "../../plugin/RouteTree";
 
 const importPluginConfig = (configFileName: string, imports: Import[]) => {
   const configImportName = genSafeVariableName(
@@ -26,11 +26,11 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
 
   imports.push({
     name: "Route",
-    from: "zro/router/Route",
+    from: "zro/router",
   });
   imports.push({
     name: "Router",
-    from: "zro/router/Router",
+    from: "zro/router",
   });
   imports.push({
     name: "middlewareWithPluginContext",

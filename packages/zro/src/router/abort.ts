@@ -1,6 +1,6 @@
 import { StandardSchemaV1 } from "@standard-schema/spec";
-import { getRequest } from "src/router/Router";
-import { serializeError } from "src/router/safe-response";
+import { getRequest } from "../router/Router";
+import { serializeError } from "../router/safe-response";
 
 export const abort = (
   code: number,

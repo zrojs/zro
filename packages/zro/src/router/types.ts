@@ -1,5 +1,5 @@
-import { Route } from "src/router/Route";
 import { Middleware, MiddlewareReturnType } from "./Middleware";
+import { Route } from "./Route";
 
 export type Prettify<T> = {
   [K in keyof T]: T[K];

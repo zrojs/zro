@@ -14,7 +14,7 @@ type RequestContext = {
   status: number;
 };
 
-const requestContext = createContext<RequestContext>();
+export const requestContext = createContext<RequestContext>();
 export const getRequest = requestContext.use;
 
 export const dataContext = createContext<any>();

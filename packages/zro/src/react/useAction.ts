@@ -1,5 +1,5 @@
 import { FormEvent, useCallback } from "react";
-import { useNavigate } from "src/react";
+import { useNavigate } from "./index";
 
 export const useAction = (url: string) => {
   const { navigate } = useNavigate();

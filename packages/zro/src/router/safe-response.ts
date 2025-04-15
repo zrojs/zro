@@ -1,6 +1,6 @@
 import { StandardSchemaV1 } from "@standard-schema/spec";
 import { set } from "es-toolkit/compat";
-import { getRequest } from "src/router/Router";
+import { getRequest } from "../router/Router";
 
 export const safeRespose = async <T>(fn: () => T | Promise<T>) => {
   const request = getRequest();

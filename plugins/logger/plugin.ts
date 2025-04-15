@@ -1,5 +1,4 @@
-import { Middleware } from "zro/router/Middleware";
-import { getRequest } from "zro/router/Router";
+import { getRequest, Middleware } from "zro/router";
 
 const redBg = (str: string) => `\x1b[41m${str}\x1b[0m`;
 const blueBg = (str: string) => `\x1b[44m${str}\x1b[0m`;

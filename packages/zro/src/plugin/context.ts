@@ -1,5 +1,5 @@
-import { Middleware } from "src/router/Middleware";
 import { createContext } from "unctx";
+import { Middleware } from "../router/Middleware";
 export * from "./RouteTree";
 
 export const PluginConfigContext = createContext();

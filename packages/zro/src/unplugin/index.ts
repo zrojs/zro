@@ -1,14 +1,13 @@
 import { transform } from "@babel/core";
 import defu from "defu";
-import { viteContext } from "src/dev-server";
-import deadImportsRemover from "src/unplugin/babel/dead-imports-remover";
+import { joinURL } from "ufo";
+import { createUnplugin } from "unplugin";
+import { createFilter, loadEnv, ViteDevServer } from "vite";
+import { viteContext } from "../dev-server";
+import deadImportsRemover from "./babel/dead-imports-remover";
 import serverCodeRemover, {
   stripAnnotatedBlocks,
-} from "src/unplugin/babel/server-code-remover";
-import { joinURL } from "ufo";
-import { unctxPlugin } from "unctx/plugin";
-import { createUnplugin, UnpluginOptions } from "unplugin";
-import { createFilter, loadEnv, ViteDevServer } from "vite";
+} from "./babel/server-code-remover";
 import { prepare } from "./generators";
 
 export type ZroUnpluginOptions = {
@@ -50,6 +49,7 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                   "react/jsx-dev-runtime",
                   "react-dom/client",
                   "zro/react",
+                  "zro/router",
                 ],
                 exclude: ["zro/plugin", ...options.plugins],
               },
@@ -127,7 +127,7 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
           },
         },
       },
-      unctxPlugin.raw({}, meta) as UnpluginOptions,
+      // unctxPlugin.raw({}, meta) as UnpluginOptions,
     ];
   }
 );

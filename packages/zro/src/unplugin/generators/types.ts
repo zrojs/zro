@@ -1,9 +1,9 @@
 import { genSafeVariableName } from "knitwork";
 import { mkdir, writeFile } from "node:fs/promises";
 import { relative } from "node:path";
-import { RouteTree, TreeRoute } from "src/plugin";
 import { joinURL } from "ufo";
 import { createUnimport, Import } from "unimport";
+import { RouteTree, TreeRoute } from "../../plugin";
 
 export const createTypesFile = async (tree: RouteTree, destDir: string) => {
   const imports: Import[] = [];

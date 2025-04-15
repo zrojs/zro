@@ -7,8 +7,8 @@ import {
   SessionConfig,
   useSession,
 } from "h3";
-import { PluginConfigContext } from "src/plugin";
-import { Action } from "src/router/Action";
+import { PluginConfigContext } from "../../plugin";
+import { Action } from "../../router/Action";
 import { getServerContext } from "./context";
 
 export const getEvent = (): H3Event => {

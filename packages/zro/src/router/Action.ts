@@ -1,6 +1,6 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec";
-import { abort } from "src/router/abort";
-import { getRequest } from "src/router/Router";
+import { abort } from "./abort";
+import { getRequest } from "./Router";
 
 export class Action<TSchema extends StandardSchemaV1, ReturnType> {
   constructor(

@@ -1,8 +1,7 @@
 import { AuthConfig } from "index";
 import z from "zod";
 import { getConfig } from "zro/plugin";
-import { Action } from "zro/router/Action";
-import { redirect } from "zro/router/redirect";
+import { Action, redirect } from "zro/router";
 import { getSession } from "zro/router/server";
 import { PasswordProvider } from "./index";
 

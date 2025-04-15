@@ -6,51 +6,43 @@
   "license": "MIT",
   "author": "Nariman Movaffaghi",
   "type": "module",
-  "bin": "./dist/src/cli/index.js",
+  "bin": "./dist/cli/index.mjs",
   "files": [
     "dist"
   ],
   "exports": {
-    "./router/*": {
-      "types": "./dist/src/router/*.d.ts",
-      "import": "./dist/src/router/*.js"
-    },
-    "./router/types": {
-      "types": "./dist/src/router/types.d.ts",
-      "import": "./dist/src/router/types.js"
+    "./router": {
+      "types": "./dist/router/index.d.ts",
+      "import": "./dist/router/index.mjs"
     },
     "./unplugin": {
-      "types": "./dist/src/unplugin/index.d.ts",
-      "import": "./dist/src/unplugin/index.js"
+      "types": "./dist/unplugin/index.d.ts",
+      "import": "./dist/unplugin/index.mjs"
     },
     "./unhead": {
-      "types": "./dist/src/unhead/index.d.ts",
-      "import": "./dist/src/unhead/index.js"
+      "types": "./dist/unhead/index.d.ts",
+      "import": "./dist/unhead/index.mjs"
     },
     "./unhead/server": {
-      "types": "./dist/src/unhead/server.d.ts",
-      "import": "./dist/src/unhead/server.js"
-    },
-    "./unplugin/vite": {
-      "types": "./dist/src/unplugin/vite.d.ts",
-      "import": "./dist/src/unplugin/vite.js"
+      "types": "./dist/unhead/server.d.ts",
+      "import": "./dist/unhead/server.mjs"
     },
     "./react": {
-      "types": "./dist/src/react/index.d.ts",
-      "import": "./dist/src/react/index.js"
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.mjs"
     },
     "./plugin": {
-      "types": "./dist/src/plugin/index.d.ts",
-      "import": "./dist/src/plugin/index.js"
+      "types": "./dist/plugin/index.d.ts",
+      "import": "./dist/plugin/index.mjs"
     },
     "./router/server": {
-      "types": "./dist/src/router/server/index.d.ts",
-      "import": "./dist/src/router/server/index.js"
+      "types": "./dist/router/server/index.d.ts",
+      "import": "./dist/router/server/index.mjs"
     }
   },
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"pnpm run postbuild\"",
-    "build": "tsc",
+    "dev": "unbuild --stub",
+    "build": "unbuild",
     "postbuild": "tsc-alias",
     "test": "vitest",
     "coverage": "vitest run --coverage",
@@ -59,7 +51,6 @@
   "peerDependencies": {
     "react": ">=19",
     "react-dom": ">=19",
-    "typescript": "^5.5.4",
     "vite": ">=6"
   },
   "dependencies": {
@@ -84,6 +75,7 @@
     "tinyglobby": "^0.2.12",
     "turbo-stream": "^3.1.0",
     "ufo": "^1.5.4",
+    "unbuild": "^3.5.0",
     "unctx": "^2.4.1",
     "unimport": "^4.1.2",
     "unplugin": "^2.2.0",
@@ -92,6 +84,7 @@
   "devDependencies": {
     "@types/babel__core": "^7.20.5",
     "@types/react": "^19.0.11",
+    "typescript": "^5.5.4",
     "@types/react-dom": "^19.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

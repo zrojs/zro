@@ -1,12 +1,12 @@
 import { existsSync } from "fs";
 import { loadFile } from "magicast";
 import { exit } from "process";
-import { registerPlugins } from "src/plugin/register";
-import { RouteTree } from "src/plugin/RouteTree";
-import { ZroUnpluginOptions } from "src/unplugin";
-import { createTypesFile } from "src/unplugin/generators/types";
 import { glob } from "tinyglobby";
 import { joinURL } from "ufo";
+import { registerPlugins } from "../../plugin/register";
+import { RouteTree } from "../../plugin/RouteTree";
+import { ZroUnpluginOptions } from "../../unplugin";
+import { createTypesFile } from "../../unplugin/generators/types";
 import { logger } from "../../utils/log";
 import { createRouterFile } from "./router";
 

@@ -15,13 +15,13 @@ import {
   useState,
 } from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
-import { createHead, UnheadProvider } from "src/unhead";
 import { decode, encode } from "turbo-stream";
 import { withTrailingSlash } from "ufo";
 import type { ResolvableHead, Unhead } from "unhead/types";
 import { Route, RouteData } from "../router/Route";
 import { Router as ZroRouter } from "../router/Router";
 import { isRedirectResponse } from "../router/redirect";
+import { createHead, UnheadProvider } from "../unhead";
 import { Cache } from "./cache";
 
 export type RouterProps = {

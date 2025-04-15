@@ -1,4 +1,4 @@
-import { getRequest } from "src/router/Router";
+import { getRequest } from "./Router";
 
 export const redirect = (url: string, code: number = 302) => {
   const { request } = getRequest();

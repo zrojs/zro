@@ -1,10 +1,10 @@
 import { createRequire } from "module";
 import { addDependency } from "nypm";
-import { useVite } from "src/dev-server";
 import { joinURL } from "ufo";
 import { Plugin, PluginConfigContext, RouteTree } from ".";
+import { useVite } from "../dev-server";
 
-const require = createRequire(process.cwd());
+const __require = createRequire(process.cwd());
 
 export const registerPlugins = async (
   plugins: string[],
@@ -29,7 +29,7 @@ export const registerPlugins = async (
 
 const importPlugin = async (plugin: string) => {
   try {
-    return await require(plugin);
+    return await __require(plugin);
   } catch (e) {
     console.error(e);
     await addDependency(plugin, { cwd: process.cwd(), silent: true });

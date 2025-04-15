@@ -1,9 +1,17 @@
-// import { useUnhead } from "@unhead/react";
-// import { useEffect, useMemo, useRef, useState } from "react";
-
-export * from "@unhead/react";
-export * from "@unhead/react/client";
-export { Head } from "./Head";
+export {
+  Head,
+  hookImports,
+  useHead,
+  useHeadSafe,
+  useScript,
+  useSeoMeta,
+  useUnhead,
+} from "@unhead/react";
+export {
+  createHead,
+  renderDOMHead,
+  UnheadProvider,
+} from "@unhead/react/client";
 
 // export const useHead = (input: any, options: any, fn: any) => {
 //   const unhead = useUnhead();

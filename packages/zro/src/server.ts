@@ -6,15 +6,15 @@ import {
   toWebRequest,
 } from "h3";
 import React from "react";
-import { Router as ZroRouter } from "src/router/Router";
 import { encode } from "turbo-stream";
 import { SerializableHead } from "unhead/types";
 import { Router } from "./react";
+import { Router as ZroRouter } from "./router/Router";
 // @ts-expect-error
 import { renderToReadableStream } from "react-dom/server.browser";
-import { Cache } from "src/react/cache";
 import { withTrailingSlash } from "ufo";
 import { transformHtmlTemplate } from "unhead/server";
+import { Cache } from "./react/cache";
 
 export const handleRequest = async (
   e: H3Event,
