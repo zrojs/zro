@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.9
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.8...v0.0.9)
+
+### 🩹 Fixes
+
+- Reorder exclude array for clarity in Vite configuration ([bfe4d12](https://github.com/zrojs/zro/commit/bfe4d12))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.8
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.7...v0.0.8)
