@@ -2,7 +2,6 @@ import { createRequire } from "module";
 import { addDependency } from "nypm";
 import { useVite } from "src/dev-server";
 import { joinURL } from "ufo";
-import { withAsyncContext } from "unctx";
 import { Plugin, PluginConfigContext, RouteTree } from ".";
 
 const require = createRequire(process.cwd());
@@ -22,12 +21,9 @@ export const registerPlugins = async (
         joinURL(process.cwd(), `configs/${configFileName}`)
       )
     ).default;
-    await PluginConfigContext.callAsync(
-      config,
-      withAsyncContext(async () => {
-        return await setup.call(pluginModule, routeTree);
-      }, true)
-    );
+    await PluginConfigContext.call(config, async () => {
+      return await setup.call(pluginModule, routeTree);
+    });
   }
 };
 

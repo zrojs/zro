@@ -7,6 +7,9 @@
   "author": "Nariman Movaffaghi",
   "type": "module",
   "bin": "./dist/src/cli/index.js",
+  "files": [
+    "dist"
+  ],
   "exports": {
     "./router": {
       "types": "./dist/src/router/index.d.ts",
