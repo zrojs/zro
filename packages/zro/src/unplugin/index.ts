@@ -49,13 +49,9 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                   "react/jsx-runtime",
                   "react/jsx-dev-runtime",
                   "react-dom/client",
-                ],
-                exclude: [
-                  "zro/router",
                   "zro/react",
-                  "zro/plugin",
-                  ...options.plugins,
                 ],
+                exclude: ["zro/router", "zro/plugin", ...options.plugins],
               },
               esbuild: {
                 jsx: "automatic",
