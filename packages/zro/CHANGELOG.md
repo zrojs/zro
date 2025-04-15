@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.12
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.11...v0.0.12)
+
+### 🚀 Enhancements
+
+- Migrate from tsc to unbuild to have more control over build files ([03b51eb](https://github.com/zrojs/zro/commit/03b51eb))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.11
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.10...v0.0.11)

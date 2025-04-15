@@ -1,6 +1,6 @@
 {
   "name": "zro",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "ZRO framework",
   "keywords": [],
   "license": "MIT",
@@ -43,7 +43,6 @@
   "scripts": {
     "dev": "unbuild --stub",
     "build": "unbuild",
-    "postbuild": "tsc-alias",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "prepublishOnly": "pnpm build && pnpx changelogen --release --push"
@@ -88,9 +87,6 @@
     "@types/react-dom": "^19.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tsc-alias": "^1.8.11",
-    "tsc-watch": "^6.2.1",
-    "typescript": "^5.5.4",
     "unhead": "^2.0.5",
     "vite": "^6.2.2",
     "vitest": "^3.0.8"
