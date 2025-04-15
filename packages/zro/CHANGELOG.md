@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.11
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.10...v0.0.11)
+
+### 🩹 Fixes
+
+- Mark package as private in package.json ([1c3e51c](https://github.com/zrojs/zro/commit/1c3e51c))
+
+### 💅 Refactors
+
+- Update router imports for improved structure and clarity ([9bfdd07](https://github.com/zrojs/zro/commit/9bfdd07))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.10
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.9...v0.0.10)
