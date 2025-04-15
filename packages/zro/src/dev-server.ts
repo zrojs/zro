@@ -1,5 +1,5 @@
 import { colors } from "consola/utils";
-import { upperFirst } from "es-toolkit";
+import { upperFirst } from "es-toolkit/string";
 import {
   App,
   createApp,
@@ -53,6 +53,8 @@ export const bootstrapDevServer = async ({
       clearScreen: false,
       appType: "custom",
     });
+
+    await vite.warmupRequest("/.zro/router.client");
 
     return viteContext.call(vite, async () => {
       // load zro options here

@@ -1,4 +1,4 @@
-import { toMerged } from "es-toolkit";
+import { toMerged } from "es-toolkit/compat";
 import { addRoute, createRouter, findAllRoutes, findRoute } from "rou3";
 import { getQuery } from "ufo";
 import { createContext, withAsyncContext } from "unctx";
