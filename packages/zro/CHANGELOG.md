@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.8
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.7...v0.0.8)
+
+### 🩹 Fixes
+
+- Update @unhead/react and unhead dependencies to version 2.0.5 ([1312190](https://github.com/zrojs/zro/commit/1312190))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.7
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.6...v0.0.7)
