@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.10
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.9...v0.0.10)
+
+### 🩹 Fixes
+
+- Update imports from es-toolkit to specific paths for compatibility ([d848a7f](https://github.com/zrojs/zro/commit/d848a7f))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.9
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.8...v0.0.9)
