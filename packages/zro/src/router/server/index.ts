@@ -1,3 +1,4 @@
+import { StandardSchemaV1 } from "@standard-schema/spec";
 import {
   deleteCookie as h3DeleteCookie,
   H3Event,
@@ -6,8 +7,9 @@ import {
   SessionConfig,
   useSession,
 } from "h3";
+import { PluginConfigContext } from "src/plugin";
+import { Action } from "src/router/Action";
 import { getServerContext } from "./context";
-export { ServerContext } from "./context";
 
 export const getEvent = (): H3Event => {
   return getServerContext()?.event as H3Event;
@@ -39,4 +41,16 @@ export const deleteCookie = (
   options?: Parameters<typeof h3DeleteCookie>[2]
 ) => {
   return h3DeleteCookie(getEvent(), name, options);
+};
+
+export const wrapWithConfig = <TSchema extends StandardSchemaV1>(
+  action: Action<TSchema, any>,
+  config: any
+) => {
+  let _handler = action.options.handler;
+  action.options.handler = (input: StandardSchemaV1.InferInput<TSchema>) =>
+    PluginConfigContext.call(config, () => {
+      return _handler(input);
+    });
+  return action;
 };

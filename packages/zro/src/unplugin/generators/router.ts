@@ -41,6 +41,11 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
     from: "zro/plugin",
   });
 
+  imports.push({
+    name: "wrapWithConfig",
+    from: "zro/router/server",
+  });
+
   for (const bootstrapScript of tree.getBootstrapScripts()) {
     const { unImport, configFileName } = bootstrapScript;
 
@@ -97,7 +102,7 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
         ? `Object.keys(${routeImportVariable}.actions).reduce(
       (actions, actionKey) => {
         const action = ${routeImportVariable}.actions[actionKey];
-        actions[actionKey] = action.wrapWithConfig(${configImportName});
+        actions[actionKey] = wrapWithConfig(action, ${configImportName});
         return actions;
       },
       ${routeImportVariable}.actions

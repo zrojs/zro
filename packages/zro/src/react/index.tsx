@@ -18,7 +18,7 @@ import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { createHead, UnheadProvider } from "src/unhead";
 import { decode, encode } from "turbo-stream";
 import { withTrailingSlash } from "ufo";
-import { ResolvableHead, Unhead } from "unhead/types";
+import type { ResolvableHead, Unhead } from "unhead/types";
 import {
   isRedirectResponse,
   Route,

@@ -51,9 +51,9 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                   "react-dom/client",
                 ],
                 exclude: [
-                  "zro/plugin",
                   "zro/router",
                   "zro/react",
+                  "zro/plugin",
                   ...options.plugins,
                 ],
               },

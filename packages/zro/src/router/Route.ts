@@ -1,12 +1,12 @@
 import { defu } from "defu";
 import { merge } from "es-toolkit";
-import { dataContext, getDataContext, getRequest } from "src/router/Router";
-import { abort } from "src/router/utils";
-import { safeRespose } from "src/router/utils/safe-response";
 import { getQuery } from "ufo";
 import { withAsyncContext } from "unctx";
 import { Action } from "./Action";
 import { Middleware } from "./Middleware";
+import { dataContext, getDataContext, getRequest } from "./Router";
+import { abort } from "./utils";
+import { safeRespose } from "./utils/safe-response";
 import { Merge, MergeMiddlewaresReturnType } from "./utils/types";
 
 type MaybePromise<T> = T | Promise<T>;
@@ -204,9 +204,9 @@ export class Route<
                 return runMiddlewares(index + 1, merge(data, newData || {}));
               },
             });
-          })
+          }, true)
         );
-      })().catch((e) => {
+      }, true)().catch((e) => {
         loadedData = e;
         return next(loadedData);
       });

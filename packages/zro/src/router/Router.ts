@@ -1,12 +1,12 @@
 import { toMerged } from "es-toolkit";
 import { addRoute, createRouter, findAllRoutes, findRoute } from "rou3";
-import { ServerContext } from "src/router/server";
-import { abort } from "src/router/utils";
 import { getQuery } from "ufo";
 import { createContext, withAsyncContext } from "unctx";
 import { createHead } from "unhead/server";
 import { ResolvableHead, Unhead } from "unhead/types";
 import { Route } from "./Route";
+import { ServerContext } from "./server/context";
+import { abort } from "./utils";
 
 type RequestContext = {
   request: Request;
@@ -154,7 +154,7 @@ export class Router {
                 },
                 index === routes.length - 1
               );
-            })
+            }, true)
           );
         };
         return {
@@ -162,7 +162,7 @@ export class Router {
           head,
           status: requestContext.use().status,
         };
-      })
+      }, true)
     );
   }
 }

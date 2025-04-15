@@ -1,11 +1,10 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec";
-import { PluginConfigContext } from "src/plugin";
 import { getRequest } from "src/router/Router";
 import { abort } from "src/router/utils";
 
 export class Action<TSchema extends StandardSchemaV1, ReturnType> {
   constructor(
-    private options: {
+    public options: {
       input: TSchema;
       handler: (
         input: StandardSchemaV1.InferInput<TSchema>
@@ -45,14 +44,5 @@ export class Action<TSchema extends StandardSchemaV1, ReturnType> {
       this.formDataToObject(await request.formData())
     );
     return handler(body);
-  }
-  // @remove
-  public wrapWithConfig(config: any) {
-    let _handler = this.options.handler;
-    this.options.handler = (input: StandardSchemaV1.InferInput<TSchema>) =>
-      PluginConfigContext.call(config, () => {
-        return _handler(input);
-      });
-    return this;
   }
 }
