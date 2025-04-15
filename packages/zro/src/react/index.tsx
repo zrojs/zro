@@ -1,19 +1,4 @@
-import {
-  createContext,
-  FC,
-  HTMLProps,
-  MouseEvent,
-  PropsWithChildren,
-  startTransition,
-  Suspense,
-  use,
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
+import React from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { decode, encode } from "turbo-stream";
 import { withTrailingSlash } from "ufo";
@@ -50,8 +35,8 @@ const getRouterCacheKey = (url: string) =>
 
 type NavigateFn = (url: string, options: { replace?: boolean }) => void;
 type NavigateContext = { navigate: NavigateFn; url: string };
-const navigateContext = createContext<NavigateContext>(null!);
-export const useNavigate = () => useContext(navigateContext);
+const navigateContext = React.createContext<NavigateContext>(null!);
+export const useNavigate = () => React.useContext(navigateContext);
 let hydrated = false;
 const ssr = typeof window === "undefined";
 export type ErrorBoundaryProps = FallbackProps;
@@ -66,16 +51,16 @@ fallbackHead.push({
   ],
 });
 const fallbackCache = new Cache();
-export const Router: FC<RouterProps> = ({
+export const Router: React.FC<RouterProps> = ({
   router,
   initialUrl,
   cache = fallbackCache,
   head = fallbackHead,
 }) => {
-  const [url, setUrl] = useState(
+  const [url, setUrl] = React.useState(
     initialUrl?.pathname || window.location.pathname
   );
-  const findTree = useCallback((url: string) => {
+  const findTree = React.useCallback((url: string) => {
     const req = new Request(
       new URL(url, initialUrl?.origin || window.location.origin)
     );
@@ -140,11 +125,11 @@ export const Router: FC<RouterProps> = ({
     return routeInfo.tree;
   }, []);
 
-  const [tree, setTree] = useState<Route<any, any, any, readonly any[]>[]>(
-    findTree(url)
-  );
+  const [tree, setTree] = React.useState<
+    Route<any, any, any, readonly any[]>[]
+  >(findTree(url));
 
-  const navigateValue = useMemo((): NavigateContext => {
+  const navigateValue = React.useMemo((): NavigateContext => {
     return {
       url,
       navigate: (url, { replace = false }) => {
@@ -154,10 +139,10 @@ export const Router: FC<RouterProps> = ({
     } as NavigateContext;
   }, [url]);
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     window.history.pushState = new Proxy(window.history.pushState, {
       apply: (target, thisArg, argArray) => {
-        startTransition(() => {
+        React.startTransition(() => {
           setUrl(argArray[2]);
           setTree(findTree(argArray[2]));
         });
@@ -166,7 +151,7 @@ export const Router: FC<RouterProps> = ({
     });
     window.history.replaceState = new Proxy(window.history.replaceState, {
       apply: (target, thisArg, argArray) => {
-        startTransition(() => {
+        React.startTransition(() => {
           setUrl(argArray[2]);
           setTree(findTree(argArray[2]));
         });
@@ -175,9 +160,9 @@ export const Router: FC<RouterProps> = ({
     });
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handlePopState = () => {
-      startTransition(async () => {
+      React.startTransition(async () => {
         setUrl(window.location.pathname);
         setTree(findTree(window.location.pathname));
       });
@@ -206,14 +191,14 @@ export const Router: FC<RouterProps> = ({
 
 const DataStreammer = () => {
   if (typeof window !== "undefined") return null;
-  const globalReaderStream = useMemo(
+  const globalReaderStream = React.useMemo(
     () =>
       encode(currentLoadingRoute.loader, {
         redactErrors: false,
       }),
     []
   );
-  const reader = useMemo(() => globalReaderStream.getReader(), []);
+  const reader = React.useMemo(() => globalReaderStream.getReader(), []);
 
   return (
     <>
@@ -222,25 +207,25 @@ const DataStreammer = () => {
           __html: `_rc = null;  window._readableStream = new ReadableStream({ start(controller) { _rc = controller } })`,
         }}
       ></script>
-      <Suspense>
+      <React.Suspense>
         <StreamLoaderData rs={globalReaderStream} reader={reader} />
-      </Suspense>
+      </React.Suspense>
     </>
   );
 };
 
-const StreamLoaderData: FC<{
+const StreamLoaderData: React.FC<{
   rs: ReadableStream<string>;
   reader: ReadableStreamDefaultReader<string>;
 }> = ({ rs, reader }) => {
-  const read = useMemo(async () => {
+  const read = React.useMemo(async () => {
     return reader.read().finally(() => {
       reader.releaseLock();
     });
   }, []);
-  const { value, done } = use(read);
+  const { value, done } = React.use(read);
   reader.releaseLock();
-  const readerN = useMemo(() => rs.getReader(), []);
+  const readerN = React.useMemo(() => rs.getReader(), []);
 
   if (!done)
     return (
@@ -250,9 +235,9 @@ const StreamLoaderData: FC<{
             __html: `_rc.enqueue(${JSON.stringify(value)})`,
           }}
         ></script>
-        <Suspense>
+        <React.Suspense>
           <StreamLoaderData rs={rs} reader={readerN} />
-        </Suspense>
+        </React.Suspense>
       </>
     );
   return (
@@ -267,7 +252,7 @@ const StreamLoaderData: FC<{
   );
 };
 
-const GlobalErrorBoundary: FC<FallbackProps> = ({ error }) => {
+const GlobalErrorBoundary: React.FC<FallbackProps> = ({ error }) => {
   console.error(error);
   return (
     <div>
@@ -277,7 +262,7 @@ const GlobalErrorBoundary: FC<FallbackProps> = ({ error }) => {
   );
 };
 
-const RenderTree: FC<{ tree: any[] }> = ({ tree }) => {
+const RenderTree: React.FC<{ tree: any[] }> = ({ tree }) => {
   const route = tree[0];
   const remainingTree = tree;
   if (route)
@@ -295,28 +280,31 @@ const RenderTree: FC<{ tree: any[] }> = ({ tree }) => {
     );
 };
 
-const RouteLoading: FC<PropsWithChildren<{ route: Route<any, any> }>> = ({
-  route,
-  children,
-}) => {
+const RouteLoading: React.FC<
+  React.PropsWithChildren<{ route: Route<any, any> }>
+> = ({ route, children }) => {
   const routeProps = route.getProps();
   if (routeProps?.loading)
-    return <Suspense fallback={<routeProps.loading />}>{children}</Suspense>;
+    return (
+      <React.Suspense fallback={<routeProps.loading />}>
+        {children}
+      </React.Suspense>
+    );
   return children;
 };
-const OutletContext = createContext<{
+const OutletContext = React.createContext<{
   route: Route<any, any>;
   tree: Route<any, any>[];
 }>(null!);
 
 export const Outlet = () => {
-  const { route, tree } = use(OutletContext);
+  const { route, tree } = React.use(OutletContext);
   if (!route) return null;
   const routeProps = route.getProps() as any;
   const childRoute = tree[0];
   const remainingTree = tree.slice(1);
   const { url } = useNavigate();
-  const children = useMemo(() => {
+  const children = React.useMemo(() => {
     return (
       <OutletContext.Provider
         value={{
@@ -334,14 +322,20 @@ export const Outlet = () => {
   }, [childRoute, remainingTree]);
 
   if (routeProps.loading) {
-    return <Suspense fallback={<routeProps.loading />}>{children}</Suspense>;
+    return (
+      <React.Suspense fallback={<routeProps.loading />}>
+        {children}
+      </React.Suspense>
+    );
   }
 
   return children;
 };
 
-const RouteErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
-  const { route } = useContext(OutletContext);
+const RouteErrorBoundary: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
+  const { route } = React.useContext(OutletContext);
   const routeProps = route.getProps() as any;
   if (routeProps?.errorBoundary)
     return (
@@ -352,8 +346,8 @@ const RouteErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
   return children;
 };
 
-const RenderRouteComponent: FC = () => {
-  const { route } = use(OutletContext);
+const RenderRouteComponent: React.FC = () => {
+  const { route } = React.use(OutletContext);
   const routeProps = route.getProps() as any;
   const data = useLoaderData();
   if (!routeProps?.component) return null;
@@ -365,14 +359,9 @@ const RenderRouteComponent: FC = () => {
   return <routeProps.component />;
 };
 
-const EmptyComponent = () => {
-  useLoaderData();
-  return null;
-};
-
-export const Link: FC<HTMLProps<HTMLAnchorElement>> = (props) => {
+export const Link: React.FC<React.HTMLProps<HTMLAnchorElement>> = (props) => {
   const onClick = async (
-    e: MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>
+    e: React.MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>
   ) => {
     props.onClick && (await props.onClick(e));
     if (!e.defaultPrevented) {
@@ -384,10 +373,10 @@ export const Link: FC<HTMLProps<HTMLAnchorElement>> = (props) => {
 };
 
 export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
-  const currentData = use(currentLoadingRoute.loader!);
-  const route = useContext(OutletContext).route;
+  const currentData = React.use(currentLoadingRoute.loader!);
+  const route = React.useContext(OutletContext).route;
   const { navigate } = useNavigate();
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (currentData instanceof Response && isRedirectResponse(currentData)) {
       const url = new URL(currentData.headers.get("Location")!);
       navigate(url.pathname, { replace: true });
