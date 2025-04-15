@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.7
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.6...v0.0.7)
+
+### 💅 Refactors
+
+- Simplify PluginConfigContext and remove unused wrapWithConfig method; update imports and usage across router files ([c1a397e](https://github.com/zrojs/zro/commit/c1a397e))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.6
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.5...v0.0.6)
