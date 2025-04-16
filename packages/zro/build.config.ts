@@ -53,7 +53,7 @@ export default defineBuildConfig({
     inlineDependencies: ["unhead/server", "hookable", "unhead/types"],
     esbuild: {
       format: "esm",
-      minify: false,
+      minify: true,
     },
   },
   stubOptions: {

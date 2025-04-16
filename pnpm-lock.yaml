@@ -120,12 +120,6 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
-      tsc-alias:
-        specifier: ^1.8.11
-        version: 1.8.11
-      tsc-watch:
-        specifier: ^6.2.1
-        version: 6.2.1(typescript@5.8.2)
       typescript:
         specifier: ^5.5.4
         version: 5.8.2

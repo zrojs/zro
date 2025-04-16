@@ -114,16 +114,23 @@ export class Router {
   }
 
   public async load(request: Request, serverCtx?: any) {
-    const routeInfo = this.findRoute(request);
-    const head = createHead();
-    this.setUpRequest(request);
-
-    const { tree: routes } = routeInfo!;
-
     if (serverCtx) {
       ServerContext.unset();
       ServerContext.set(serverCtx);
     }
+
+    const routeInfo = this.findRoute(request);
+    const head = createHead();
+    this.setUpRequest(request);
+
+    if (!routeInfo) {
+      return {
+        data: {},
+        head,
+        status: 404,
+      };
+    }
+    const { tree: routes } = routeInfo!;
 
     return HeadContext.callAsync(
       head,

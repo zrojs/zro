@@ -89,7 +89,7 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
           },
           async transform(code, id, options) {
             const { ssr } = options || { ssr: false };
-            if (_options && !ssr && ziroRouterLibFilter(id)) {
+            if (!ssr && ziroRouterLibFilter(id)) {
               const res = transform(code, {
                 filename: id,
                 targets: {
@@ -106,7 +106,7 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                 plugins: [deadImportsRemover()],
               })!.code!;
             }
-            if (_options && !ssr && routeFilesFilter(id)) {
+            if (!ssr && routeFilesFilter(id)) {
               let res = transform(code, {
                 filename: id,
                 targets: {

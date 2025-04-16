@@ -8,8 +8,12 @@ type Route = Routes["/blog/"];
 
 export const loader = async () => {
   const orm = getOrm<typeof schema>();
+
   return {
-    posts: orm.select().from(schema.posts).all(),
+    posts: new Promise(async (resolve) => {
+      await new Promise((r) => setTimeout(r, 5000));
+      return resolve(orm.select().from(schema.posts).all());
+    }),
   };
 };
 

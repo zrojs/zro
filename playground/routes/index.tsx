@@ -1,5 +1,7 @@
 import z from "zod";
 import { Action, getRequest } from "zro/router";
+import { useHead } from "zro/unhead";
+
 type Route = Routes["/"];
 
 export const actions = {
@@ -38,5 +40,15 @@ export const loader = async () => {
 };
 
 export default function HomePage() {
+  useHead({
+    title: "hi",
+    link: [
+      {
+        rel: "icon",
+        type: "image/x-icon",
+        href: "/favicon.ico",
+      },
+    ],
+  });
   return <span>Welcome to homepage</span>;
 }

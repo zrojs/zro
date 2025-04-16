@@ -51,20 +51,52 @@ fallbackHead.push({
   ],
 });
 const fallbackCache = new Cache();
-export const Router: React.FC<RouterProps> = ({
+export const Router: React.FC<RouterProps> = (props) => {
+  const {
+    router,
+    initialUrl,
+    cache = fallbackCache,
+    head = fallbackHead,
+  } = props;
+
+  return (
+    <UnheadProvider head={head}>
+      <html suppressHydrationWarning>
+        <head suppressHydrationWarning></head>
+        <body suppressHydrationWarning>
+          <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
+            <React.Suspense>
+              <ClientRouter
+                router={router}
+                cache={cache}
+                head={head}
+                initialUrl={initialUrl}
+              />
+            </React.Suspense>
+          </ErrorBoundary>
+          <DataStreammer />
+        </body>
+      </html>
+    </UnheadProvider>
+  );
+};
+
+const ClientRouter: React.FC<RouterProps & { cache: Cache }> = ({
   router,
+  cache,
+  head,
   initialUrl,
-  cache = fallbackCache,
-  head = fallbackHead,
 }) => {
   const [url, setUrl] = React.useState(
     initialUrl?.pathname || window.location.pathname
   );
+
   const findTree = React.useCallback((url: string) => {
     const req = new Request(
       new URL(url, initialUrl?.origin || window.location.origin)
     );
     const routeInfo = router.findRoute(req)!;
+    if (!routeInfo) throw new Error("Page not found");
     if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
       let reqKey = getRouterCacheKey(req.url);
       const loaderFn = () => {
@@ -171,21 +203,10 @@ export const Router: React.FC<RouterProps> = ({
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
-
   return (
-    <UnheadProvider head={head}>
-      <html suppressHydrationWarning>
-        <head suppressHydrationWarning></head>
-        <body suppressHydrationWarning>
-          <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
-            <navigateContext.Provider value={navigateValue}>
-              <RenderTree tree={tree} />
-            </navigateContext.Provider>
-          </ErrorBoundary>
-          <DataStreammer />
-        </body>
-      </html>
-    </UnheadProvider>
+    <navigateContext.Provider value={navigateValue}>
+      <RenderTree tree={tree} />
+    </navigateContext.Provider>
   );
 };
 
@@ -253,7 +274,6 @@ const StreamLoaderData: React.FC<{
 };
 
 const GlobalErrorBoundary: React.FC<FallbackProps> = ({ error }) => {
-  console.error(error);
   return (
     <div>
       <h2>{error.message}</h2>

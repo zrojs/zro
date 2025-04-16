@@ -8,7 +8,7 @@ export const abort = (
   issues?: StandardSchemaV1.FailureResult["issues"]
 ) => {
   const requestCtx = getRequest();
-  requestCtx.status = code;
+  if (requestCtx) requestCtx.status = code;
   if (!issues) throw new Error(text);
   throw serializeError(text || "", issues);
 };
