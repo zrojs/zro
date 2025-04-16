@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.15
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.14...v0.0.15)
+
+### 🚀 Enhancements
+
+- Enable minification in build config, refactor Router component for improved readability, and update error handling in abort function ([257571a](https://github.com/zrojs/zro/commit/257571a))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.14
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.13...v0.0.14)
