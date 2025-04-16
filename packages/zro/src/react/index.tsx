@@ -372,7 +372,7 @@ const RenderRouteComponent: React.FC = () => {
   const data = useLoaderData();
   if (!routeProps?.component) return null;
 
-  if (data instanceof Error) {
+  if (data instanceof Error && routeProps.errorBoundary) {
     return <routeProps.errorBoundary error={data} />;
   }
 
