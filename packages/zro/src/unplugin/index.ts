@@ -53,6 +53,7 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                 exclude: [
                   "zro/react",
                   "zro/plugin",
+                  "@unhead/react",
                   "zro/react/client-entry",
                   ...options.plugins,
                 ],
