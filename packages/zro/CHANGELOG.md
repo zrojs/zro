@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.17
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.16...v0.0.17)
+
+### 🚀 Enhancements
+
+- Move client entry to bundle itself and make this file optional to have ([605bbb9](https://github.com/zrojs/zro/commit/605bbb9))
+- Add virtual:zro/router.client to externals in build config ([e336812](https://github.com/zrojs/zro/commit/e336812))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.16
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.15...v0.0.16)
