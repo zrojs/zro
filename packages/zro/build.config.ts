@@ -66,6 +66,8 @@ export default defineBuildConfig({
       format: "esm",
       minify: false,
       legalComments: "inline",
+      jsxSideEffects: true,
+      jsx: "automatic",
     },
   },
   stubOptions: {

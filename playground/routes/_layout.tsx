@@ -15,7 +15,6 @@ export default function RootLayout() {
     link: [{ rel: "stylesheet", href: styles }],
   });
   const loaderData = useLoaderData<Route>();
-
   return (
     <div>
       <Head>
