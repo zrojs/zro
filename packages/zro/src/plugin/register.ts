@@ -11,7 +11,8 @@ export const registerPlugins = async (
   for (const plugin of plugins) {
     const { default: pluginModule } = (await importPlugin(
       plugin,
-      process.cwd()
+      process.cwd(),
+      true
     )) as {
       default: Plugin<any>;
     };
@@ -27,7 +28,11 @@ export const registerPlugins = async (
   }
 };
 
-const importPlugin = async (plugin: string, userRoot: string) => {
+const importPlugin = async (
+  plugin: string,
+  userRoot: string,
+  tryInstall: boolean
+) => {
   const requireFromUser = createRequire(userRoot);
   try {
     return await import(
@@ -38,13 +43,14 @@ const importPlugin = async (plugin: string, userRoot: string) => {
     try {
       return requireFromUser(plugin); // fallback for CJS/dev-monorepo
     } catch (err2) {
-      console.error(
-        `Both import() and require() failed for plugin "${plugin}"`
-      );
-      await addDependency(plugin, {
-        cwd: process.cwd(),
-        silent: false,
-      });
+      console.error(`Installing "${plugin}"`);
+      if (tryInstall) {
+        await addDependency(plugin, {
+          cwd: process.cwd(),
+          silent: true,
+        });
+        return importPlugin(plugin, userRoot, false);
+      }
       throw err2;
     }
   }
