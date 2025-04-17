@@ -1,5 +1,5 @@
 import { ErrorBoundaryProps, Link, Outlet, useLoaderData } from "zro/react";
-import { Head, useHead, useUnhead } from "zro/unhead";
+import { Head, useHead } from "zro/unhead";
 import styles from "./styles.css?url";
 
 type Route = Routes["/_layout"];
@@ -14,11 +14,13 @@ export default function RootLayout() {
   useHead({
     link: [{ rel: "stylesheet", href: styles }],
   });
-  // const loaderData = useLoaderData<Route>();
+  const loaderData = useLoaderData<Route>();
 
   return (
     <div>
-      <Head>{/* <title>{loaderData.version}</title> */}</Head>
+      <Head>
+        <title>{loaderData.version}</title>
+      </Head>
       <div className="flex gap-2 [&>a]:text-blue-700">
         <Link href="/">[HOME]</Link>
         <Link href="/blog">[BLOG]</Link>

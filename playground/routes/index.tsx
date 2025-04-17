@@ -41,7 +41,6 @@ export const loader = async () => {
 
 export default function HomePage() {
   useHead({
-    title: "hi",
     link: [
       {
         rel: "icon",
