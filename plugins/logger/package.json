@@ -1,14 +1,15 @@
 {
   "name": "@zro/logger",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "type": "module",
+  "private": false,
   "description": "Request logger for ZRO apps",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "unbuild --stub",
     "build": "unbuild",
-    "prepublishOnly": "pnpm build && pnpx changelogen --release --push"
+    "prepublishOnly": "pnpm build && pnpx changelogen --release --no-tag --push"
   },
   "keywords": [],
   "author": "Nariman Movaffaghi",
