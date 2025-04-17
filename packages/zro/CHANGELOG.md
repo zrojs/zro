@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.23
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.22...v0.0.23)
+
+### 🩹 Fixes
+
+- Exclude @unhead/react from optimizeDeps in Vite configuration ([aab75ad](https://github.com/zrojs/zro/commit/aab75ad))
+- Update zro dependency versioning to use workspace:^* across all packages ([e9491b2](https://github.com/zrojs/zro/commit/e9491b2))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.22
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.21...v0.0.22)
