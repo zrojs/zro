@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.19
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.18...v0.0.19)
+
+### 🚀 Enhancements
+
+- Install not found plugins silently ([8acc3a7](https://github.com/zrojs/zro/commit/8acc3a7))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.18
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.17...v0.0.18)
