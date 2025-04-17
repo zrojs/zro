@@ -1,6 +1,10 @@
 # Changelog
 
 
+## v0.0.4
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.23...v0.0.4)
+
 ## v0.0.3
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.17...v0.0.3)
