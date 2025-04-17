@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.22
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.21...v0.0.22)
+
+### 🩹 Fixes
+
+- Enable tree shaking in Rollup configuration ([b2cf97c](https://github.com/zrojs/zro/commit/b2cf97c))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.21
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.20...v0.0.21)
