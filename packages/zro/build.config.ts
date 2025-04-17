@@ -68,6 +68,7 @@ export default defineBuildConfig({
       legalComments: "inline",
       jsxSideEffects: true,
       jsx: "automatic",
+      treeShaking: true,
     },
   },
   stubOptions: {
