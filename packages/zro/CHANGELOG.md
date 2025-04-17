@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.21
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.20...v0.0.21)
+
+### 🚀 Enhancements
+
+- Enable automatic JSX runtime and add side effects support ([eff596d](https://github.com/zrojs/zro/commit/eff596d))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.20
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.19...v0.0.20)
