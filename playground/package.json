@@ -13,9 +13,9 @@
   "author": "Nariman Movaffaghi",
   "license": "MIT",
   "dependencies": {
-    "@zro/db": "workspace:*",
-    "@zro/logger": "workspace:*",
-    "@zro/auth": "workspace:*",
+    "@zro/db": "workspace:^*",
+    "@zro/logger": "workspace:^*",
+    "@zro/auth": "workspace:^*",
     "drizzle-kit": "^0.30.6",
     "drizzle-orm": "^0.41.0",
     "react": "^19.0.0",
@@ -23,7 +23,7 @@
     "unctx": "^2.4.1",
     "vite-plugin-inspect": "^11.0.0",
     "zod": "^3.24.2",
-    "zro": "workspace:*"
+    "zro": "workspace:^*"
   },
   "packageManager": "pnpm@10.6.3",
   "devDependencies": {

@@ -30,7 +30,7 @@
     "tsc-alias": "^1.8.11",
     "tsc-watch": "^6.2.1",
     "typescript": "^5.5.4",
-    "zro": "workspace:*"
+    "zro": "workspace:^*"
   },
   "dependencies": {
     "db0": "^0.3.1",
