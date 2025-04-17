@@ -58,7 +58,7 @@ export default defineBuildConfig({
       outDir: "./dist/server",
     },
   ],
-  externals: ["react", "react/jsx-runtime"],
+  externals: ["react", "react/jsx-runtime", "virtual:zro/router.client"],
   rollup: {
     inlineDependencies: ["unhead/server", "hookable", "unhead/types"],
     esbuild: {
