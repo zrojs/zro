@@ -3,20 +3,22 @@
   "version": "0.0.1",
   "type": "module",
   "description": "Request logger for ZRO apps",
-  "main": "./dist/index.js",
+  "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "dev": "tsc-watch",
-    "build": "tsc"
+    "dev": "unbuild --stub",
+    "build": "unbuild",
+    "prepublishOnly": "pnpm build && pnpx changelogen --release --push"
   },
   "keywords": [],
   "author": "Nariman Movaffaghi",
   "license": "MIT",
   "packageManager": "pnpm@10.6.3",
-  "devDependencies": {
-    "tsc-watch": "^6.2.1",
-    "typescript": "^5.5.4",
+  "peerDependencies": {
     "zro": "workspace:*"
+  },
+  "devDependencies": {
+    "unbuild": "^3.5.0"
   },
   "dependencies": {
     "defu": "^6.1.4"
