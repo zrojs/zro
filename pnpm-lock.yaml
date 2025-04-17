@@ -249,19 +249,13 @@ importers:
       defu:
         specifier: ^6.1.4
         version: 6.1.4
-    devDependencies:
-      tsc-watch:
-        specifier: ^6.2.1
-        version: 6.2.1(typescript@5.8.2)
-      typescript:
-        specifier: ^5.5.4
-        version: 5.8.2
-      unbuild:
-        specifier: ^3.5.0
-        version: 3.5.0(typescript@5.8.2)
       zro:
         specifier: workspace:*
         version: link:../../packages/zro
+    devDependencies:
+      unbuild:
+        specifier: ^3.5.0
+        version: 3.5.0(typescript@5.8.2)
 
 packages:
 

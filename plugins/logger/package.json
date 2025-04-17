@@ -6,6 +6,13 @@
   "description": "Request logger for ZRO apps",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "default": "./dist/index.mjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "dev": "unbuild --stub",
     "build": "unbuild",

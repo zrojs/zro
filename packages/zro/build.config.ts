@@ -61,9 +61,11 @@ export default defineBuildConfig({
   externals: ["react", "react/jsx-runtime", "virtual:zro/router.client"],
   rollup: {
     inlineDependencies: ["unhead/server", "hookable", "unhead/types"],
+    preserveDynamicImports: true,
     esbuild: {
       format: "esm",
-      minify: true,
+      minify: false,
+      legalComments: "inline",
     },
   },
   stubOptions: {
