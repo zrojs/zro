@@ -125,6 +125,19 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
             }
             return code;
           },
+          async resolveId(source, importer, options) {
+            if (source == "virtual:zro/router.client") {
+              return "/.zro/router.client";
+            }
+            if (source == "/@zro/client-entry") {
+              const isClientEntryExists = await this.resolve("/client-entry");
+              if (isClientEntryExists) return isClientEntryExists.id;
+              return await this.resolve("zro/react/client-entry", undefined, {
+                skipSelf: true,
+              }).then((resolved) => resolved?.id);
+            }
+            return null;
+          },
         },
       },
       // unctxPlugin.raw({}, meta) as UnpluginOptions,

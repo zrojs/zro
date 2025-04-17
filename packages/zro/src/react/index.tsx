@@ -45,7 +45,7 @@ fallbackHead.push({
   script: [
     {
       type: "module",
-      src: "/app.tsx",
+      src: "@zro/client-entry",
       tagPosition: "bodyClose",
     },
   ],
@@ -318,7 +318,9 @@ const OutletContext = React.createContext<{
 }>(null!);
 
 export const Outlet = () => {
-  const { route, tree } = React.use(OutletContext);
+  const ctx = React.use(OutletContext);
+  if (!ctx) return null;
+  const { route, tree } = ctx;
   if (!route) return null;
   const routeProps = route.getProps() as any;
   const childRoute = tree[0];

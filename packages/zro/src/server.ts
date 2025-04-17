@@ -42,7 +42,7 @@ export const handleRequest = async (
     script: [
       {
         type: "module",
-        src: "/app.tsx",
+        src: "@zro/client-entry",
         tagPosition: "bodyClose",
       },
     ],

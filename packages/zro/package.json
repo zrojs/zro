@@ -31,6 +31,14 @@
       "types": "./dist/react/index.d.ts",
       "import": "./dist/react/index.mjs"
     },
+    "./react/client-entry": {
+      "types": "./dist/react/client/client-entry.d.ts",
+      "import": "./dist/react/client/client-entry.mjs"
+    },
+    "./react/client": {
+      "types": "./dist/react/client/index.d.ts",
+      "import": "./dist/react/client/index.mjs"
+    },
     "./plugin": {
       "types": "./dist/plugin/index.d.ts",
       "import": "./dist/plugin/index.mjs"

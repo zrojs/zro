@@ -4,6 +4,16 @@ export default defineBuildConfig({
   entries: [
     {
       builder: "rollup",
+      input: "./src/react/client/client-entry",
+      outDir: "./dist/react/client-entry",
+    },
+    {
+      builder: "rollup",
+      input: "./src/react/client/index",
+      outDir: "./dist/react/client",
+    },
+    {
+      builder: "rollup",
       input: "./src/cli/index",
       outDir: "./dist/cli",
     },
