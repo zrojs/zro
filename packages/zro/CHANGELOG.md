@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.20
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.19...v0.0.20)
+
+### 🩹 Fixes
+
+- Exclude "zro/react/client-entry" from optimizeDeps in Vite config ([c54fb12](https://github.com/zrojs/zro/commit/c54fb12))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.19
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.18...v0.0.19)
