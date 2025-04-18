@@ -1,8 +1,17 @@
-import { FormEvent, useCallback } from "react";
+import { FormEvent, useCallback, useMemo } from "react";
 import { useNavigate } from "./index";
+import type { Actions } from "../router";
+import { withQuery } from "ufo";
 
-export const useAction = (url: string) => {
+export const useAction = <TRouteId extends keyof Actions>(
+  routePath: TRouteId,
+  action: keyof Actions[TRouteId]
+) => {
   const { navigate } = useNavigate();
+  const url = useMemo(
+    () => withQuery(routePath, { action: String(action) }),
+    [routePath, action]
+  );
   const sendReq = useCallback(
     (formData: FormData) => {
       return fetch(url, {

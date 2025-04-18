@@ -23,7 +23,12 @@ export const createTypesFile = async (tree: RouteTree, destDir: string) => {
 export {}
 declare global {
   type Routes = {
-    --code
+    --routes-types
+  }
+}
+declare module 'zro/router' {
+  interface Actions {
+    --actions-types
   }
 }`;
 
@@ -34,7 +39,7 @@ declare global {
       from: relative(destDir, route.filePath).replace(/\.[^/.]+$/, ""),
     });
     code = code.replace(
-      "--code",
+      "--routes-types",
       `${JSON.stringify(route.path)}: Route<${JSON.stringify(route.path)}, ${
         route.moduleInfo.hasLoader
           ? `LoaderReturnType<typeof ${genSafeVariableName(
@@ -47,8 +52,18 @@ declare global {
         route.moduleInfo?.hasMiddleware
           ? `typeof ${genSafeVariableName(`import_${route.path}`)}.middlewares`
           : `[]`
-      }>,\n    --code`
+      }>,\n    --routes-types`
     );
+
+    if (route.moduleInfo.hasActions) {
+      code = code.replace(
+        "--actions-types",
+        `${JSON.stringify(route.path)}: typeof ${genSafeVariableName(
+          `import_${route.path}`
+        )}.actions,
+    --actions-types`
+      );
+    }
     if (route.children)
       for (const child of route.children) {
         if (child) walkRoutes(child, route);
@@ -59,7 +74,8 @@ declare global {
     if (child) walkRoutes(child);
   }
 
-  code = code.replace("--code", "");
+  code = code.replace(`\n    --routes-types`, "");
+  code = code.replace(`\n    --actions-types`, "");
 
   const { injectImports } = createUnimport({ imports });
   await mkdir(destDir, { recursive: true });

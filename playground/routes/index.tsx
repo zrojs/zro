@@ -7,11 +7,10 @@ type Route = Routes["/"];
 export const actions = {
   login: new Action({
     input: z.object({
-      username: z.string(),
-      password: z.string(),
+      ok: z.stringbool(),
     }),
-    async handler({ password, username }) {
-      console.log(username, password);
+    async handler(obj) {
+      console.log(obj);
       return true;
     },
   }),
