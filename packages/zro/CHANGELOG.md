@@ -1,6 +1,33 @@
 # Changelog
 
 
+## v0.0.25
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.24...v0.0.25)
+
+### 🚀 Enhancements
+
+- **create-zro:** Update with-tailwind template ([4d30fff](https://github.com/zrojs/zro/commit/4d30fff))
+- **zro:** Actions supports different content types `json`, `multipart/form-data`, `x-www-form-urlencoded` ([9b1e5d9](https://github.com/zrojs/zro/commit/9b1e5d9))
+
+### 🩹 Fixes
+
+- **create-zro:** Update prepublishOnly script to exclude tagging ([b674799](https://github.com/zrojs/zro/commit/b674799))
+
+### 💅 Refactors
+
+- **ziro/react:** Cache disabled until having a revalidation strategy ([246130a](https://github.com/zrojs/zro/commit/246130a))
+
+### 🏡 Chore
+
+- **release:** V0.0.5 ([3d4708a](https://github.com/zrojs/zro/commit/3d4708a))
+- **create-zro:** Update prepublishOnly script to include changelogen ([6d09891](https://github.com/zrojs/zro/commit/6d09891))
+- **release:** V0.0.5 ([582fd35](https://github.com/zrojs/zro/commit/582fd35))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.24
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.23...v0.0.24)
