@@ -4,8 +4,21 @@ import { relative } from "node:path";
 import { joinURL } from "ufo";
 import { createUnimport, Import } from "unimport";
 import { RouteTree, TreeRoute } from "../../plugin/RouteTree";
+import { glob } from "tinyglobby";
 
-const importPluginConfig = (configFileName: string, imports: Import[]) => {
+const importPluginConfig = async (
+  configFileName: string,
+  imports: Import[]
+) => {
+  const configPath = await glob(
+    joinURL(process.cwd(), `configs/${configFileName}.{js,ts,jsx,tsx}`),
+    {
+      absolute: true,
+    }
+  ).then((res) => res[0]);
+
+  if (!configPath) return "undefined";
+
   const configImportName = genSafeVariableName(
     `import_config_${configFileName}`
   );
@@ -49,7 +62,7 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
   for (const bootstrapScript of tree.getBootstrapScripts()) {
     const { unImport, configFileName } = bootstrapScript;
 
-    const configImportName = importPluginConfig(configFileName!, imports);
+    const configImportName = await importPluginConfig(configFileName!, imports);
 
     const fnImportName = genSafeVariableName(
       `import_${configFileName}_${unImport.name}`
@@ -66,16 +79,19 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
 
   serverCode += `\n`;
 
-  const walkRoutes = (route: TreeRoute, parent?: TreeRoute) => {
+  const walkRoutes = async (route: TreeRoute, parent?: TreeRoute) => {
+    const routeImportVariable = genSafeVariableName(`import_${route.path}`);
     imports.push({
       name: "*",
-      as: genSafeVariableName(`import_${route.path}`),
+      as: routeImportVariable,
       from: relative(destDir, route.filePath).replace(/\.[^/.]+$/, ""),
     });
     let configImportName = "";
     if (route.configFileName)
-      configImportName = importPluginConfig(route.configFileName!, imports);
-    const routeImportVariable = genSafeVariableName(`import_${route.path}`);
+      configImportName = await importPluginConfig(
+        route.configFileName!,
+        imports
+      );
     serverCode += `const ${genSafeVariableName(
       `route_${route.path}`
     )} = new Route(${JSON.stringify(route.path)}, {
@@ -127,31 +143,30 @@ export const createRouterFile = async (tree: RouteTree, destDir: string) => {
         : undefined
     },
   }
-})${route.extraMiddlewares
-      .map((middlewareInfo) => {
-        const { unImport, configFileName } = middlewareInfo;
-        const as = genSafeVariableName(`import_${unImport.name}`);
-        imports.push({
-          ...{
-            ...unImport,
-            from: relative(joinURL(process.cwd(), ".zro"), unImport.from),
-          },
-          as,
-        });
-        if (configFileName) {
+})${(
+      await Promise.all(
+        route.extraMiddlewares.map(async (middlewareInfo) => {
+          const { unImport, configFileName } = middlewareInfo;
+          const as = genSafeVariableName(`import_${unImport.name}`);
           imports.push({
-            name: "default",
-            as: `import_config_${unImport.name}`,
-            from: relative(
-              joinURL(process.cwd(), ".zro"),
-              `configs/${configFileName}`
-            ),
+            ...{
+              ...unImport,
+              from: relative(joinURL(process.cwd(), ".zro"), unImport.from),
+            },
+            as,
           });
-          return `.addMiddleware(middlewareWithPluginContext(${`import_config_${unImport.name}`}, ${as}))`;
-        }
-        return `.addMiddleware(${as})`;
-      })
-      .join("\n")}
+          if (configFileName) {
+            const configImportName = await importPluginConfig(
+              configFileName,
+              imports
+            );
+
+            return `.addMiddleware(middlewareWithPluginContext(${configImportName}, ${as}))`;
+          }
+          return `.addMiddleware(${as})`;
+        })
+      )
+    ).join("\n")}
 ${
   route.isLeaf
     ? `router.addRoute(${genSafeVariableName(`route_${route.path}`)})\n`
@@ -190,12 +205,12 @@ ${
 
     if (route.children)
       for (const child of route.children) {
-        if (child) walkRoutes(child, route);
+        if (child) await walkRoutes(child, route);
       }
   };
 
   for (const child of tree.findRootRoutes()) {
-    if (child) walkRoutes(child);
+    if (child) await walkRoutes(child);
   }
 
   serverCode += "\nreturn router;\n}\n";

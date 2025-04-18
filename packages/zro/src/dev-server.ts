@@ -16,6 +16,7 @@ import loadingSpinner from "yocto-spinner";
 import { Router as ZroRouter } from "./router/Router";
 import { handleRequest } from "./server";
 import { extractUnheadInputFromHtml } from "./unhead/server";
+import { Youch } from "youch";
 
 const serverContext = createContext<App>({
   asyncContext: true,
@@ -61,18 +62,24 @@ export const bootstrapDevServer = async ({
       app.use(fromNodeMiddleware(vite.middlewares));
       app.use(
         eventHandler(async (e) => {
-          const { createRouter } = (await vite.ssrLoadModule(
-            "/.zro/router.server"
-          )) as { createRouter: () => Promise<ZroRouter> };
-
-          const url = getRequestURL(e).href;
-          const viteHtml = await vite.transformIndexHtml(
-            url,
-            "<html><head></head><body></body></html>"
-          );
-          const { input } = extractUnheadInputFromHtml(viteHtml);
-
-          return handleRequest(e, await createRouter(), input);
+          const req = getRequestURL(e);
+          try {
+            const { createRouter } = (await vite.ssrLoadModule(
+              "/.zro/router.server"
+            )) as { createRouter: () => Promise<ZroRouter> };
+            const url = req.href;
+            const viteHtml = await vite.transformIndexHtml(
+              url,
+              "<html><head></head><body></body></html>"
+            );
+            const { input } = extractUnheadInputFromHtml(viteHtml);
+            return handleRequest(e, await createRouter(), input);
+          } catch (error) {
+            const youch = new Youch();
+            const html = await youch.toHTML(error);
+            console.log(await youch.toANSI(error));
+            return html;
+          }
         })
       );
       const listener = await listen(toNodeListener(app), {

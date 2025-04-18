@@ -15,7 +15,7 @@ const plugin: Plugin<LoggerConfig> = {
   name: "logger",
   configFileName: "logger",
   setup(tree) {
-    const config = getConfig<LoggerConfig>();
+    const config = defineConfig(getConfig<LoggerConfig>());
     if (config.enabled)
       tree.findRootRoutes().forEach((route) => {
         route?.addMiddleware(

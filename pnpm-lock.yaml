@@ -104,6 +104,9 @@ importers:
       yocto-spinner:
         specifier: ^0.2.1
         version: 0.2.1
+      youch:
+        specifier: 4.1.0-beta.7
+        version: 4.1.0-beta.7
     devDependencies:
       '@types/babel__core':
         specifier: ^7.20.5
@@ -136,13 +139,13 @@ importers:
   playground:
     dependencies:
       '@zro/auth':
-        specifier: workspace:*
+        specifier: workspace:^*
         version: link:../plugins/auth
       '@zro/db':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugins/db
       '@zro/logger':
-        specifier: workspace:*
+        specifier: workspace:^*
         version: link:../plugins/logger
       drizzle-kit:
         specifier: ^0.30.6
@@ -166,7 +169,7 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
       zro:
-        specifier: workspace:*
+        specifier: workspace:^*
         version: link:../packages/zro
     devDependencies:
       '@cloudflare/vite-plugin':
@@ -216,7 +219,7 @@ importers:
         specifier: ^5.5.4
         version: 5.8.2
       zro:
-        specifier: workspace:*
+        specifier: workspace:^*
         version: link:../../packages/zro
 
   plugins/db:
@@ -230,19 +233,13 @@ importers:
       drizzle-orm:
         specifier: ^0.41.0
         version: 0.41.0(gel@2.0.2)
-    devDependencies:
-      tsc-alias:
-        specifier: ^1.8.11
-        version: 1.8.11
-      tsc-watch:
-        specifier: ^6.2.1
-        version: 6.2.1(typescript@5.8.2)
-      typescript:
-        specifier: ^5.5.4
-        version: 5.8.2
       zro:
-        specifier: workspace:*
+        specifier: workspace:^*
         version: link:../../packages/zro
+    devDependencies:
+      unbuild:
+        specifier: ^3.5.0
+        version: 3.5.0(typescript@5.8.2)
 
   plugins/logger:
     dependencies:
@@ -250,7 +247,7 @@ importers:
         specifier: ^6.1.4
         version: 6.1.4
       zro:
-        specifier: workspace:*
+        specifier: workspace:^*
         version: link:../../packages/zro
     devDependencies:
       unbuild:
@@ -1399,6 +1396,17 @@ packages:
   '@polka/url@1.0.0-next.28':
     resolution: {integrity: sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==}
 
+  '@poppinss/colors@4.1.4':
+    resolution: {integrity: sha512-FA+nTU8p6OcSH4tLDY5JilGYr1bVWHpNmcLr7xmMEdbWmKHa+3QZ+DqefrXKmdjO/brHTnQZo20lLSjaO7ydog==}
+    engines: {node: '>=18.16.0'}
+
+  '@poppinss/dumper@0.6.3':
+    resolution: {integrity: sha512-iombbn8ckOixMtuV1p3f8jN6vqhXefNjJttoPaJDMeIk/yIGhkkL3OrHkEjE9SRsgoAx1vBUU2GtgggjvA5hCA==}
+
+  '@poppinss/exception@1.2.1':
+    resolution: {integrity: sha512-aQypoot0HPSJa6gDPEPTntc1GT6QINrSbgRlRhadGW2WaYqUK3tK4Bw9SBMZXhmxd3GeAlZjVcODHgiu+THY7A==}
+    engines: {node: '>=18'}
+
   '@rollup/plugin-alias@5.1.1':
     resolution: {integrity: sha512-PR9zDb+rOzkRb2VD+EuKB7UC41vU5DIwZ5qqCpk0KJudcWAyi8rvYOhS7+L5aZCspw1stTViLgN5v6FF1p5cgQ==}
     engines: {node: '>=14.0.0'}
@@ -1547,6 +1555,13 @@ packages:
     resolution: {integrity: sha512-PIQeY5XDkrOysbQblSW7v3l1MDZzkTEzAfTPkj5VAu3FW8fS4ynyLg2sINp0fp3SjZ8xkRYpLqoKcYqAkhU1dw==}
     cpu: [x64]
     os: [win32]
+
+  '@sindresorhus/is@7.0.1':
+    resolution: {integrity: sha512-QWLl2P+rsCJeofkDNIT3WFmb6NrRud1SUYW8dIhXK/46XFV8Q/g7Bsvib0Askb0reRLe+WYPeeE+l5cH7SlkuQ==}
+    engines: {node: '>=18'}
+
+  '@speed-highlight/core@1.2.7':
+    resolution: {integrity: sha512-0dxmVj4gxg3Jg879kvFS/msl4s9F3T9UXC1InxgOf7t5NvcPD97u/WTA5vL/IxWHMn7qSxBozqrnnE2wvl1m8g==}
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
@@ -1869,6 +1884,10 @@ packages:
   cookie@0.7.2:
     resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
     engines: {node: '>= 0.6'}
+
+  cookie@1.0.2:
+    resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
+    engines: {node: '>=18'}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -2402,6 +2421,10 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
+
+  kleur@4.1.5:
+    resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
+    engines: {node: '>=6'}
 
   knitwork@1.2.0:
     resolution: {integrity: sha512-xYSH7AvuQ6nXkq42x0v5S8/Iry+cfulBz/DJQzhIyESdLD7425jXsPy4vn5cCXU+HhRN2kVw51Vd1K6/By4BQg==}
@@ -3076,6 +3099,10 @@ packages:
     peerDependencies:
       postcss: ^8.4.31
 
+  supports-color@10.0.0:
+    resolution: {integrity: sha512-HRVVSbCCMbj7/kdWF9Q+bbckjBHLtHMEoJWlkmYzzdwhYMkjkOwubLM6t7NbWKjgKamGDrWL1++KrjUO1t9oAQ==}
+    engines: {node: '>=18'}
+
   supports-color@5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
     engines: {node: '>=4'}
@@ -3392,8 +3419,16 @@ packages:
     resolution: {integrity: sha512-GQHQqAopRhwU8Kt1DDM8NjibDXHC8eoh1erhGAJPEyveY9qqVeXvVikNKrDz69sHowPMorbPUrH/mx8c50eiBQ==}
     engines: {node: '>=18'}
 
+  youch-core@0.3.2:
+    resolution: {integrity: sha512-fusrlIMLeRvTFYLUjJ9KzlGC3N+6MOPJ68HNj/yJv2nz7zq8t4HEviLms2gkdRPUS7F5rZ5n+pYx9r88m6IE1g==}
+    engines: {node: '>=18'}
+
   youch@3.3.4:
     resolution: {integrity: sha512-UeVBXie8cA35DS6+nBkls68xaBBXCye0CNznrhszZjTbRVnJKQuNsyLKBTTL4ln1o1rh2PKtv35twV7irj5SEg==}
+
+  youch@4.1.0-beta.7:
+    resolution: {integrity: sha512-HUn0M24AUTMvjdkoMtH8fJz2FEd+k1xvtR9EoTrDUoVUi6o7xl5X+pST/vjk4T3GEQo2mJ9FlAvhWBm8dIdD4g==}
+    engines: {node: '>=18'}
 
   zod@3.22.3:
     resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
@@ -4166,6 +4201,18 @@ snapshots:
 
   '@polka/url@1.0.0-next.28': {}
 
+  '@poppinss/colors@4.1.4':
+    dependencies:
+      kleur: 4.1.5
+
+  '@poppinss/dumper@0.6.3':
+    dependencies:
+      '@poppinss/colors': 4.1.4
+      '@sindresorhus/is': 7.0.1
+      supports-color: 10.0.0
+
+  '@poppinss/exception@1.2.1': {}
+
   '@rollup/plugin-alias@5.1.1(rollup@4.35.0)':
     optionalDependencies:
       rollup: 4.35.0
@@ -4269,6 +4316,10 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.35.0':
     optional: true
+
+  '@sindresorhus/is@7.0.1': {}
+
+  '@speed-highlight/core@1.2.7': {}
 
   '@standard-schema/spec@1.0.0': {}
 
@@ -4589,6 +4640,8 @@ snapshots:
   cookie-es@1.2.2: {}
 
   cookie@0.7.2: {}
+
+  cookie@1.0.2: {}
 
   cross-spawn@7.0.6:
     dependencies:
@@ -5132,6 +5185,8 @@ snapshots:
   jsesc@3.1.0: {}
 
   json5@2.2.3: {}
+
+  kleur@4.1.5: {}
 
   knitwork@1.2.0: {}
 
@@ -5783,6 +5838,8 @@ snapshots:
       postcss: 8.5.3
       postcss-selector-parser: 6.1.2
 
+  supports-color@10.0.0: {}
+
   supports-color@5.5.0:
     dependencies:
       has-flag: 3.0.0
@@ -6126,11 +6183,23 @@ snapshots:
 
   yoctocolors@2.1.1: {}
 
+  youch-core@0.3.2:
+    dependencies:
+      '@poppinss/exception': 1.2.1
+      error-stack-parser-es: 1.0.5
+
   youch@3.3.4:
     dependencies:
       cookie: 0.7.2
       mustache: 4.2.0
       stacktracey: 2.1.8
+
+  youch@4.1.0-beta.7:
+    dependencies:
+      '@poppinss/dumper': 0.6.3
+      '@speed-highlight/core': 1.2.7
+      cookie: 1.0.2
+      youch-core: 0.3.2
 
   zod@3.22.3: {}
 
