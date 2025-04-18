@@ -160,11 +160,7 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
         });
       };
 
-      // if (!cache.getRevalidateCallback(reqKey))
-      //   cache.setRevalidateCallback(reqKey, loaderFn);
-      currentLoadingRoute.loader =
-        cache.get(reqKey) || cache.set(reqKey, loaderFn());
-      // console.log(currentLoadingRoute.loader);
+      currentLoadingRoute.loader = cache.set(reqKey, loaderFn());
       currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
       currentLoadingRoute.cacheKey = reqKey;
     }
@@ -217,6 +213,7 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
+
   return (
     <navigateContext.Provider value={navigateValue}>
       <RenderTree tree={tree} />
