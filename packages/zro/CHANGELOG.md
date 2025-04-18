@@ -1,6 +1,28 @@
 # Changelog
 
 
+## v0.0.24
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.23...v0.0.24)
+
+### 🚀 Enhancements
+
+- Optional action input and improve `useAction` interface ([1a5e070](https://github.com/zrojs/zro/commit/1a5e070))
+
+### 🩹 Fixes
+
+- Better error preview using `youch` ([35abad0](https://github.com/zrojs/zro/commit/35abad0))
+- `db` plugin build flow using unbuild ([7302c57](https://github.com/zrojs/zro/commit/7302c57))
+
+### 🏡 Chore
+
+- **release:** V0.0.4 ([c63a61d](https://github.com/zrojs/zro/commit/c63a61d))
+- **release:** V0.0.1 ([8510de1](https://github.com/zrojs/zro/commit/8510de1))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.23
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.22...v0.0.23)
