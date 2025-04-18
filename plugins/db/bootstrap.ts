@@ -4,6 +4,9 @@ import { DBConfig } from ".";
 
 export const bootstrap = async () => {
   const config = getConfig<DBConfig>();
+  if (!config) {
+    throw new Error("DB Config is required!");
+  }
   const db = createDatabase(config.connector);
   (globalThis as any).__db0 = db;
   if (!!config.orm) {

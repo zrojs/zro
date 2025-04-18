@@ -1,21 +1,21 @@
 {
   "name": "@zro/db",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "type": "module",
   "description": "unjs/db0 integration for ZRO apps",
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"pnpm run postbuild\"",
-    "build": "tsc",
-    "postbuild": "tsc-alias"
+    "dev": "unbuild --watch",
+    "build": "unbuild",
+    "prepublishOnly": "pnpm build && pnpx changelogen --release --no-tag --push"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./dist/index.mjs"
     },
     "./connectors/*": {
       "types": "./dist/connectors/*.d.ts",
-      "default": "./dist/connectors/*.js"
+      "default": "./dist/connectors/*.mjs"
     }
   },
   "types": "./dist/index.d.mts",
@@ -26,15 +26,23 @@
   "author": "Nariman Movaffaghi",
   "license": "MIT",
   "packageManager": "pnpm@10.6.3",
-  "devDependencies": {
-    "tsc-alias": "^1.8.11",
-    "tsc-watch": "^6.2.1",
-    "typescript": "^5.5.4",
-    "zro": "workspace:^*"
-  },
   "dependencies": {
     "db0": "^0.3.1",
-    "defu": "^6.1.4",
-    "drizzle-orm": "^0.41.0"
+    "defu": "^6.1.4"
+  },
+  "devDependencies": {
+    "unbuild": "^3.5.0"
+  },
+  "peerDependencies": {
+    "drizzle-orm": "^0.41.0",
+    "zro": "workspace:^*"
+  },
+  "peerDependenciesMeta": {
+    "drizzle-orm": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
