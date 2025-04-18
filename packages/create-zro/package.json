@@ -10,7 +10,7 @@
     "dev": "unbuild --stub",
     "build": "unbuild",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm build && pnpx changelogen --release --push"
   },
   "files": [
     "templates",
