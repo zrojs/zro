@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useMemo } from "react";
-import { useNavigate, useRevalidate, useRevalite } from "./index";
+import { useNavigate, useRevalidate } from "./index";
 import type { Actions } from "../router";
 import { withQuery } from "ufo";
 
@@ -36,11 +36,16 @@ export const useAction = <TRouteId extends keyof Actions>(
     [sendReq]
   );
 
-  return {
-    formProps: {
+  const formProps = useMemo(() => {
+    return {
       onSubmit,
       action: url,
-    },
+      method: "post",
+    };
+  }, [onSubmit, url]);
+
+  return {
+    formProps,
     data: {},
     errors: {},
   };
