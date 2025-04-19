@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.28
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.27...v0.0.28)
+
+### 🩹 Fixes
+
+- **react:** Add method to action form props ([23299e1](https://github.com/zrojs/zro/commit/23299e1))
+- **react:** Update ClientRouter to use full URL instead of pathname ([98dcbe2](https://github.com/zrojs/zro/commit/98dcbe2))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.27
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.26...v0.0.27)
