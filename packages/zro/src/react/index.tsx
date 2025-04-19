@@ -101,9 +101,7 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
   head,
   initialUrl,
 }) => {
-  const [url, setUrl] = useState(
-    initialUrl?.pathname || window.location.pathname
-  );
+  const [url, setUrl] = useState(initialUrl?.href || window.location.href);
 
   const findTree = useCallback((url: string, where?: string) => {
     const req = new Request(
@@ -142,10 +140,10 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
               let reqKey = getRouterCacheKey(response.url);
               cache.set(reqKey, res);
               currentLoadingRoute.path = withTrailingSlash(
-                new URL(response.url).pathname
+                new URL(response.url).href
               );
               currentLoadingRoute.cacheKey = reqKey;
-              navigateValue.navigate(new URL(response.url).pathname, {
+              navigateValue.navigate(new URL(response.url).href, {
                 replace: true,
               });
             }
@@ -165,6 +163,7 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
     currentLoadingRoute.loader = ssr
       ? cache.get(reqKey)
       : cache.set(reqKey, loaderFn());
+
     currentLoadingRoute.cacheKey = reqKey;
     if (!ssr)
       currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
@@ -210,8 +209,8 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
   useEffect(() => {
     const handlePopState = () => {
       startTransition(async () => {
-        setUrl(window.location.pathname);
-        setTree(findTree(window.location.pathname));
+        setUrl(window.location.href);
+        setTree(findTree(window.location.href));
       });
     };
 
@@ -408,7 +407,7 @@ export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
   useLayoutEffect(() => {
     if (currentData instanceof Response && isRedirectResponse(currentData)) {
       const url = new URL(currentData.headers.get("Location")!);
-      navigate(url.pathname, { replace: true });
+      navigate(url.href, { replace: true });
     }
   }, [currentData]);
   const data =
@@ -424,7 +423,7 @@ export const useRevalidate = () => {
   const revalite = useCallback(() => {
     const url = new URL(window.location.href);
     url.searchParams.delete("_zro");
-    navigate(url.pathname, { replace: true });
+    navigate(url.href, { replace: true });
   }, [navigate]);
   return { revalite };
 };
