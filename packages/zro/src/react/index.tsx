@@ -160,9 +160,12 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
         });
       };
 
-      currentLoadingRoute.loader = cache.set(reqKey, loaderFn());
-      currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
+      currentLoadingRoute.loader = ssr
+        ? cache.get(reqKey)
+        : cache.set(reqKey, loaderFn());
       currentLoadingRoute.cacheKey = reqKey;
+      if (!ssr)
+        currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
     }
     return routeInfo.tree;
   }, []);
