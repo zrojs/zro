@@ -1,44 +1,29 @@
 import z from "zod";
 import { Action, getRequest } from "zro/router";
 import { useHead } from "zro/unhead";
+import { useAction, useLoaderData } from "zro/react";
 
 type Route = Routes["/"];
 
 export const actions = {
-  login: new Action({
-    input: z.object({
-      ok: z.stringbool(),
-    }),
-    async handler(obj) {
-      console.log(obj);
+  dummyAction: new Action({
+    async handler() {
       return true;
     },
   }),
 };
-
+let i = 0;
 export const loader = async () => {
-  const { request } = getRequest();
-
-  // const session = await getSession<{ user?: string }>({
-  //   password: process.env.AUTH_SESSION_KEY!,
-  // });
-
-  // console.log(session.id);
-  // console.log(deleteCookie("hello"));
-
-  /*
-  const session = getSession();
-  session.update({
-    user: false
-  })
-  */
+  i += 1;
   return {
+    i,
     title: "Welcome to playground",
     description: "This is a playground for testing zro",
   };
 };
 
 export default function HomePage() {
+  const data = useLoaderData();
   useHead({
     link: [
       {
@@ -48,5 +33,14 @@ export default function HomePage() {
       },
     ],
   });
-  return <span>Welcome to homepage</span>;
+  const dummyAction = useAction("/", "dummyAction");
+  return (
+    <form {...dummyAction.formProps} className="flex flex-col gap-2">
+      {data.i}
+      <span>Welcome to homepage</span>
+      <button type="submit" className="bg-black text-white">
+        do action
+      </button>
+    </form>
+  );
 }

@@ -105,72 +105,74 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
     initialUrl?.pathname || window.location.pathname
   );
 
-  const findTree = useCallback((url: string) => {
+  const findTree = useCallback((url: string, where?: string) => {
     const req = new Request(
       new URL(url, initialUrl?.origin || window.location.origin)
     );
     const routeInfo = router.findRoute(req)!;
     if (!routeInfo) throw new Error("Page not found");
-    if (currentLoadingRoute.path !== routeInfo.route.getPath()) {
-      let reqKey = getRouterCacheKey(req.url);
-      const loaderFn = () => {
-        router.setUpRequest(req);
-        if (typeof window !== "undefined" && !hydrated) {
-          hydrated = true;
-          // @ts-ignore
-          const res = decode(window._readableStream);
-          return res;
-        }
-        if (!ssr) {
-          const reqUrl = new URL(req.url);
-          if (reqUrl.origin !== window.location.origin)
-            window.location.href = reqUrl.href;
-          req.headers.set("accept", "text/x-script");
-          return fetch(req).then((response) => {
-            let redirect = false;
-            if (response.redirected && response.url !== req.url) {
-              redirect = true;
-              cache.delete(reqKey);
-            }
-            if (response.body) {
-              const res = decode(
-                response.body.pipeThrough(new TextDecoderStream())
-              );
-              if (redirect) {
-                let reqKey = getRouterCacheKey(response.url);
-                cache.set(reqKey, res);
-                currentLoadingRoute.path = withTrailingSlash(
-                  new URL(response.url).pathname
-                );
-                currentLoadingRoute.cacheKey = reqKey;
-                navigateValue.navigate(new URL(response.url).pathname, {
-                  replace: true,
-                });
-              }
-              return res;
-            }
-          });
-        }
-        return router.load(req).then((ctx) => {
-          if (ctx instanceof Response && isRedirectResponse(ctx)) {
+    // if (
+    //   currentLoadingRoute.path !== withTrailingSlash(routeInfo.route.getPath())
+    // ) {
+    let reqKey = getRouterCacheKey(req.url);
+    const loaderFn = () => {
+      router.setUpRequest(req);
+      if (typeof window !== "undefined" && !hydrated) {
+        hydrated = true;
+        // @ts-ignore
+        const res = decode(window._readableStream);
+        return res;
+      }
+      if (!ssr) {
+        const reqUrl = new URL(req.url);
+        if (reqUrl.origin !== window.location.origin)
+          window.location.href = reqUrl.href;
+        req.headers.set("accept", "text/x-script");
+        return fetch(req).then((response) => {
+          let redirect = false;
+          if (response.redirected && response.url !== req.url) {
+            redirect = true;
             cache.delete(reqKey);
-            return ctx;
           }
-          return ctx.data;
+          if (response.body) {
+            const res = decode(
+              response.body.pipeThrough(new TextDecoderStream())
+            );
+            if (redirect) {
+              let reqKey = getRouterCacheKey(response.url);
+              cache.set(reqKey, res);
+              currentLoadingRoute.path = withTrailingSlash(
+                new URL(response.url).pathname
+              );
+              currentLoadingRoute.cacheKey = reqKey;
+              navigateValue.navigate(new URL(response.url).pathname, {
+                replace: true,
+              });
+            }
+            return res;
+          }
         });
-      };
+      }
+      return router.load(req).then((ctx) => {
+        if (ctx instanceof Response && isRedirectResponse(ctx)) {
+          cache.delete(reqKey);
+          return ctx;
+        }
+        return ctx.data;
+      });
+    };
 
-      currentLoadingRoute.loader = ssr
-        ? cache.get(reqKey)
-        : cache.set(reqKey, loaderFn());
-      currentLoadingRoute.cacheKey = reqKey;
-      if (!ssr)
-        currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
-    }
+    currentLoadingRoute.loader = ssr
+      ? cache.get(reqKey)
+      : cache.set(reqKey, loaderFn());
+    currentLoadingRoute.cacheKey = reqKey;
+    if (!ssr)
+      currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
+    // }
     return routeInfo.tree;
   }, []);
 
-  const [tree, setTree] = useState<Route<any, any, any, readonly any[]>[]>(
+  const [tree, setTree] = useState<Route<any, any, any, readonly any[]>[]>(() =>
     findTree(url)
   );
 
@@ -415,6 +417,16 @@ export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
   if (data instanceof Error && !ssr) throw data;
 
   return data;
+};
+
+export const useRevalidate = () => {
+  const { navigate } = useNavigate();
+  const revalite = useCallback(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("_zro");
+    navigate(url.pathname, { replace: true });
+  }, [navigate]);
+  return { revalite };
 };
 
 export * from "./useAction";

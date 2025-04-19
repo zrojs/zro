@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useMemo } from "react";
-import { useNavigate } from "./index";
+import { useNavigate, useRevalidate, useRevalite } from "./index";
 import type { Actions } from "../router";
 import { withQuery } from "ufo";
 
@@ -12,14 +12,18 @@ export const useAction = <TRouteId extends keyof Actions>(
     () => withQuery(routePath, { action: String(action) }),
     [routePath, action]
   );
+  const { revalite } = useRevalidate();
   const sendReq = useCallback(
     (formData: FormData) => {
       return fetch(url, {
         method: "POST",
         body: formData,
-      }).then((res) => {
-        if (res.redirected) navigate(res.url, { replace: true });
-      });
+      })
+        .then((res) => {
+          if (res.redirected) navigate(res.url, { replace: true });
+          return res;
+        })
+        .then(revalite);
     },
     [url]
   );
