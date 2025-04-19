@@ -1,6 +1,25 @@
 # Changelog
 
 
+## v0.0.26
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.25...v0.0.26)
+
+### 🚀 Enhancements
+
+- **create-zro:** Rename _gitignore to .gitignore and add default ignore template ([b485c4e](https://github.com/zrojs/zro/commit/b485c4e))
+
+### 🩹 Fixes
+
+- **plugins/db:** Enhance error message for missing DB config ([8ff590d](https://github.com/zrojs/zro/commit/8ff590d))
+- **plugins/db:** Update drizzle-orm peer dependency version constraint ([7febebc](https://github.com/zrojs/zro/commit/7febebc))
+- Router types loaders typesafety ([3c4f9e7](https://github.com/zrojs/zro/commit/3c4f9e7))
+- **react:** Reading from cache on ssr only ([0e87320](https://github.com/zrojs/zro/commit/0e87320))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.25
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.24...v0.0.25)
