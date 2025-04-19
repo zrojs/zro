@@ -34,7 +34,7 @@
     "unbuild": "^3.5.0"
   },
   "peerDependencies": {
-    "drizzle-orm": "^0.41.0",
+    "drizzle-orm": ">=0.41",
     "zro": "workspace:^*"
   },
   "peerDependenciesMeta": {
