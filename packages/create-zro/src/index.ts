@@ -79,7 +79,15 @@ const availableTemplates = fs.readdirSync(templatesDir);
     const entries = fs.readdirSync(src, { withFileTypes: true });
     for (const entry of entries) {
       const srcPath = path.join(src, entry.name);
-      const destPath = path.join(dest, entry.name);
+      let destName = entry.name;
+
+      // Rename _gitignore to .gitignore
+      if (destName === "_gitignore") {
+        destName = ".gitignore";
+      }
+
+      const destPath = path.join(dest, destName);
+
       if (entry.isDirectory()) {
         fs.mkdirSync(destPath, { recursive: true });
         copyRecursiveSync(srcPath, destPath);
