@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.27
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.26...v0.0.27)
+
+### 🚀 Enhancements
+
+- **react:** Revalidate router after action ([c2b10de](https://github.com/zrojs/zro/commit/c2b10de))
+
+### 🏡 Chore
+
+- **release:** V0.0.2 ([3f97d72](https://github.com/zrojs/zro/commit/3f97d72))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.26
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.25...v0.0.26)
