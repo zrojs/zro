@@ -9,15 +9,15 @@ export const createTypesFile = async (tree: RouteTree, destDir: string) => {
   const imports: Import[] = [];
   imports.push({
     name: "LoaderReturnType",
-    from: "zro/router/Route",
+    from: "zro/router",
   });
   imports.push({
     name: "Route",
-    from: "zro/router/Route",
+    from: "zro/router",
   });
   imports.push({
     name: "RouteData",
-    from: "zro/router/Route",
+    from: "zro/router",
   });
   let code = `
 export {}
