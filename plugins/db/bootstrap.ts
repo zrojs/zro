@@ -5,7 +5,9 @@ import { DBConfig } from ".";
 export const bootstrap = async () => {
   const config = getConfig<DBConfig>();
   if (!config) {
-    throw new Error("DB Config is required!");
+    throw new Error("DB Config is required!", {
+      cause: `No database configuration found.\nPlease create a config file at "configs/db.ts".\nFor more information, visit https://github.com/zrojs/zro/tree/master/plugins/db`,
+    });
   }
   const db = createDatabase(config.connector);
   (globalThis as any).__db0 = db;
