@@ -24,13 +24,27 @@ export const handleRequest = async (
   const req = toWebRequest(e);
   const initialUrl = new URL(req.url);
   const cache = new Cache();
-  const accpet = getHeader(e, "accept");
+  const accept = getHeader(e, "accept");
 
   const { data, head, status } = await router.load(req, { event: e });
+  setResponseStatus(e, status);
+  const { loaderData, actionData } = data;
 
   // we need this for redirections or other throwing responses
   if (data instanceof Response) return data;
-  if (accpet === "text/x-script") {
+  // if (actionData instanceof Response) return actionData;
+  const isAction = !!actionData;
+
+  if (isAction && getHeader(e, "X-ZRO-Action")) {
+    const firstActionKey = Object.fromEntries(
+      (actionData as Map<string, any>).entries()
+    );
+    const actionKey = Object.keys(firstActionKey)[0];
+    const action = (actionData as Map<string, any>).get(actionKey);
+    return action;
+  }
+
+  if (accept === "text/x-script") {
     setHeader(e, "Content-Type", "text/x-script");
     if (data instanceof Response) return data;
     return encode(data, {
@@ -55,7 +69,6 @@ export const handleRequest = async (
     JSON.stringify(withTrailingSlash(initialUrl.href)),
     Promise.resolve(data)
   );
-  setResponseStatus(e, status);
 
   const stream = (await renderToReadableStream(
     React.createElement(Router, {

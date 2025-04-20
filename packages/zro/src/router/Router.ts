@@ -1,9 +1,9 @@
-import { toMerged } from "../utils/tools";
 import { addRoute, createRouter, findAllRoutes, findRoute } from "rou3";
 import { getQuery } from "ufo";
 import { createContext, withAsyncContext } from "unctx";
 import { createHead } from "unhead/server";
 import { ResolvableHead, Unhead } from "unhead/types";
+import { toMerged } from "../utils/tools";
 import { abort } from "./abort";
 import { Route } from "./Route";
 import { ServerContext } from "./server/context";
@@ -144,29 +144,52 @@ export class Router {
     return HeadContext.callAsync(
       head,
       withAsyncContext(async () => {
-        const dataPerRoute: Map<string, any> = new Map();
+        const loaderDataPerRoute: Map<string, any> = new Map();
+        let actionDataPerRoute: Map<string, any> | undefined = undefined;
         const loadRoutes = async (index: number = 0, data: any = {}) => {
           if (index >= routes.length) {
-            return dataPerRoute;
+            return {
+              loaderData: loaderDataPerRoute,
+              actionData: actionDataPerRoute,
+            };
           }
           return dataContext.callAsync(
             data,
             withAsyncContext(async () => {
               return await routes[index].load(
-                async (newData: any): Promise<any> => {
-                  dataPerRoute.set(routes[index].getPath(), newData);
+                async (
+                  newLoaderData: any,
+                  newActionData?: any
+                ): Promise<any> => {
+                  loaderDataPerRoute.set(
+                    routes[index].getPath(),
+                    newLoaderData
+                  );
+                  if (newActionData) {
+                    actionDataPerRoute = new Map();
+                    actionDataPerRoute.set(
+                      routes[index].getPath(),
+                      newActionData
+                    );
+                  }
                   // if didn't error, load next route
-                  if (newData instanceof Error) {
+                  if (
+                    newLoaderData instanceof Error ||
+                    newActionData instanceof Error
+                  ) {
                     if (requestContext.use().status < 400)
                       requestContext.use().status = 400;
-                    return dataPerRoute;
+                    return loaderDataPerRoute;
                   }
-                  if (newData instanceof Response) {
-                    requestContext.use().status = newData.status;
-                    // if (isRedirectResponse(newData))
-                    return newData;
+                  if (newLoaderData instanceof Response) {
+                    requestContext.use().status = newLoaderData.status;
+                    return newLoaderData;
                   }
-                  return loadRoutes(index + 1, toMerged(data, newData!));
+                  if (newActionData instanceof Response) {
+                    requestContext.use().status = newActionData.status;
+                    return newActionData;
+                  }
+                  return loadRoutes(index + 1, toMerged(data, newLoaderData!));
                 },
                 index === routes.length - 1
               );

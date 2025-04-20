@@ -1,29 +1,36 @@
 import {
-  FC,
-  use,
-  useMemo,
-  useCallback,
-  useLayoutEffect,
   createContext,
-  Suspense,
-  useState,
-  startTransition,
-  useEffect,
-  PropsWithChildren,
+  FC,
+  FormEvent,
   HTMLProps,
   MouseEvent,
+  PropsWithChildren,
+  startTransition,
+  Suspense,
+  use,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
 } from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { decode, encode } from "turbo-stream";
-import { withTrailingSlash } from "ufo";
+import { withQuery, withTrailingSlash } from "ufo";
 import type { ResolvableHead, Unhead } from "unhead/types";
+import type {
+  Actions,
+  InferActionReturnType,
+  InferActionSchema,
+} from "../router";
 import { Route, RouteData } from "../router/Route";
 import { Router as ZroRouter } from "../router/Router";
 import { isRedirectResponse } from "../router/redirect";
-import { createHead, UnheadProvider } from "./unhead";
 import { Cache } from "./cache";
+import { createHead, UnheadProvider } from "./unhead";
 export * from "./unhead";
 
+export type AlsoAllowString<T> = T | (string & {});
 export type RouterProps = {
   router: ZroRouter;
   initialUrl?: URL;
@@ -400,23 +407,31 @@ export const Link: FC<HTMLProps<HTMLAnchorElement>> = (props) => {
   };
   return <a {...props} onClick={onClick} />;
 };
-
+const useGlobalLoaderData = () => {
+  const data = use(currentLoadingRoute.loader!);
+  return data.loaderData;
+};
+const useGlobalActionData = () => {
+  const data = use(currentLoadingRoute.loader!);
+  return data.actionData;
+};
 export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
   const route = use(OutletContext).route;
-  const currentData = use(currentLoadingRoute.loader!);
+  const loaderData = useGlobalLoaderData();
   const { navigate } = useNavigate();
   useLayoutEffect(() => {
-    if (currentData instanceof Response && isRedirectResponse(currentData)) {
-      const url = new URL(currentData.headers.get("Location")!);
+    if (loaderData instanceof Response && isRedirectResponse(loaderData)) {
+      const url = new URL(loaderData.headers.get("Location")!);
       navigate(url.href, { replace: true });
     }
-  }, [currentData]);
-  const data =
-    currentData instanceof Map ? currentData.get(route.getPath()) : null;
+  }, [loaderData]);
 
-  if (data instanceof Error && !ssr) throw data;
+  const currentLoaderData =
+    loaderData instanceof Map ? loaderData.get(route.getPath()) : null;
 
-  return data;
+  if (currentLoaderData instanceof Error && !ssr) throw currentLoaderData;
+
+  return currentLoaderData;
 };
 
 export const useRevalidate = () => {
@@ -429,4 +444,112 @@ export const useRevalidate = () => {
   return { revalite };
 };
 
-export * from "./useAction";
+export const useAction = <
+  TRouteId extends keyof Actions,
+  TActionKey extends keyof Actions[TRouteId]
+>(
+  routePath: TRouteId,
+  action: TActionKey
+) => {
+  type TAction = Actions[TRouteId][TActionKey];
+  const globalActionData = useGlobalActionData();
+
+  const [data, setData] = useState<InferActionReturnType<TAction>>(() => {
+    if (globalActionData && globalActionData.get(routePath))
+      return globalActionData.get(routePath);
+    return {};
+  });
+
+  type TActionErrors = Partial<
+    Record<AlsoAllowString<"root" | keyof InferActionSchema<TAction>>, string>
+  >;
+
+  const [errors, setErrors] = useState<TActionErrors>({});
+  const { navigate } = useNavigate();
+  const url = useMemo(
+    () => withQuery(routePath, { action: String(action) }),
+    [routePath, action]
+  );
+  const { revalite } = useRevalidate();
+  const sendReq = useCallback(
+    (formData: FormData) => {
+      return fetch(url, {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-ZRO-Action": String(action),
+        },
+      })
+        .then((res) => {
+          if (!res.ok) throw res;
+          console.log(res);
+          if (res.redirected) navigate(res.url, { replace: true });
+          return res;
+        })
+        .then(async (res) => {
+          const contentType = res.headers.get("Content-Type");
+          if (contentType?.includes("application/json")) {
+            const json = await res.json();
+            setData(json);
+            setErrors({});
+            return json;
+          } else if (contentType?.includes("text/plain")) {
+            const text = await res.text();
+            setData(text as any);
+            setErrors({});
+            return text;
+          }
+        })
+        .catch(async (res) => {
+          if (res instanceof Response) {
+            const contentType = res.headers.get("Content-Type");
+            if (contentType?.includes("application/json")) {
+              const json = await res.json();
+              setErrors({
+                ...(json.errors || {}),
+                root: json.message,
+              });
+              return json;
+            } else {
+              setErrors({
+                root: "Invalid response from server",
+              } as TActionErrors);
+            }
+          }
+          if (res instanceof Error) {
+            setErrors({
+              root: res.message,
+            } as TActionErrors);
+          }
+        })
+        .finally(revalite);
+    },
+    [url]
+  );
+
+  const onSubmit = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      return sendReq(new FormData(e.target as HTMLFormElement)).catch((e) => {
+        console.log("error");
+        console.log(e);
+        return e;
+      });
+    },
+    [sendReq]
+  );
+
+  const formProps = useMemo(() => {
+    return {
+      onSubmit,
+      action: url,
+      method: "post",
+    };
+  }, [onSubmit, url]);
+
+  return {
+    formProps,
+    data,
+    errors,
+  };
+};

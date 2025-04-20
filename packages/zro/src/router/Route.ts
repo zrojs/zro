@@ -1,7 +1,7 @@
 import { defu } from "defu";
-import { merge } from "../utils/tools";
 import { getQuery } from "ufo";
 import { withAsyncContext } from "unctx";
+import { merge } from "../utils/tools";
 import { abort } from "./abort";
 import { Action } from "./Action";
 import { Middleware } from "./Middleware";
@@ -131,17 +131,6 @@ export class Route<
     if (!action) abort(404, "Action not found");
     const res = await safeRespose(action.run.bind(action));
 
-    const status = getRequest().status;
-
-    if (!(res instanceof Response)) {
-      const isJSON = typeof res === "object";
-      return new Response(isJSON ? JSON.stringify(res) : String(res), {
-        headers: {
-          "Content-Type": isJSON ? "application/json" : "text/plain",
-        },
-        status,
-      });
-    }
     return res;
   }
 
@@ -154,12 +143,13 @@ export class Route<
   }
 
   public async load(
-    next: (data: any) => Promise<any> = async (data: any) => data,
+    next: (loaderData: any, actionData?: any) => Promise<any> = async (
+      data: any
+    ) => data,
     isDestRoute?: boolean
   ): Promise<Data> {
     const middlewares = this.options.middlewares;
     let loadedData: any = getDataContext();
-
     const runMiddlewares = async (
       index: number,
       data: any = {}
@@ -171,13 +161,10 @@ export class Route<
             let actionData;
             try {
               actionData = await this.handleAction();
-              if (actionData) {
-                loadedData = merge(actionData, loadedData);
-              }
             } catch (e) {
               actionData = e;
             }
-            return await next(actionData);
+            return await next(loadedData, actionData);
           }
           if (this.options.loader) {
             let loaderData;
