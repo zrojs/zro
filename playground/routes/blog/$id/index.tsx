@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { use } from "react";
 import { ErrorBoundaryProps, useLoaderData } from "zro/react";
 import { getRequest } from "zro/router";
-import { useHead } from "zro/unhead";
+import { useHead } from "zro/react";
 
 type Route = Routes["/blog/:id/"];
 

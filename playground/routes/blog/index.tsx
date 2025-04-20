@@ -2,7 +2,7 @@ import { getOrm } from "@zro/db";
 import * as schema from "configs/db.schema";
 import { Suspense, use } from "react";
 import { Link, useLoaderData } from "zro/react";
-import { useHead } from "zro/unhead";
+import { useHead } from "zro/react";
 
 type Route = Routes["/blog/"];
 

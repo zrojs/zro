@@ -15,8 +15,8 @@ import { createServer, ViteDevServer } from "vite";
 import loadingSpinner from "yocto-spinner";
 import { Router as ZroRouter } from "./router/Router";
 import { handleRequest } from "./server";
-import { extractUnheadInputFromHtml } from "./unhead/server";
 import { Youch } from "youch";
+import { extractUnheadInputFromHtml } from "unhead/server";
 
 const serverContext = createContext<App>({
   asyncContext: true,

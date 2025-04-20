@@ -1,5 +1,5 @@
 import { defineConfig } from "@zro/db";
-import libsql from "@zro/db/connectors/libsql";
+import libsql from "@zro/db/connectors/libsql/http";
 
 export default defineConfig({
   connector: libsql({

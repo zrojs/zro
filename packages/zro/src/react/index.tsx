@@ -20,8 +20,9 @@ import type { ResolvableHead, Unhead } from "unhead/types";
 import { Route, RouteData } from "../router/Route";
 import { Router as ZroRouter } from "../router/Router";
 import { isRedirectResponse } from "../router/redirect";
-import { createHead, UnheadProvider } from "../unhead";
+import { createHead, UnheadProvider } from "./unhead";
 import { Cache } from "./cache";
+export * from "./unhead";
 
 export type RouterProps = {
   router: ZroRouter;

@@ -29,16 +29,6 @@ export default defineBuildConfig({
     },
     {
       builder: "rollup",
-      input: "./src/unhead/index",
-      outDir: "./dist/unhead",
-    },
-    {
-      builder: "rollup",
-      input: "./src/unhead/server",
-      outDir: "./dist/unhead/server",
-    },
-    {
-      builder: "rollup",
       input: "./src/react/index",
       outDir: "./dist/react",
     },

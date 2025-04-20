@@ -1,5 +1,5 @@
 import { ErrorBoundaryProps, Link, Outlet, useLoaderData } from "zro/react";
-import { Head, useHead } from "zro/unhead";
+import { Head, useHead } from "zro/react";
 import styles from "./styles.css?url";
 
 type Route = Routes["/_layout"];

@@ -19,14 +19,6 @@
       "types": "./dist/unplugin/index.d.ts",
       "import": "./dist/unplugin/index.mjs"
     },
-    "./unhead": {
-      "types": "./dist/unhead/index.d.ts",
-      "import": "./dist/unhead/index.mjs"
-    },
-    "./unhead/server": {
-      "types": "./dist/unhead/server.d.ts",
-      "import": "./dist/unhead/server.mjs"
-    },
     "./react": {
       "types": "./dist/react/index.d.ts",
       "import": "./dist/react/index.mjs"
