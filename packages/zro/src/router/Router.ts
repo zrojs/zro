@@ -48,6 +48,15 @@ export class Router {
       (route.getParent()!.getPath() as string).endsWith("_layout")
     ) {
       const currentParent = route.getParent()!;
+      // add parent actions to the router
+      for (const actionKey of currentParent.getActionKeys()) {
+        addRoute(
+          this.router,
+          `action-${actionKey}`,
+          currentParent.getPath(),
+          currentParent
+        );
+      }
       const notFoundRoute = currentParent.getPath().replace("_layout", "**");
       const allRoutes = findAllRoutes(this.router, "", notFoundRoute).find(
         (r) => r.data.getPath() === notFoundRoute
