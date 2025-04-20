@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.30
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.29...v0.0.30)
+
+### 🩹 Fixes
+
+- **zro/tools:** Export toMerged function from es-toolkit/compat ([677fdbd](https://github.com/zrojs/zro/commit/677fdbd))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.29
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.28...v0.0.29)
