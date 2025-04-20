@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.34
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.33...v0.0.34)
+
+### 🚀 Enhancements
+
+- Make actions no-js environment compatible ([7863a2d](https://github.com/zrojs/zro/commit/7863a2d))
+
+### 🩹 Fixes
+
+- **react:** Improve error handling in useAction by explicitly allowing "root" key ([d763259](https://github.com/zrojs/zro/commit/d763259))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.33
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.32...v0.0.33)
