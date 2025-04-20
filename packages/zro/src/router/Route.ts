@@ -1,5 +1,5 @@
 import { defu } from "defu";
-import { merge } from "es-toolkit/compat";
+import { merge } from "../utils/tools";
 import { getQuery } from "ufo";
 import { withAsyncContext } from "unctx";
 import { abort } from "./abort";

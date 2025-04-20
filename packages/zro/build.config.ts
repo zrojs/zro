@@ -58,10 +58,29 @@ export default defineBuildConfig({
       outDir: "./dist/server",
     },
   ],
-  externals: ["react", "react/jsx-runtime", "virtual:zro/router.client"],
+  externals: [
+    "react",
+    "react-dom",
+    "react/jsx-runtime",
+    "react/jsx-dev-runtime",
+    "react-dom/client",
+    "virtual:zro/router.client",
+  ],
+  sourcemap: true,
+  clean: true,
+  hooks: {
+    "rollup:options"(ctx, options) {
+      options.external = (id) => {
+        if (id.includes("es-toolkit")) {
+          return false;
+        }
+        return /^[a-z@][a-z@/\-0-9]/.test(id) && !id.includes("es-toolkit");
+      };
+    },
+  },
   rollup: {
     inlineDependencies: ["unhead/server", "hookable", "unhead/types"],
-    preserveDynamicImports: true,
+    preserveDynamicImports: false,
     esbuild: {
       format: "esm",
       minify: false,

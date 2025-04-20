@@ -51,8 +51,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       es-toolkit:
-        specifier: ^1.33.0
-        version: 1.33.0
+        specifier: ^1.35.0
+        version: 1.35.0
       h3:
         specifier: npm:h3-nightly@latest
         version: h3-nightly@1.15.1-20250222-111608-d1c00fc
@@ -231,7 +231,7 @@ importers:
         specifier: ^6.1.4
         version: 6.1.4
       drizzle-orm:
-        specifier: ^0.41.0
+        specifier: '>=0.41'
         version: 0.41.0(gel@2.0.2)
       zro:
         specifier: workspace:^*
@@ -2154,8 +2154,8 @@ packages:
   es-module-lexer@1.6.0:
     resolution: {integrity: sha512-qqnD1yMU6tk/jnaMosogGySTZP8YtUgAffA9nMN+E/rjxcfRQ6IEk7IiozUjgxKoFHBGjTLnrHB/YC45r/59EQ==}
 
-  es-toolkit@1.33.0:
-    resolution: {integrity: sha512-X13Q/ZSc+vsO1q600bvNK4bxgXMkHcf//RxCmYDaRY5DAcT+eoXjY5hoAPGMdRnWQjvyLEcyauG3b6hz76LNqg==}
+  es-toolkit@1.35.0:
+    resolution: {integrity: sha512-kVHyrRoC0eLc1hWJ6npG8nNFtOG+nWfcMI+XE0RaFO0gxd6Ions8r0O/U64QyZgY7IeidUnS5oZlRZYUgMGCAg==}
 
   esbuild-register@3.6.0:
     resolution: {integrity: sha512-H2/S7Pm8a9CL1uhp9OvjwrBh5Pvx0H8qVOxNu8Wed9Y7qv56MPtq+GGM8RJpq6glYJn9Wspr8uw7l55uyinNeg==}
@@ -4823,7 +4823,7 @@ snapshots:
 
   es-module-lexer@1.6.0: {}
 
-  es-toolkit@1.33.0: {}
+  es-toolkit@1.35.0: {}
 
   esbuild-register@3.6.0(esbuild@0.19.12):
     dependencies:

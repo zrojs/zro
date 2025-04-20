@@ -1,5 +1,5 @@
 import { colors } from "consola/utils";
-import { upperFirst } from "es-toolkit/string";
+import { upperFirst } from "./utils/tools";
 import {
   App,
   createApp,
