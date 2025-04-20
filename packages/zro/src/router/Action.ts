@@ -1,10 +1,17 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec";
+import { getHeader, MultiPartData, readBody, readMultipartFormData } from "h3";
 import { abort } from "./abort";
 import { getServerContext } from "./server/context";
-import { readBody, readMultipartFormData, getHeader, MultiPartData } from "h3";
 
 export interface Actions {}
-
+export type InferActionSchema<TAction extends Action<any, any>> =
+  TAction extends Action<infer TSchema, infer TReturnType>
+    ? StandardSchemaV1.InferInput<TSchema>
+    : never;
+export type InferActionReturnType<TAction extends Action<any, any>> =
+  TAction extends Action<infer TSchema, infer TReturnType>
+    ? TReturnType
+    : never;
 export class Action<TSchema extends StandardSchemaV1, ReturnType> {
   constructor(
     public options: {

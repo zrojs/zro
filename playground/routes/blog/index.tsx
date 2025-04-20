@@ -10,7 +10,6 @@ export const loader = async () => {
 
   return {
     posts: new Promise(async (resolve) => {
-      await new Promise((r) => setTimeout(r, 5000));
       return resolve(orm.select().from(schema.posts).all());
     }),
   };

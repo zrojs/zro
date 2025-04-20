@@ -1,12 +1,29 @@
-import { FormEvent, useCallback, useMemo } from "react";
-import { useNavigate, useRevalidate } from "./index";
-import type { Actions } from "../router";
+import { FormEvent, useCallback, useMemo, useState } from "react";
 import { withQuery } from "ufo";
+import type {
+  Actions,
+  InferActionReturnType,
+  InferActionSchema,
+} from "../router";
+import { useNavigate, useRevalidate } from "./index";
 
-export const useAction = <TRouteId extends keyof Actions>(
+export type AlsoAllowString<T> = T | (string & {});
+
+export const useAction = <
+  TRouteId extends keyof Actions,
+  TActionKey extends keyof Actions[TRouteId]
+>(
   routePath: TRouteId,
-  action: keyof Actions[TRouteId]
+  action: TActionKey
 ) => {
+  type TAction = Actions[TRouteId][TActionKey];
+  const [data, setData] = useState<InferActionReturnType<TAction>>();
+
+  type TActionErrors = Partial<
+    Record<AlsoAllowString<keyof InferActionSchema<TAction>>, string>
+  >;
+
+  const [errors, setErrors] = useState<TActionErrors>({});
   const { navigate } = useNavigate();
   const url = useMemo(
     () => withQuery(routePath, { action: String(action) }),
@@ -15,15 +32,52 @@ export const useAction = <TRouteId extends keyof Actions>(
   const { revalite } = useRevalidate();
   const sendReq = useCallback(
     (formData: FormData) => {
+      console.log("calling");
       return fetch(url, {
         method: "POST",
         body: formData,
       })
         .then((res) => {
+          if (!res.ok) throw res;
+          console.log(res);
           if (res.redirected) navigate(res.url, { replace: true });
           return res;
         })
-        .then(revalite);
+        .then(async (res) => {
+          const contentType = res.headers.get("Content-Type");
+          if (contentType?.includes("application/json")) {
+            const json = await res.json();
+            setData(json);
+            return json;
+          } else if (contentType?.includes("text/plain")) {
+            const text = await res.text();
+            setData(text as any);
+            return text;
+          }
+        })
+        .catch(async (res) => {
+          if (res instanceof Response) {
+            const contentType = res.headers.get("Content-Type");
+            if (contentType?.includes("application/json")) {
+              const json = await res.json();
+              setErrors({
+                ...(json.errors || {}),
+                root: json.message,
+              });
+              return json;
+            } else {
+              setErrors({
+                root: "Invalid response from server",
+              } as TActionErrors);
+            }
+          }
+          if (res instanceof Error) {
+            setErrors({
+              root: res.message,
+            } as TActionErrors);
+          }
+        })
+        .finally(revalite);
     },
     [url]
   );
@@ -31,7 +85,11 @@ export const useAction = <TRouteId extends keyof Actions>(
   const onSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      return sendReq(new FormData(e.target as HTMLFormElement));
+      return sendReq(new FormData(e.target as HTMLFormElement)).catch((e) => {
+        console.log("error");
+        console.log(e);
+        return e;
+      });
     },
     [sendReq]
   );
@@ -46,7 +104,7 @@ export const useAction = <TRouteId extends keyof Actions>(
 
   return {
     formProps,
-    data: {},
-    errors: {},
+    data,
+    errors,
   };
 };

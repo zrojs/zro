@@ -45,7 +45,7 @@
     }
   },
   "scripts": {
-    "dev": "unbuild --stub",
+    "dev": "unbuild --watch",
     "build": "unbuild",
     "test": "vitest",
     "coverage": "vitest run --coverage",

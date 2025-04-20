@@ -1,6 +1,5 @@
 import { useAction, useHead, useLoaderData } from "zro/react";
 import { Action } from "zro/router";
-
 type Route = Routes["/"];
 
 export const actions = {
@@ -35,6 +34,8 @@ export default function HomePage() {
   return (
     <form {...dummyAction.formProps} className="flex flex-col gap-2">
       {data.i}
+      <span>{JSON.stringify(dummyAction.errors)}</span>
+      <span>{JSON.stringify(dummyAction.data)}</span>
       <span>Welcome to homepage</span>
       <button type="submit" className="bg-black text-white">
         do action
