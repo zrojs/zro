@@ -2,9 +2,8 @@ import { getOrm } from "@zro/db";
 import * as schema from "configs/db.schema";
 import { eq } from "drizzle-orm";
 import { use } from "react";
-import { ErrorBoundaryProps, useLoaderData } from "zro/react";
+import { ErrorBoundaryProps, useHead, useLoaderData } from "zro/react";
 import { getRequest } from "zro/router";
-import { useHead } from "zro/react";
 
 type Route = Routes["/blog/:id/"];
 

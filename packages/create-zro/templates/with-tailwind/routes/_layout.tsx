@@ -1,6 +1,5 @@
 import type { FC } from "react";
-import { Outlet, type ErrorBoundaryProps } from "zro/react";
-import { useHead } from "zro/react";
+import { Outlet, useHead, type ErrorBoundaryProps } from "zro/react";
 import styles from "./styles.css?url";
 
 export default function MainLayout() {

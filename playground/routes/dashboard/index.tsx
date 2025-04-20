@@ -1,5 +1,4 @@
-import { useLoaderData } from "zro/react";
-import { useHead } from "zro/react";
+import { useHead, useLoaderData } from "zro/react";
 
 type Route = Routes["/dashboard/"];
 

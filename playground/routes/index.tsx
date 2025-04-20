@@ -1,7 +1,5 @@
-import z from "zod";
-import { Action, getRequest } from "zro/router";
-import { useHead } from "zro/react";
-import { useAction, useLoaderData } from "zro/react";
+import { useAction, useHead, useLoaderData } from "zro/react";
+import { Action } from "zro/router";
 
 type Route = Routes["/"];
 
