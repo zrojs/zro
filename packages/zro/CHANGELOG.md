@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.29
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.28...v0.0.29)
+
+### 🚀 Enhancements
+
+- **router:** Bundle inline es-toolkit ([0dbdeb5](https://github.com/zrojs/zro/commit/0dbdeb5))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.28
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.27...v0.0.28)
