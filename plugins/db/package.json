@@ -13,6 +13,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.mjs"
     },
+    "./connectors/libsql/*": {
+      "types": "./dist/connectors/libsql/*.d.ts",
+      "default": "./dist/connectors/libsql/*.mjs"
+    },
     "./connectors/*": {
       "types": "./dist/connectors/*.d.ts",
       "default": "./dist/connectors/*.mjs"
