@@ -20,7 +20,7 @@ export const useAction = <
   const [data, setData] = useState<InferActionReturnType<TAction>>();
 
   type TActionErrors = Partial<
-    Record<AlsoAllowString<keyof InferActionSchema<TAction>>, string>
+    Record<AlsoAllowString<"root" | keyof InferActionSchema<TAction>>, string>
   >;
 
   const [errors, setErrors] = useState<TActionErrors>({});
@@ -48,10 +48,12 @@ export const useAction = <
           if (contentType?.includes("application/json")) {
             const json = await res.json();
             setData(json);
+            setErrors({});
             return json;
           } else if (contentType?.includes("text/plain")) {
             const text = await res.text();
             setData(text as any);
+            setErrors({});
             return text;
           }
         })
