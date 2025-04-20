@@ -1,1 +1,1 @@
-export { set, merge, cloneDeep, upperFirst, toMerged } from "es-toolkit/compat";
+export { set, merge, upperFirst, toMerged } from "es-toolkit/compat";

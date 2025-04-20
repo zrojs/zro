@@ -68,19 +68,19 @@ export default defineBuildConfig({
   ],
   sourcemap: true,
   clean: true,
-  hooks: {
-    "rollup:options"(ctx, options) {
-      options.external = (id) => {
-        if (id.includes("es-toolkit")) {
-          return false;
-        }
-        return /^[a-z@][a-z@/\-0-9]/.test(id) && !id.includes("es-toolkit");
-      };
-    },
-  },
+  // hooks: {
+  //   "rollup:options"(ctx, options) {
+  //     options.external = (id) => {
+  //       if (id.includes("es-toolkit")) {
+  //         return false;
+  //       }
+  //       return /^[a-z@][a-z@/\-0-9]/.test(id) && !id.includes("es-toolkit");
+  //     };
+  //   },
+  // },
   rollup: {
-    inlineDependencies: ["unhead/server", "hookable", "unhead/types"],
     preserveDynamicImports: false,
+    inlineDependencies: true,
     esbuild: {
       format: "esm",
       minify: false,

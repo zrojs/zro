@@ -35,9 +35,6 @@ importers:
       '@standard-schema/spec':
         specifier: ^1.0.0
         version: 1.0.0
-      '@unhead/react':
-        specifier: ^2.0.5
-        version: 2.0.5(react@19.0.0)
       citty:
         specifier: ^0.1.6
         version: 0.1.6
@@ -50,9 +47,6 @@ importers:
       es-module-lexer:
         specifier: ^1.6.0
         version: 1.6.0
-      es-toolkit:
-        specifier: ^1.35.0
-        version: 1.35.0
       h3:
         specifier: npm:h3-nightly@latest
         version: h3-nightly@1.15.1-20250222-111608-d1c00fc
@@ -117,6 +111,12 @@ importers:
       '@types/react-dom':
         specifier: ^19.0.4
         version: 19.0.4(@types/react@19.0.11)
+      '@unhead/react':
+        specifier: ^2.0.5
+        version: 2.0.5(react@19.0.0)
+      es-toolkit:
+        specifier: ^1.35.0
+        version: 1.35.0
       react:
         specifier: ^19.0.0
         version: 19.0.0
