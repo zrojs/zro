@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.3
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.30...v0.0.3)
+
+### 🚀 Enhancements
+
+- Register actions from layout routes ([d677adf](https://github.com/zrojs/zro/commit/d677adf))
+- **connectors:** Add libsql connectors for HTTP, Node, and Web ([819ec17](https://github.com/zrojs/zro/commit/819ec17))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.2
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.26...v0.0.2)
