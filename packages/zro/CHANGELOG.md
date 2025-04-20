@@ -1,6 +1,24 @@
 # Changelog
 
 
+## v0.0.31
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.30...v0.0.31)
+
+### 🚀 Enhancements
+
+- Register actions from layout routes ([d677adf](https://github.com/zrojs/zro/commit/d677adf))
+- **connectors:** Add libsql connectors for HTTP, Node, and Web ([819ec17](https://github.com/zrojs/zro/commit/819ec17))
+- **zro:** Move es-toolkit and unhead to dev dependencies to be bundled as inline ([347e310](https://github.com/zrojs/zro/commit/347e310))
+
+### 🏡 Chore
+
+- **release:** V0.0.3 ([3d20326](https://github.com/zrojs/zro/commit/3d20326))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.30
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.29...v0.0.30)
