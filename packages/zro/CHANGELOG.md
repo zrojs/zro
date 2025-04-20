@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.32
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.31...v0.0.32)
+
+### 💅 Refactors
+
+- **zro:** Export `zro/unhead` from `zro/react` as it is actually react integrations ([52bef48](https://github.com/zrojs/zro/commit/52bef48))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.31
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.30...v0.0.31)
