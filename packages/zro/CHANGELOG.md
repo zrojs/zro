@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.33
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.32...v0.0.33)
+
+### 🚀 Enhancements
+
+- **react:** Add data, error typesafety to useActions ([2bd51d9](https://github.com/zrojs/zro/commit/2bd51d9))
+
+### 🏡 Chore
+
+- **playground:** Improve imports ordering ([fb1ffeb](https://github.com/zrojs/zro/commit/fb1ffeb))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.32
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.31...v0.0.32)
