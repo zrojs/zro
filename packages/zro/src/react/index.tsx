@@ -187,8 +187,8 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
           findTree(url);
           await currentLoadingRoute.loader;
         }
-        // if (replace) window.history.replaceState({}, async ? "async" : "", url);
-        // else window.history.pushState({}, async ? "async" : "", url);
+        if (replace) window.history.replaceState({}, "", url);
+        else window.history.pushState({}, "", url);
       },
     } as NavigateContext;
   }, [url]);
@@ -447,8 +447,8 @@ export const useRevalidate = () => {
 
 const parseServerError = (json: any) => {
   return {
-    ...(json.errors || {}),
-    root: json.message,
+    ...(json?.errors || {}),
+    root: json?.message,
   };
 };
 
@@ -463,7 +463,11 @@ export const useAction = <
   const globalActionData = useGlobalActionData();
 
   const [data, setData] = useState<InferActionReturnType<TAction>>(() => {
-    if (globalActionData && !globalActionData.error) {
+    if (
+      globalActionData &&
+      !globalActionData.error &&
+      globalActionData.data.get(routePath)
+    ) {
       return globalActionData.data.get(routePath);
     }
     return {};
@@ -474,7 +478,11 @@ export const useAction = <
   >;
 
   const [errors, setErrors] = useState<TActionErrors>(() => {
-    if (globalActionData && globalActionData.error)
+    if (
+      globalActionData &&
+      globalActionData.error &&
+      globalActionData.data.get(routePath)
+    )
       return parseServerError(globalActionData.data.get(routePath));
     return {};
   });
