@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.38
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.37...v0.0.38)
+
+### 💅 Refactors
+
+- **Router:** Remove rootRoute management from Router class ([7727270](https://github.com/zrojs/zro/commit/7727270))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.37
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.36...v0.0.37)
