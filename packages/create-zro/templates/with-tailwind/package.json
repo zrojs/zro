@@ -1,5 +1,5 @@
 {
-  "name": "zro app",
+  "name": "zro-app",
   "type": "module",
   "scripts": {
     "dev": "zro dev",
