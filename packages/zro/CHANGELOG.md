@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.39
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.38...v0.0.39)
+
+### 🩹 Fixes
+
+- **react:** Set action error/data based on action route ([c359029](https://github.com/zrojs/zro/commit/c359029))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.38
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.37...v0.0.38)
