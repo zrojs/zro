@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.37
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.36...v0.0.37)
+
+### 💅 Refactors
+
+- **Route:** Simplify constructor options handling, removing defu ([e58df7d](https://github.com/zrojs/zro/commit/e58df7d))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.36
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.35...v0.0.36)
