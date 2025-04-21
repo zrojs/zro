@@ -40,8 +40,21 @@ export const handleRequest = async (
   });
 
   if (serverSession.data.actionData) {
-    data.actionData = new Map(JSON.parse(serverSession.data.actionData));
-    serverSession.clear();
+    try {
+      const actionData = JSON.parse(serverSession.data.actionData);
+      data.actionData = {
+        error: actionData.error,
+        data: new Map(actionData.data),
+      };
+    } catch (e) {
+      console.error("Error parsing action data");
+      data.actionData = {
+        error: false,
+        data: new Map(),
+      };
+    } finally {
+      serverSession.clear();
+    }
   }
 
   // we need this for redirections or other throwing responses
@@ -65,7 +78,10 @@ export const handleRequest = async (
       const referer = getHeader(e, "referer");
       if (!!referer) {
         await serverSession.update({
-          actionData: JSON.stringify(Array.from(actionData.entries())),
+          actionData: JSON.stringify({
+            error: status >= 400,
+            data: Array.from(actionData.entries()),
+          }),
         });
         return Response.redirect(referer, 302);
       } else {

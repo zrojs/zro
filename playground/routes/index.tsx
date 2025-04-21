@@ -11,7 +11,9 @@ export const actions = {
   }),
 };
 let i = 0;
+
 export const loader = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   i += 1;
   return {
     i,

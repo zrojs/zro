@@ -43,10 +43,6 @@ let currentLoadingRoute: {
   loader: Promise<any> | null;
   cacheKey: string;
 } = {
-  // handle the case where the user navigates to a different route before the current route is done loading
-  // handle the case where no route is found
-  // handle the case where no route loaded yet
-  // what if no loader found?!
   path: "",
   loader: null,
   cacheKey: "",
@@ -55,7 +51,10 @@ let currentLoadingRoute: {
 const getRouterCacheKey = (url: string) =>
   JSON.stringify(withTrailingSlash(url));
 
-type NavigateFn = (url: string, options: { replace?: boolean }) => void;
+type NavigateFn = (
+  url: string,
+  options: { replace?: boolean; async?: boolean }
+) => Promise<void>;
 type NavigateContext = { navigate: NavigateFn; url: string };
 const navigateContext = createContext<NavigateContext>(null!);
 export const useNavigate = () => use(navigateContext);
@@ -117,9 +116,6 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
     );
     const routeInfo = router.findRoute(req)!;
     if (!routeInfo) throw new Error("Page not found");
-    // if (
-    //   currentLoadingRoute.path !== withTrailingSlash(routeInfo.route.getPath())
-    // ) {
     let reqKey = getRouterCacheKey(req.url);
     const loaderFn = () => {
       router.setUpRequest(req);
@@ -186,9 +182,13 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
   const navigateValue = useMemo((): NavigateContext => {
     return {
       url,
-      navigate: (url, { replace = false }) => {
-        if (replace) window.history.replaceState({}, "", url);
-        else window.history.pushState({}, "", url);
+      navigate: async (url, { replace = false, async }) => {
+        if (async) {
+          findTree(url);
+          await currentLoadingRoute.loader;
+        }
+        // if (replace) window.history.replaceState({}, async ? "async" : "", url);
+        // else window.history.pushState({}, async ? "async" : "", url);
       },
     } as NavigateContext;
   }, [url]);
@@ -196,9 +196,10 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
   useLayoutEffect(() => {
     window.history.pushState = new Proxy(window.history.pushState, {
       apply: (target, thisArg, argArray) => {
-        startTransition(() => {
+        startTransition(async () => {
+          const tree = findTree(argArray[2]);
           setUrl(argArray[2]);
-          setTree(findTree(argArray[2]));
+          setTree(tree);
         });
         return target.apply(thisArg, argArray as [any, string, string?]);
       },
@@ -206,8 +207,9 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
     window.history.replaceState = new Proxy(window.history.replaceState, {
       apply: (target, thisArg, argArray) => {
         startTransition(() => {
+          const tree = findTree(argArray[2]);
           setUrl(argArray[2]);
-          setTree(findTree(argArray[2]));
+          setTree(tree);
         });
         return target.apply(thisArg, argArray as [any, string, string?]);
       },
@@ -413,7 +415,7 @@ const useGlobalLoaderData = () => {
 };
 const useGlobalActionData = () => {
   const data = use(currentLoadingRoute.loader!);
-  return data.actionData;
+  return data.actionData as { error: boolean; data: Map<any, any> };
 };
 export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
   const route = use(OutletContext).route;
@@ -436,12 +438,18 @@ export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
 
 export const useRevalidate = () => {
   const { navigate } = useNavigate();
-  const revalite = useCallback(() => {
+  const revalidate = useCallback(async () => {
     const url = new URL(window.location.href);
-    url.searchParams.delete("_zro");
-    navigate(url.href, { replace: true });
+    return navigate(url.href, { replace: true, async: true });
   }, [navigate]);
-  return { revalite };
+  return { revalidate };
+};
+
+const parseServerError = (json: any) => {
+  return {
+    ...(json.errors || {}),
+    root: json.message,
+  };
 };
 
 export const useAction = <
@@ -455,8 +463,9 @@ export const useAction = <
   const globalActionData = useGlobalActionData();
 
   const [data, setData] = useState<InferActionReturnType<TAction>>(() => {
-    if (globalActionData && globalActionData.get(routePath))
-      return globalActionData.get(routePath);
+    if (globalActionData && !globalActionData.error) {
+      return globalActionData.data.get(routePath);
+    }
     return {};
   });
 
@@ -464,16 +473,20 @@ export const useAction = <
     Record<AlsoAllowString<"root" | keyof InferActionSchema<TAction>>, string>
   >;
 
-  const [errors, setErrors] = useState<TActionErrors>({});
+  const [errors, setErrors] = useState<TActionErrors>(() => {
+    if (globalActionData && globalActionData.error)
+      return parseServerError(globalActionData.data.get(routePath));
+    return {};
+  });
   const { navigate } = useNavigate();
   const url = useMemo(
     () => withQuery(routePath, { action: String(action) }),
     [routePath, action]
   );
-  const { revalite } = useRevalidate();
+  const { revalidate } = useRevalidate();
   const sendReq = useCallback(
     (formData: FormData) => {
-      return fetch(url, {
+      fetch(url, {
         method: "POST",
         body: formData,
         headers: {
@@ -482,7 +495,6 @@ export const useAction = <
       })
         .then((res) => {
           if (!res.ok) throw res;
-          console.log(res);
           if (res.redirected) navigate(res.url, { replace: true });
           return res;
         })
@@ -490,14 +502,22 @@ export const useAction = <
           const contentType = res.headers.get("Content-Type");
           if (contentType?.includes("application/json")) {
             const json = await res.json();
-            setData(json);
-            setErrors({});
-            return json;
-          } else if (contentType?.includes("text/plain")) {
+            return [
+              json,
+              () => {
+                setData(json);
+                setErrors({});
+              },
+            ];
+          } else if (contentType?.includes("text/")) {
             const text = await res.text();
-            setData(text as any);
-            setErrors({});
-            return text;
+            return [
+              text,
+              () => {
+                setData(text as any);
+                setErrors({});
+              },
+            ];
           }
         })
         .catch(async (res) => {
@@ -505,24 +525,47 @@ export const useAction = <
             const contentType = res.headers.get("Content-Type");
             if (contentType?.includes("application/json")) {
               const json = await res.json();
-              setErrors({
-                ...(json.errors || {}),
-                root: json.message,
-              });
-              return json;
+              const errorObj = parseServerError(json);
+              return [
+                errorObj,
+                () => {
+                  setErrors(errorObj);
+                },
+                "error",
+              ];
             } else {
-              setErrors({
-                root: "Invalid response from server",
-              } as TActionErrors);
+              const errorObj = parseServerError({
+                message: "Invalid response from server",
+              });
+              return [
+                errorObj,
+                () => {
+                  setErrors(errorObj);
+                },
+                "error",
+              ];
             }
           }
           if (res instanceof Error) {
-            setErrors({
-              root: res.message,
-            } as TActionErrors);
+            const errorObj = parseServerError({
+              message: res.message,
+            });
+            return [
+              errorObj,
+              () => {
+                setErrors(errorObj);
+              },
+              "error",
+            ];
           }
         })
-        .finally(revalite);
+        .then(([returnData, callback, type = "success"]: any) => {
+          revalidate().then(() => {
+            return startTransition(callback);
+          });
+          if (type === "error") throw returnData;
+          return returnData;
+        });
     },
     [url]
   );
@@ -530,11 +573,7 @@ export const useAction = <
   const onSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      return sendReq(new FormData(e.target as HTMLFormElement)).catch((e) => {
-        console.log("error");
-        console.log(e);
-        return e;
-      });
+      return sendReq(new FormData(e.target as HTMLFormElement));
     },
     [sendReq]
   );
