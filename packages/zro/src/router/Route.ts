@@ -1,4 +1,3 @@
-import { defu } from "defu";
 import { getQuery } from "ufo";
 import { withAsyncContext } from "unctx";
 import { merge } from "../utils/tools";
@@ -64,14 +63,18 @@ export class Route<
 
   constructor(
     private path: RouteId,
-    private _options?: Partial<
+    private _options: Partial<
       LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares>
     >
   ) {
-    this.options = defu(_options, {
-      middlewares: [] as unknown as TMiddlewares,
-      actions: [],
-    }) as LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares>;
+    if (!_options.middlewares)
+      _options.middlewares = [] as unknown as TMiddlewares;
+    if (!_options.actions) _options.actions = {};
+    this.options = _options as LoaderOptions<
+      LoaderData,
+      ParentLoaderData,
+      TMiddlewares
+    >;
   }
 
   public getPath() {
