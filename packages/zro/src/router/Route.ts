@@ -63,13 +63,12 @@ export class Route<
 
   constructor(
     private path: RouteId,
-    private _options: Partial<
-      LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares>
-    >
+    _options: Partial<LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares>>
   ) {
     if (!_options.middlewares)
       _options.middlewares = [] as unknown as TMiddlewares;
     if (!_options.actions) _options.actions = {};
+
     this.options = _options as LoaderOptions<
       LoaderData,
       ParentLoaderData,

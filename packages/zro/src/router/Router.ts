@@ -30,11 +30,8 @@ export const getHead = HeadContext.tryUse;
 
 export class Router {
   private router = createRouter<Route<any, any>>();
-  private rootRoute = new Route("_root");
 
   public addRoute(route: Route<any, any>) {
-    if (route.getPath() === "_root") this.rootRoute = route;
-
     if (route.hasGet()) addRoute(this.router, "get", route.getPath(), route);
 
     // add route to actions
@@ -78,10 +75,6 @@ export class Router {
         );
       }
     }
-  }
-
-  public getRoot() {
-    return this.rootRoute;
   }
 
   public findRoute(request: Request) {
