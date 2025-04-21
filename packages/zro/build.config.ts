@@ -58,16 +58,6 @@ export default defineBuildConfig({
   ],
   sourcemap: true,
   clean: true,
-  // hooks: {
-  //   "rollup:options"(ctx, options) {
-  //     options.external = (id) => {
-  //       if (id.includes("es-toolkit")) {
-  //         return false;
-  //       }
-  //       return /^[a-z@][a-z@/\-0-9]/.test(id) && !id.includes("es-toolkit");
-  //     };
-  //   },
-  // },
   rollup: {
     preserveDynamicImports: false,
     inlineDependencies: true,

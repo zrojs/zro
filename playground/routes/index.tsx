@@ -1,11 +1,12 @@
 import { useAction, useHead, useLoaderData } from "zro/react";
 import { Action } from "zro/router";
+
 type Route = Routes["/"];
 
 export const actions = {
   dummyAction: new Action({
     async handler() {
-      return true;
+      return "ho";
     },
   }),
 };

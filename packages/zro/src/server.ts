@@ -4,6 +4,7 @@ import {
   setHeader,
   setResponseStatus,
   toWebRequest,
+  useSession,
 } from "h3";
 import React from "react";
 import { encode } from "turbo-stream";
@@ -26,22 +27,68 @@ export const handleRequest = async (
   const cache = new Cache();
   const accept = getHeader(e, "accept");
 
-  const { data, head, status } = await router.load(req, { event: e });
+  let { data, head, status } = await router.load(req, { event: e });
+
   setResponseStatus(e, status);
-  const { loaderData, actionData } = data;
+
+  let actionData = data.actionData;
+
+  const serverSession = await useSession(e, {
+    password: process.env.APP_KEY!,
+    sessionHeader: "zro",
+    name: "zro",
+  });
+
+  if (serverSession.data.actionData) {
+    data.actionData = new Map(JSON.parse(serverSession.data.actionData));
+    serverSession.clear();
+  }
 
   // we need this for redirections or other throwing responses
   if (data instanceof Response) return data;
-  // if (actionData instanceof Response) return actionData;
-  const isAction = !!actionData;
 
-  if (isAction && getHeader(e, "X-ZRO-Action")) {
-    const firstActionKey = Object.fromEntries(
-      (actionData as Map<string, any>).entries()
-    );
-    const actionKey = Object.keys(firstActionKey)[0];
-    const action = (actionData as Map<string, any>).get(actionKey);
-    return action;
+  const isAction = !!actionData;
+  const actionFiredFromJavascript = getHeader(e, "X-ZRO-Action");
+
+  if (isAction) {
+    if (actionFiredFromJavascript) {
+      // is action and it's fired from javascript
+      const firstActionKey = Object.fromEntries(
+        (actionData as Map<string, any>).entries()
+      );
+      const actionKey = Object.keys(firstActionKey)[0];
+      const action = (actionData as Map<string, any>).get(actionKey);
+      return action;
+    } else {
+      // if fired without javascript
+      // if referrer provided, flush action data to session and redirect to referrer
+      const referer = getHeader(e, "referer");
+      if (!!referer) {
+        await serverSession.update({
+          actionData: JSON.stringify(Array.from(actionData.entries())),
+        });
+        return Response.redirect(referer, 302);
+      } else {
+        // if no referrer found, load the router with current url, render the page
+        const newReq = new Request(req.url, {
+          method: "get",
+          headers: req.headers,
+          body: undefined,
+          mode: req.mode,
+          credentials: req.credentials,
+          cache: req.cache,
+          redirect: req.redirect,
+          referrer: req.referrer,
+          referrerPolicy: req.referrerPolicy,
+          integrity: req.integrity,
+          keepalive: req.keepalive,
+        });
+        const newLoader = await router.load(newReq, { event: e });
+        data = newLoader.data;
+        data.actionData = actionData;
+        head = newLoader.head;
+      }
+    }
   }
 
   if (accept === "text/x-script") {
