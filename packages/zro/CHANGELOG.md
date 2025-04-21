@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.36
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.35...v0.0.36)
+
+### 🚀 Enhancements
+
+- **zro:** Response actions with redirect or html when appropriate ([fabef7f](https://github.com/zrojs/zro/commit/fabef7f))
+- **react:** `useAction` integration with server with no-js env ([60c60f7](https://github.com/zrojs/zro/commit/60c60f7))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.35
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.34...v0.0.35)
