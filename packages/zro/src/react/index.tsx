@@ -183,12 +183,13 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
     return {
       url,
       navigate: async (url, { replace = false, async }) => {
+        let tree;
         if (async) {
-          findTree(url);
+          tree = findTree(url);
           await currentLoadingRoute.loader;
         }
-        if (replace) window.history.replaceState({}, "", url);
-        else window.history.pushState({}, "", url);
+        if (replace) window.history.replaceState({ __zro_tree: tree }, "", url);
+        else window.history.pushState({ __zro_tree: tree }, "", url);
       },
     } as NavigateContext;
   }, [url]);
@@ -197,7 +198,14 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
     window.history.pushState = new Proxy(window.history.pushState, {
       apply: (target, thisArg, argArray) => {
         startTransition(async () => {
-          const tree = findTree(argArray[2]);
+          const _zroTree = argArray[0]?.__zro_tree;
+          let tree;
+          if (_zroTree) {
+            tree = _zroTree;
+            delete argArray[0].__zro_tree;
+          } else {
+            tree = findTree(argArray[2]);
+          }
           setUrl(argArray[2]);
           setTree(tree);
         });
@@ -207,7 +215,14 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
     window.history.replaceState = new Proxy(window.history.replaceState, {
       apply: (target, thisArg, argArray) => {
         startTransition(() => {
-          const tree = findTree(argArray[2]);
+          const _zroTree = argArray[0]?.__zro_tree;
+          let tree;
+          if (_zroTree) {
+            tree = _zroTree;
+            delete argArray[0].__zro_tree;
+          } else {
+            tree = findTree(argArray[2]);
+          }
           setUrl(argArray[2]);
           setTree(tree);
         });
