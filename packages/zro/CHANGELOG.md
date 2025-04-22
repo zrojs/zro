@@ -1,6 +1,28 @@
 # Changelog
 
 
+## v0.0.40
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.39...v0.0.40)
+
+### 🚀 Enhancements
+
+- **create-zro:** With-drizzle-tailwind base template with simple todo app demo ([29232bb](https://github.com/zrojs/zro/commit/29232bb))
+
+### 🩹 Fixes
+
+- **create-zro:** Correct application name format in package.json with tailwind template ([6f3567d](https://github.com/zrojs/zro/commit/6f3567d))
+- **ClientRouter:** Preserve loader promise when navigating replace, async ([7fab083](https://github.com/zrojs/zro/commit/7fab083))
+
+### 🏡 Chore
+
+- **release:** V0.0.6 ([51bd2a7](https://github.com/zrojs/zro/commit/51bd2a7))
+- **release:** V0.0.7 ([489ef05](https://github.com/zrojs/zro/commit/489ef05))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.39
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.38...v0.0.39)
