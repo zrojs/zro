@@ -3,7 +3,8 @@
   "type": "module",
   "scripts": {
     "dev": "zro dev",
-    "build": "zro build"
+    "build": "zro build",
+    "prepare": "zro prepare"
   },
   "dependencies": {
     "launch-editor": "^2.10.0",

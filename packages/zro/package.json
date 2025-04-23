@@ -63,6 +63,7 @@
     "citty": "^0.1.6",
     "consola": "^3.4.0",
     "defu": "^6.1.4",
+    "dotenv": "^16.5.0",
     "es-module-lexer": "^1.6.0",
     "h3": "npm:h3-nightly@latest",
     "jiti": "^2.4.2",
@@ -84,15 +85,15 @@
     "youch": "4.1.0-beta.7"
   },
   "devDependencies": {
-    "@unhead/react": "^2.0.5",
-    "unhead": "^2.0.5",
-    "es-toolkit": "^1.35.0",
     "@types/babel__core": "^7.20.5",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
+    "@unhead/react": "^2.0.5",
+    "es-toolkit": "^1.35.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "^5.5.4",
+    "unhead": "^2.0.5",
     "vite": "^6.2.2",
     "vitest": "^3.0.8"
   },

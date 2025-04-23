@@ -5,7 +5,7 @@
     "dev": "zro dev",
     "build": "zro build",
     "db:migrate": "drizzle-kit generate && drizzle-kit migrate",
-    "prepare": "pnpm run db:migrate",
+    "prepare": "zro prepare && pnpm run db:migrate",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {

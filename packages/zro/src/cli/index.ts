@@ -32,6 +32,24 @@ const cli = defineCommand({
         const { h3 } = await bootstrapDevServer({ host: !!args.host });
       },
     }),
+    prepare: defineCommand({
+      meta: {
+        name: "prepare",
+        description: "Prepare the project for dev and production",
+      },
+      run: async () => {
+        const { prepare } = await import("./prepare");
+        console.clear();
+        const { title, version } = useZro();
+        console.log(
+          ` ${colors.bold(title)} ${colors.dim(`v${version}`)} ${colors.dim(
+            `(Prepare)`
+          )}`
+        );
+        console.log();
+        await prepare();
+      },
+    }),
   },
 });
 

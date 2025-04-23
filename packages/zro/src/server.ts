@@ -33,6 +33,12 @@ export const handleRequest = async (
 
   let actionData = data.actionData;
 
+  if (!process.env.APP_KEY) {
+    throw new Error(
+      "APP_KEY is not set in the environment variables, please run zro:prepare to generate the key"
+    );
+  }
+
   const serverSession = await useSession(e, {
     password: process.env.APP_KEY!,
     sessionHeader: "zro",

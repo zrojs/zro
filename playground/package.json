@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon -w '../packages/' -x 'zro dev'",
     "db:migrate": "drizzle-kit generate && drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "prepare": "zro prepare"
   },
   "keywords": [],
   "author": "Nariman Movaffaghi",
