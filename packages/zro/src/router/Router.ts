@@ -172,7 +172,11 @@ export class Router {
                   ) {
                     if (requestContext.use().status < 400)
                       requestContext.use().status = 400;
-                    return loaderDataPerRoute;
+                    // early return on facing error
+                    return {
+                      loaderData: loaderDataPerRoute,
+                      actionData: actionDataPerRoute,
+                    };
                   }
                   if (newLoaderData instanceof Response) {
                     requestContext.use().status = newLoaderData.status;
