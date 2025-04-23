@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.0.42
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.41...v0.0.42)
+
+### 🩹 Fixes
+
+- **zro:** Early return error on facing error ([75196d4](https://github.com/zrojs/zro/commit/75196d4))
+
+### 🏡 Chore
+
+- **release:** V0.0.8 ([0ce6564](https://github.com/zrojs/zro/commit/0ce6564))
+- **create-zro:** Remove unused local database file ([a388767](https://github.com/zrojs/zro/commit/a388767))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.41
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.40...v0.0.41)
