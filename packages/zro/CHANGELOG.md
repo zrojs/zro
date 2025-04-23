@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.0.44
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.43...v0.0.44)
+
+### 🚀 Enhancements
+
+- **react:** Wrap route component inside suspense even no loader provided ([392a7cc](https://github.com/zrojs/zro/commit/392a7cc))
+
+### 🏡 Chore
+
+- **release:** V0.0.9 ([7dbfc59](https://github.com/zrojs/zro/commit/7dbfc59))
+- **playground:** Remove unused app.tsx file ([eaeb82e](https://github.com/zrojs/zro/commit/eaeb82e))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.43
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.42...v0.0.43)
