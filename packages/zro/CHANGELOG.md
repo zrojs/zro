@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.41
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.40...v0.0.41)
+
+### 🚀 Enhancements
+
+- **zro:** Prepare script to generate app key and future configurations ([ac4cfc9](https://github.com/zrojs/zro/commit/ac4cfc9))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.40
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.39...v0.0.40)
