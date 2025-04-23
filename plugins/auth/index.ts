@@ -1,10 +1,9 @@
-import { AuthProvider } from "auth-provider";
-import { SessionConfig } from "h3";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getConfig, type Plugin } from "zro/plugin";
 import { Middleware, redirect } from "zro/router";
-import { getSession } from "zro/router/server";
+import { getSession, SessionConfig } from "zro/router/server";
+import { AuthProvider } from "./auth-provider";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

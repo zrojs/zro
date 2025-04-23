@@ -70,12 +70,12 @@ export class GithubProvider extends AuthProvider<GithubAuthenticateUser> {
 
   async registerRotes(tree: RouteTree, config: AuthConfig) {
     await tree.addRootRoute(
-      __dirname + "/github-action.js",
+      __dirname + "/github-action.mjs",
       config.authPrefix + "/github",
       plugin.configFileName
     );
     await tree.addRootRoute(
-      __dirname + "/github-callback-action.js",
+      __dirname + "/github-callback-action.mjs",
       config.authPrefix + "/github/callback",
       plugin.configFileName
     );

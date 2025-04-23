@@ -11,6 +11,8 @@ import { PluginConfigContext } from "../../plugin";
 import { Action } from "../../router/Action";
 import { getServerContext } from "./context";
 
+export type { SessionConfig } from "h3";
+
 export const getEvent = (): H3Event => {
   return getServerContext()?.event as H3Event;
 };

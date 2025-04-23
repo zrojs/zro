@@ -4,18 +4,18 @@
   "type": "module",
   "description": "Auth integration for ZRO",
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"pnpm run postbuild\"",
-    "build": "tsc",
-    "postbuild": "tsc-alias"
+    "dev": "unbuild --watch",
+    "build": "unbuild",
+    "prepublishOnly": "pnpm build && pnpx changelogen --release --no-tag --push"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./dist/index.mjs"
     },
     "./providers/*": {
       "types": "./dist/providers/*/index.d.ts",
-      "default": "./dist/providers/*/index.js"
+      "default": "./dist/providers/*/index.mjs"
     }
   },
   "keywords": [],
@@ -23,14 +23,13 @@
   "license": "MIT",
   "packageManager": "pnpm@10.6.3",
   "devDependencies": {
-    "tsc-alias": "^1.8.11",
-    "tsc-watch": "^6.2.1",
-    "typescript": "^5.5.4",
+    "unbuild": "^3.5.0"
+  },
+  "peerDependencies": {
     "zro": "workspace:^*"
   },
   "dependencies": {
     "defu": "^6.1.4",
-    "tsc-alias": "^1.8.11",
     "zod": "^3.24.2"
   }
 }

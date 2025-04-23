@@ -18,7 +18,7 @@ export class PasswordProvider extends AuthProvider<PasswordAuthProps> {
   }
 
   async registerRotes(tree: RouteTree, config: AuthConfig) {
-    const actionRouteFilePath = __dirname + "/password-action.js";
+    const actionRouteFilePath = __dirname + "/password-action.mjs";
     const actionPath = config.authPrefix + "/password";
     await tree.addRootRoute(
       actionRouteFilePath,

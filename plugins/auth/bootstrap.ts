@@ -1,5 +1,5 @@
-import { AuthConfig } from "index";
 import { getConfig } from "zro/plugin";
+import { AuthConfig } from "./index";
 
 export const bootstrap = () => {
   const config = getConfig<AuthConfig>();

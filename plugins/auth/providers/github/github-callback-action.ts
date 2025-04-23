@@ -1,7 +1,7 @@
-import { AuthConfig } from "index";
 import { getConfig } from "zro/plugin";
 import { getRequest, redirect } from "zro/router";
 import { getSession } from "zro/router/server";
+import { AuthConfig } from "../../index";
 import { GithubProvider, GithubUser } from "./index";
 
 export const loader = async () => {
