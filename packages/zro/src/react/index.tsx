@@ -86,14 +86,12 @@ export const Router: FC<RouterProps> = (props) => {
         <head suppressHydrationWarning></head>
         <body suppressHydrationWarning>
           <ErrorBoundary FallbackComponent={GlobalErrorBoundary}>
-            <Suspense>
-              <ClientRouter
-                router={router}
-                cache={cache}
-                head={head}
-                initialUrl={initialUrl}
-              />
-            </Suspense>
+            <ClientRouter
+              router={router}
+              cache={cache}
+              head={head}
+              initialUrl={initialUrl}
+            />
           </ErrorBoundary>
           <DataStreammer />
         </body>
@@ -347,7 +345,7 @@ const RouteLoading: FC<PropsWithChildren<{ route: Route<any, any> }>> = ({
   const routeProps = route.getProps();
   if (routeProps?.loading)
     return <Suspense fallback={<routeProps.loading />}>{children}</Suspense>;
-  return children;
+  return <Suspense>{children}</Suspense>;
 };
 const OutletContext = createContext<{
   route: Route<any, any>;
