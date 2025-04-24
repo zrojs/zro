@@ -14,7 +14,7 @@
   "author": "Nariman Movaffaghi",
   "license": "MIT",
   "dependencies": {
-    "@zro/auth": "workspace:^*",
+    "@zro/auth": "workspace:^",
     "@zro/db": "workspace:^*",
     "@zro/logger": "workspace:^*",
     "drizzle-kit": "^0.30.6",

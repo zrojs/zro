@@ -145,7 +145,7 @@ importers:
   playground:
     dependencies:
       '@zro/auth':
-        specifier: workspace:^*
+        specifier: workspace:^
         version: link:../plugins/auth
       '@zro/db':
         specifier: workspace:^*
