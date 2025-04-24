@@ -1,6 +1,28 @@
 # Changelog
 
 
+## v0.0.45
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.44...v0.0.45)
+
+### 🩹 Fixes
+
+- **package:** Reset version to 0.0.0 and ensure public access for publishing ([7ac8a8c](https://github.com/zrojs/zro/commit/7ac8a8c))
+- **zro:** Use redirection with x-script data to load next route and prevent redundant api call ([57c9531](https://github.com/zrojs/zro/commit/57c9531))
+- **auth:** Change `AuthProvider` generic type from `unknown` to `any` and update `AuthConfig` to use `User` type ([c55dff7](https://github.com/zrojs/zro/commit/c55dff7))
+
+### 💅 Refactors
+
+- **zro/auth:** Update module structure and dependencies ready to publish. ([4792dce](https://github.com/zrojs/zro/commit/4792dce))
+
+### 🏡 Chore
+
+- **release:** V0.0.1 ([02a640e](https://github.com/zrojs/zro/commit/02a640e))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.44
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.43...v0.0.44)
