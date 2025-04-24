@@ -1,11 +1,4 @@
-import {
-  getHeader,
-  H3Event,
-  setHeader,
-  setResponseStatus,
-  toWebRequest,
-  useSession,
-} from "h3";
+import { H3Event, useSession } from "h3";
 import React from "react";
 import { encode } from "turbo-stream";
 import { SerializableHead } from "unhead/types";
@@ -22,14 +15,14 @@ export const handleRequest = async (
   router: ZroRouter,
   extraHead?: SerializableHead
 ) => {
-  const req = toWebRequest(e);
+  const req = e.req;
   const initialUrl = new URL(req.url);
   const cache = new Cache();
-  const accept = getHeader(e, "accept");
+  const accept = e.req.headers.get("accept");
 
   let { data, head, status } = await router.load(req, { event: e });
 
-  setResponseStatus(e, status);
+  e.res.status = status;
 
   let actionData = data.actionData;
 
@@ -67,7 +60,7 @@ export const handleRequest = async (
   if (data instanceof Response) return data;
 
   const isAction = !!actionData;
-  const actionFiredFromJavascript = getHeader(e, "X-ZRO-Action");
+  const actionFiredFromJavascript = e.req.headers.get("X-ZRO-Action");
 
   if (isAction) {
     if (actionFiredFromJavascript) {
@@ -81,7 +74,7 @@ export const handleRequest = async (
     } else {
       // if fired without javascript
       // if referrer provided, flush action data to session and redirect to referrer
-      const referer = getHeader(e, "referer");
+      const referer = e.req.headers.get("referer");
       if (!!referer) {
         await serverSession.update({
           actionData: JSON.stringify({
@@ -114,7 +107,7 @@ export const handleRequest = async (
   }
 
   if (accept?.includes("text/x-script")) {
-    setHeader(e, "Content-Type", "text/x-script");
+    e.res.headers.set("Content-Type", "text/x-script");
     if (data instanceof Response) return data;
     return encode(data, {
       redactErrors: false,
@@ -132,7 +125,7 @@ export const handleRequest = async (
   });
   if (extraHead) head.push(extraHead);
 
-  setHeader(e, "Content-Type", "text/html");
+  e.res.headers.set("Content-Type", "text/html");
   // set current loading to the router cache
   cache.set(
     JSON.stringify(withTrailingSlash(initialUrl.href)),

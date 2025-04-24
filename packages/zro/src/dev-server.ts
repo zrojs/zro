@@ -1,24 +1,23 @@
 import { colors } from "consola/utils";
-import { upperFirst } from "./utils/tools";
 import {
-  App,
-  createApp,
   eventHandler,
-  fromNodeMiddleware,
+  fromNodeHandler,
   getRequestURL,
-  toNodeListener,
+  H3,
+  toNodeHandler,
 } from "h3";
 import { listen, Listener } from "listhen";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { createContext } from "unctx";
+import { extractUnheadInputFromHtml } from "unhead/server";
 import { createServer, ViteDevServer } from "vite";
 import loadingSpinner from "yocto-spinner";
+import { Youch } from "youch";
 import { Router as ZroRouter } from "./router/Router";
 import { handleRequest } from "./server";
-import { Youch } from "youch";
-import { extractUnheadInputFromHtml } from "unhead/server";
+import { upperFirst } from "./utils/tools";
 
-const serverContext = createContext<App>({
+const serverContext = createContext<H3>({
   asyncContext: true,
   AsyncLocalStorage,
 });
@@ -44,7 +43,7 @@ export const bootstrapDevServer = async ({
   host: boolean;
 }) => {
   startingServerSpinner.start();
-  const app = createApp();
+  const app = new H3();
 
   return serverContext.call(app, async () => {
     const vite = await createServer({
@@ -59,7 +58,7 @@ export const bootstrapDevServer = async ({
 
     return viteContext.call(vite, async () => {
       // load zro options here
-      app.use(fromNodeMiddleware(vite.middlewares));
+      app.use(fromNodeHandler(vite.middlewares));
       app.use(
         eventHandler(async (e) => {
           const req = getRequestURL(e);
@@ -82,7 +81,7 @@ export const bootstrapDevServer = async ({
           }
         })
       );
-      const listener = await listen(toNodeListener(app), {
+      const listener = await listen(toNodeHandler(app), {
         isProd: false,
         showURL: false,
         ws: false,

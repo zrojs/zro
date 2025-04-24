@@ -1,10 +1,10 @@
 import { StandardSchemaV1 } from "@standard-schema/spec";
+import type { SessionConfig } from "h3";
 import {
   deleteCookie as h3DeleteCookie,
   H3Event,
   getCookie as h3GetCookie,
   setCookie as h3SetCookie,
-  SessionConfig,
   useSession,
 } from "h3";
 import { PluginConfigContext } from "../../plugin";

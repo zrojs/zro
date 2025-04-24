@@ -1,10 +1,9 @@
 import { createRequire } from "module";
 import { addDependency } from "nypm";
+import { glob } from "tinyglobby";
 import { joinURL } from "ufo";
 import { Plugin, PluginConfigContext, RouteTree } from ".";
 import { useVite } from "../dev-server";
-import fs from "node:fs";
-import { glob } from "tinyglobby";
 
 export const registerPlugins = async (
   plugins: string[],
@@ -59,7 +58,8 @@ const importPlugin = async (
     try {
       return requireFromUser(plugin); // fallback for CJS/dev-monorepo
     } catch (err2) {
-      console.error(`Installing "${plugin}"`);
+      console.error(err);
+      console.error(err2);
       if (tryInstall) {
         await addDependency(plugin, {
           cwd: process.cwd(),
