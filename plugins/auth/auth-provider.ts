@@ -5,7 +5,7 @@ export type AuthConstructorOptions<TAuthenticationProps> = {
   authenticate: (data: TAuthenticationProps) => User | Promise<User>;
 };
 
-export class AuthProvider<TAuthenticationProps = unknown> {
+export class AuthProvider<TAuthenticationProps = any> {
   authenticate: (data: TAuthenticationProps) => User | Promise<User>;
 
   constructor(options: AuthConstructorOptions<TAuthenticationProps>) {

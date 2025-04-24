@@ -10,15 +10,15 @@ const __dirname = dirname(__filename);
 
 export interface User {}
 
-export type AuthConfig<TUser = User> = {
+export interface AuthConfig {
   authPrefix: string;
   loginPage: string;
   onLoginSuccessRedirect?: string;
   session: SessionConfig;
-  verifyToken: (token: string) => TUser | Promise<TUser>;
-  generateToken: (user: TUser) => Promise<string> | string;
-  providers: [AuthProvider<TUser>, ...AuthProvider<TUser>[]];
-};
+  verifyToken: (token: string) => User | Promise<User>;
+  generateToken: (user: User) => Promise<string> | string;
+  providers: [AuthProvider, ...AuthProvider[]];
+}
 
 const plugin: Plugin<AuthConfig> = {
   name: "auth",
@@ -40,7 +40,7 @@ const plugin: Plugin<AuthConfig> = {
 
 export default plugin;
 
-export const defineConfig = <TUser = User>(config: AuthConfig<TUser>) => {
+export const defineConfig = (config: AuthConfig) => {
   // const defaultConfig: AuthConfig = {
   //   enabled: true,
   // };
