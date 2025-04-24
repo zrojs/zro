@@ -19,8 +19,9 @@ export default defineBuildConfig({
     },
     {
       builder: "mkdist",
-      input: "./providers/",
-      outDir: "./dist/providers/",
+      input: "./providers",
+      outDir: "./dist/providers",
+      declaration: false,
     },
   ],
   clean: true,
@@ -35,5 +36,6 @@ export default defineBuildConfig({
       jsx: true,
     },
   },
-  declaration: "compatible",
+  failOnWarn: false,
+  declaration: false, // handle dts using tsup as mkdist is not able to generate dts with complex types
 });

@@ -5,7 +5,7 @@
   "description": "Auth integration for ZRO",
   "scripts": {
     "dev": "unbuild --watch",
-    "build": "unbuild",
+    "build": "unbuild & tsup --dts-only",
     "prepublishOnly": "pnpm build && pnpx changelogen --release --no-tag --push"
   },
   "exports": {
@@ -23,6 +23,7 @@
   "license": "MIT",
   "packageManager": "pnpm@10.6.3",
   "devDependencies": {
+    "tsup": "^8.4.0",
     "unbuild": "^3.5.0"
   },
   "peerDependencies": {
@@ -30,6 +31,7 @@
   },
   "dependencies": {
     "defu": "^6.1.4",
+    "tinyglobby": "^0.2.12",
     "zod": "^3.24.2"
   },
   "publishConfig": {
