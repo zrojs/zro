@@ -1,6 +1,25 @@
 # Changelog
 
 
+## v0.0.46
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.45...v0.0.46)
+
+### 🩹 Fixes
+
+- **pnpm:** Update db dependency specifier to use workspace versioning ([238e6d8](https://github.com/zrojs/zro/commit/238e6d8))
+- **dependencies:** Update @zro/auth dependency specifier to use workspace versioning ([9613541](https://github.com/zrojs/zro/commit/9613541))
+- **dependencies:** Update h3 dependency from latest to version 2x ([cc05da2](https://github.com/zrojs/zro/commit/cc05da2))
+- **router:** Update getSession to use async/await and export SessionConfig directly ([06313de](https://github.com/zrojs/zro/commit/06313de))
+
+### 🏡 Chore
+
+- **release:** V0.0.2 ([e4f601c](https://github.com/zrojs/zro/commit/e4f601c))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.45
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.44...v0.0.45)
