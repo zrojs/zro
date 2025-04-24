@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.47
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.46...v0.0.47)
+
+### 🚀 Enhancements
+
+- **zro:** Migrate to `h3@2x` ([8c125ed](https://github.com/zrojs/zro/commit/8c125ed))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.46
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.45...v0.0.46)
