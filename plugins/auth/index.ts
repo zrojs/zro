@@ -59,7 +59,10 @@ export const auth = <TUser = User>() =>
     const token = session.data.token;
     if (!token) redirect(config.loginPage);
     const user = (await config.verifyToken(token)) as TUser | undefined;
-    if (!user) redirect(config.loginPage);
+    if (!user) {
+      await session.clear();
+      redirect(config.loginPage);
+    }
 
     return next({
       user,

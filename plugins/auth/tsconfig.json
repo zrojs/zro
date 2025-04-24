@@ -1,6 +1,13 @@
 {
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "package.json"
+  ],
   "exclude": [
     "dist",
+    "__tests__",
+    "node_modules"
   ],
   "compilerOptions": {
     "lib": [
