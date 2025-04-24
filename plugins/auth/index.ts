@@ -11,9 +11,9 @@ const __dirname = dirname(__filename);
 export interface User {}
 
 export interface AuthConfig {
-  authPrefix: string;
-  loginPage: string;
-  onLoginSuccessRedirect?: string;
+  authPrefix: `/${string}`;
+  loginPage: `/${string}`;
+  onLoginSuccessRedirect?: `/${string}`;
   session: SessionConfig;
   verifyToken: (token: string) => User | Promise<User>;
   generateToken: (user: User) => Promise<string> | string;
