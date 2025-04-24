@@ -148,7 +148,7 @@ importers:
         specifier: workspace:^*
         version: link:../plugins/auth
       '@zro/db':
-        specifier: workspace:^
+        specifier: workspace:^*
         version: link:../plugins/db
       '@zro/logger':
         specifier: workspace:^*
