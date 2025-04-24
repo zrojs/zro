@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.3
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.47...v0.0.3)
+
+### 🩹 Fixes
+
+- **auth:** Auth type generation using tsup to support providers ([72e521f](https://github.com/zrojs/zro/commit/72e521f))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.2
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.45...v0.0.2)
