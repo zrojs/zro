@@ -51,8 +51,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       h3:
-        specifier: npm:h3-nightly@latest
-        version: h3-nightly@1.15.1-20250222-111608-d1c00fc
+        specifier: npm:h3-nightly@2x
+        version: h3-nightly@2.0.0-20250423-223431-7586c5b
       jiti:
         specifier: ^2.4.2
         version: 2.4.2
@@ -1880,6 +1880,9 @@ packages:
   cookie-es@1.2.2:
     resolution: {integrity: sha512-+W7VmiVINB+ywl1HGXJXmrqkOhpKrIiVZV6tQuV54ZyQC7MMuBt81Vc336GMLoHBq5hV/F9eXgt5Mnx0Rha5Fg==}
 
+  cookie-es@2.0.0:
+    resolution: {integrity: sha512-RAj4E421UYRgqokKUmotqAwuplYw15qtdXfY+hGzgCJ/MBjCVZcSoHK/kH9kocfjRjcDME7IiDWR/1WX1TM2Pg==}
+
   cookie@0.7.2:
     resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
     engines: {node: '>= 0.6'}
@@ -2304,8 +2307,14 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  h3-nightly@1.15.1-20250222-111608-d1c00fc:
-    resolution: {integrity: sha512-V2DeFol/CJ4QLimURS59juWk4b+XY2qhSlyhi0U3WnqN3PKLAIpLtRn340MHQf53ldMhP4oQA/SrJG9hPOcnLA==}
+  h3-nightly@2.0.0-20250423-223431-7586c5b:
+    resolution: {integrity: sha512-WnVVtHrStZXCvdtjc9xLZzlZI13ImZZ+Kf0fkfL/mZCsaZTc+uuqPDna+zW2qjGdICd3RmOTO1DRT3qtcj2ENQ==}
+    engines: {node: '>=20.11.1'}
+    peerDependencies:
+      crossws: ^0.2.4
+    peerDependenciesMeta:
+      crossws:
+        optional: true
 
   h3@1.15.1:
     resolution: {integrity: sha512-+ORaOBttdUm1E2Uu/obAyCguiI7MbBvsLTndc3gyK3zU+SYLoZXlyCP9Xgy0gikkGufFLTZXCXD6+4BsufnmHA==}
@@ -2974,6 +2983,9 @@ packages:
   rou3@0.5.1:
     resolution: {integrity: sha512-OXMmJ3zRk2xeXFGfA3K+EOPHC5u7RDFG7lIOx0X1pdnhUkI8MdVrbV+sNsD80ElpUZ+MRHdyxPnFthq9VHs8uQ==}
 
+  rou3@0.6.1:
+    resolution: {integrity: sha512-mqyxhSO0LLAa/lwNhH3329NEbRFJEHpZGIqr0cWQTtQEwqFMpf0a15cGw3kh9nil1oufh97Qhx4KWsy++0yn4g==}
+
   run-applescript@7.0.0:
     resolution: {integrity: sha512-9by4Ij99JUr/MCFBUkDKLWK3G9HVXmabKz9U5MlIAIuvuzkiOicRYs8XJLxX+xahD+mLiiCYDqF9dKAgtzKP1A==}
     engines: {node: '>=18'}
@@ -3047,6 +3059,10 @@ packages:
   source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+
+  srvx@0.5.2:
+    resolution: {integrity: sha512-dKyh8mBgRWgfv88h4Cy5FrTmazZNrj6HpvcnxI5DYcgaM8jc0B2IBQi6uPsJVyMt7OpfmYGVXMmwNPw6xGbaLw==}
+    engines: {node: '>=20.11.1'}
 
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
@@ -4611,6 +4627,8 @@ snapshots:
 
   cookie-es@1.2.2: {}
 
+  cookie-es@2.0.0: {}
+
   cookie@0.7.2: {}
 
   cookie@1.0.2: {}
@@ -5057,17 +5075,11 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  h3-nightly@1.15.1-20250222-111608-d1c00fc:
+  h3-nightly@2.0.0-20250423-223431-7586c5b:
     dependencies:
-      cookie-es: 1.2.2
-      crossws: 0.3.4
-      defu: 6.1.4
-      destr: 2.0.3
-      iron-webcrypto: 1.2.1
-      node-mock-http: 1.0.0
-      radix3: 1.1.2
-      ufo: 1.5.4
-      uncrypto: 0.1.3
+      cookie-es: 2.0.0
+      rou3: 0.6.1
+      srvx: 0.5.2
 
   h3@1.15.1:
     dependencies:
@@ -5680,6 +5692,8 @@ snapshots:
 
   rou3@0.5.1: {}
 
+  rou3@0.6.1: {}
+
   run-applescript@7.0.0: {}
 
   run-parallel@1.2.0:
@@ -5760,6 +5774,10 @@ snapshots:
       source-map: 0.6.1
 
   source-map@0.6.1: {}
+
+  srvx@0.5.2:
+    dependencies:
+      cookie-es: 2.0.0
 
   stackback@0.0.2: {}
 

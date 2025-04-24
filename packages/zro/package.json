@@ -66,7 +66,7 @@
     "defu": "^6.1.4",
     "dotenv": "^16.5.0",
     "es-module-lexer": "^1.6.0",
-    "h3": "npm:h3-nightly@latest",
+    "h3": "npm:h3-nightly@2x",
     "jiti": "^2.4.2",
     "knitwork": "^1.2.0",
     "listhen": "^1.9.0",
