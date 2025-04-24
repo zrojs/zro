@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.0.4
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.47...v0.0.4)
+
+### 🩹 Fixes
+
+- **auth:** Auth type generation using tsup to support providers ([72e521f](https://github.com/zrojs/zro/commit/72e521f))
+- **auth:** Clear session on invalid token during authentication ([b9a0633](https://github.com/zrojs/zro/commit/b9a0633))
+
+### 🏡 Chore
+
+- **release:** V0.0.3 ([62275c8](https://github.com/zrojs/zro/commit/62275c8))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.3
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.47...v0.0.3)
