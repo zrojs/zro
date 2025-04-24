@@ -43,7 +43,14 @@ export const bootstrapDevServer = async ({
   host: boolean;
 }) => {
   startingServerSpinner.start();
-  const app = new H3();
+  const app = new H3({
+    async onError(error, event) {
+      const youch = new Youch();
+      const html = await youch.toHTML(error);
+      console.log(await youch.toANSI(error));
+      return html;
+    },
+  });
 
   return serverContext.call(app, async () => {
     const vite = await createServer({
@@ -53,34 +60,24 @@ export const bootstrapDevServer = async ({
       clearScreen: false,
       appType: "custom",
     });
-
-    await vite.warmupRequest("/.zro/router.client");
-
     return viteContext.call(vite, async () => {
-      // load zro options here
       app.use(fromNodeHandler(vite.middlewares));
       app.use(
         eventHandler(async (e) => {
           const req = getRequestURL(e);
-          try {
-            const { createRouter } = (await vite.ssrLoadModule(
-              "/.zro/router.server"
-            )) as { createRouter: () => Promise<ZroRouter> };
-            const url = req.href;
-            const viteHtml = await vite.transformIndexHtml(
-              url,
-              "<html><head></head><body></body></html>"
-            );
-            const { input } = extractUnheadInputFromHtml(viteHtml);
-            return handleRequest(e, await createRouter(), input);
-          } catch (error) {
-            const youch = new Youch();
-            const html = await youch.toHTML(error);
-            console.log(await youch.toANSI(error));
-            return html;
-          }
+          const { createRouter } = (await vite.ssrLoadModule(
+            "/.zro/router.server"
+          )) as { createRouter: () => Promise<ZroRouter> };
+          const url = req.href;
+          const viteHtml = await vite.transformIndexHtml(
+            url,
+            "<html><head></head><body></body></html>"
+          );
+          const { input } = extractUnheadInputFromHtml(viteHtml);
+          return handleRequest(e, await createRouter(), input);
         })
       );
+      await vite.warmupRequest("/.zro/router.client");
       const listener = await listen(toNodeHandler(app), {
         isProd: false,
         showURL: false,
