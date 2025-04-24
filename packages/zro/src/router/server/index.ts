@@ -11,19 +11,18 @@ import { PluginConfigContext } from "../../plugin";
 import { Action } from "../../router/Action";
 import { getServerContext } from "./context";
 
-export type { SessionConfig } from "h3";
+export { SessionConfig };
 
 export const getEvent = (): H3Event => {
   return getServerContext()?.event as H3Event;
 };
-
-export const getSession = <
+export const getSession = async <
   TSessionData extends Record<string, any> = Record<string, any>
 >(
   config: SessionConfig
-) => {
+): ReturnType<typeof useSession<TSessionData>> => {
   const event = getEvent();
-  const session = useSession<TSessionData>(event, config);
+  const session = await useSession<TSessionData>(event, config);
   return session;
 };
 
@@ -34,6 +33,7 @@ export const setCookie = (
 ) => {
   return h3SetCookie(getEvent(), name, value, options);
 };
+
 export const getCookie = (name: string) => {
   return h3GetCookie(getEvent(), name);
 };
