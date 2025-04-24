@@ -15,7 +15,6 @@ declare module "@zro/auth" {
 export default defineConfig({
   authPrefix: "/auth",
   loginPage: "/login",
-  onLoginSuccessRedirect: "/dashboard",
   session: {
     password: process.env.AUTH_SESSION_KEY!,
   },
@@ -23,7 +22,10 @@ export default defineConfig({
     const user = JSON.parse(token) as User;
     const orm = getOrm();
     const foundUser = await orm
-      .select()
+      .select({
+        id: users.id,
+        email: users.email,
+      })
       .from(users)
       .where(eq(users.id, user.id))
       .get();
@@ -47,10 +49,9 @@ export default defineConfig({
             )
           )
           .get();
-
         if (!user) throw new Error("Invalid credentials");
         return {
-          email: data.username,
+          email: user.email,
           id: user.id,
         };
       },

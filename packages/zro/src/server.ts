@@ -113,7 +113,7 @@ export const handleRequest = async (
     }
   }
 
-  if (accept === "text/x-script") {
+  if (accept?.includes("text/x-script")) {
     setHeader(e, "Content-Type", "text/x-script");
     if (data instanceof Response) return data;
     return encode(data, {

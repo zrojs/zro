@@ -14,12 +14,14 @@ export default function LoginPage() {
         className="border border-gray-300 rounded-md px-2 py-1"
         placeholder="example@email.com"
         name="username"
+        defaultValue="me@nariman.mov"
       />
       <input
         className="border border-gray-300 rounded-md px-2 py-1"
         placeholder="••••••••••"
         type="password"
         name="password"
+        defaultValue="1234"
       />
       <button className="bg-gray-700 px-2 py-1 rounded-md text-white">
         login

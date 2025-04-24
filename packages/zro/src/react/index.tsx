@@ -53,7 +53,11 @@ const getRouterCacheKey = (url: string) =>
 
 type NavigateFn = (
   url: string,
-  options: { replace?: boolean; async?: boolean }
+  options: {
+    replace?: boolean;
+    async?: boolean;
+    readableStream?: ReadableStream;
+  }
 ) => Promise<void>;
 type NavigateContext = { navigate: NavigateFn; url: string };
 const navigateContext = createContext<NavigateContext>(null!);
@@ -108,94 +112,106 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
 }) => {
   const [url, setUrl] = useState(initialUrl?.href || window.location.href);
 
-  const findTree = useCallback((url: string, where?: string) => {
-    const req = new Request(
-      new URL(url, initialUrl?.origin || window.location.origin)
-    );
-    const routeInfo = router.findRoute(req)!;
-    if (!routeInfo) throw new Error("Page not found");
-    let reqKey = getRouterCacheKey(req.url);
-    const loaderFn = () => {
-      router.setUpRequest(req);
-      if (typeof window !== "undefined" && !hydrated) {
-        hydrated = true;
-        // @ts-ignore
-        const res = decode(window._readableStream);
-        return res;
-      }
-      if (!ssr) {
-        const reqUrl = new URL(req.url);
-        if (reqUrl.origin !== window.location.origin)
-          window.location.href = reqUrl.href;
-        req.headers.set("accept", "text/x-script");
-        return fetch(req).then((response) => {
-          let redirect = false;
-          if (response.redirected && response.url !== req.url) {
-            redirect = true;
-            cache.delete(reqKey);
-          }
-          if (response.body) {
-            const res = decode(
-              response.body.pipeThrough(new TextDecoderStream())
-            );
-            if (redirect) {
-              let reqKey = getRouterCacheKey(response.url);
-              cache.set(reqKey, res);
-              currentLoadingRoute.path = withTrailingSlash(
-                new URL(response.url).href
-              );
-              currentLoadingRoute.cacheKey = reqKey;
-              navigateValue.navigate(new URL(response.url).href, {
-                replace: true,
-              });
-            }
-            return res;
-          }
-        });
-      }
-      return router.load(req).then((ctx) => {
-        if (ctx instanceof Response && isRedirectResponse(ctx)) {
-          cache.delete(reqKey);
-          return ctx;
+  const navigateValue = useMemo((): NavigateContext => {
+    return {
+      url,
+      navigate: async (url, { replace = false, async, readableStream }) => {
+        let __zro_tree;
+        if (async) {
+          __zro_tree = findTree(url, readableStream);
+          await currentLoadingRoute.loader;
         }
-        return ctx.data;
-      });
-    };
+        if (replace)
+          window.history.replaceState(
+            { __zro_tree, needsLoader: !!!readableStream },
+            "",
+            url
+          );
+        else
+          window.history.pushState(
+            { __zro_tree, needsLoader: !!!readableStream },
+            "",
+            url
+          );
+      },
+    } as NavigateContext;
+  }, [url]);
 
-    currentLoadingRoute.loader = ssr
-      ? cache.get(reqKey)
-      : cache.set(reqKey, loaderFn());
+  const findTree = useCallback(
+    (url: string, readableStream?: ReadableStream, where?: string) => {
+      const req = new Request(
+        new URL(url, initialUrl?.origin || window.location.origin)
+      );
+      const routeInfo = router.findRoute(req)!;
+      if (!routeInfo) throw new Error("Page not found");
+      let reqKey = getRouterCacheKey(req.url);
+      const loaderFn = (readableStream?: ReadableStream) => {
+        router.setUpRequest(req);
+        if (typeof window !== "undefined" && (!hydrated || !!readableStream)) {
+          hydrated = true;
+          // @ts-ignore
+          const res = decode(readableStream || window._readableStream);
+          return res;
+        }
+        if (!ssr) {
+          const reqUrl = new URL(req.url);
+          if (reqUrl.origin !== window.location.origin)
+            window.location.href = reqUrl.href;
+          req.headers.set("accept", "text/x-script");
+          return fetch(req).then((response) => {
+            let redirect = false;
+            if (response.redirected && response.url !== req.url) {
+              redirect = true;
+              // cache.delete(reqKey);
+            }
+            if (response.body) {
+              const res = response.body.pipeThrough(new TextDecoderStream());
+              if (redirect) {
+                let reqKey = getRouterCacheKey(response.url);
+                // cache.set(reqKey, res);
+                const redirectedTo = new URL(response.url).href;
+                currentLoadingRoute.path = withTrailingSlash(redirectedTo);
+                currentLoadingRoute.cacheKey = reqKey;
+                navigateValue.navigate(redirectedTo, {
+                  replace: true,
+                  async: true,
+                  readableStream: res,
+                });
+              }
+              return decode(res);
+            }
+          });
+        }
+        return router.load(req).then((ctx) => {
+          if (ctx instanceof Response && isRedirectResponse(ctx)) {
+            cache.delete(reqKey);
+            return ctx;
+          }
+          return ctx.data;
+        });
+      };
 
-    currentLoadingRoute.cacheKey = reqKey;
-    if (!ssr)
-      currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
-    // }
-    return routeInfo.tree;
-  }, []);
+      currentLoadingRoute.loader = ssr
+        ? cache.get(reqKey)
+        : cache.set(reqKey, loaderFn(readableStream));
+
+      currentLoadingRoute.cacheKey = reqKey;
+      if (!ssr)
+        currentLoadingRoute.path = withTrailingSlash(routeInfo.route.getPath());
+      // }
+      return routeInfo.tree;
+    },
+    [navigateValue]
+  );
 
   const [tree, setTree] = useState<Route<any, any, any, readonly any[]>[]>(() =>
     findTree(url)
   );
 
-  const navigateValue = useMemo((): NavigateContext => {
-    return {
-      url,
-      navigate: async (url, { replace = false, async }) => {
-        let tree;
-        if (async) {
-          tree = findTree(url);
-          await currentLoadingRoute.loader;
-        }
-        if (replace) window.history.replaceState({ __zro_tree: tree }, "", url);
-        else window.history.pushState({ __zro_tree: tree }, "", url);
-      },
-    } as NavigateContext;
-  }, [url]);
-
   useLayoutEffect(() => {
     window.history.pushState = new Proxy(window.history.pushState, {
       apply: (target, thisArg, argArray) => {
-        startTransition(async () => {
+        startTransition(() => {
           const _zroTree = argArray[0]?.__zro_tree;
           let tree;
           if (_zroTree) {
@@ -451,10 +467,13 @@ export const useLoaderData = <R extends Route<any, any>>(): RouteData<R> => {
 
 export const useRevalidate = () => {
   const { navigate } = useNavigate();
-  const revalidate = useCallback(async () => {
-    const url = new URL(window.location.href);
-    return navigate(url.href, { replace: true, async: true });
-  }, [navigate]);
+  const revalidate = useCallback(
+    async (readableStream?: ReadableStream) => {
+      const url = new URL(window.location.href);
+      return navigate(url.href, { replace: true, async: true, readableStream });
+    },
+    [navigate]
+  );
   return { revalidate };
 };
 
@@ -512,11 +531,11 @@ export const useAction = <
         body: formData,
         headers: {
           "X-ZRO-Action": String(action),
+          accept: "text/x-script",
         },
       })
         .then((res) => {
           if (!res.ok) throw res;
-          if (res.redirected) navigate(res.url, { replace: true });
           return res;
         })
         .then(async (res) => {
@@ -524,15 +543,20 @@ export const useAction = <
           if (contentType?.includes("application/json")) {
             const json = await res.json();
             return [
+              res,
               json,
               () => {
                 setData(json);
                 setErrors({});
               },
             ];
-          } else if (contentType?.includes("text/")) {
+          } else if (
+            contentType?.includes("text/") &&
+            !contentType?.includes("text/x-script")
+          ) {
             const text = await res.text();
             return [
+              res,
               text,
               () => {
                 setData(text as any);
@@ -540,6 +564,7 @@ export const useAction = <
               },
             ];
           }
+          return [res, undefined, () => {}, "success"];
         })
         .catch(async (res) => {
           if (res instanceof Response) {
@@ -548,6 +573,7 @@ export const useAction = <
               const json = await res.json();
               const errorObj = parseServerError(json);
               return [
+                res,
                 errorObj,
                 () => {
                   setErrors(errorObj);
@@ -559,6 +585,7 @@ export const useAction = <
                 message: "Invalid response from server",
               });
               return [
+                res,
                 errorObj,
                 () => {
                   setErrors(errorObj);
@@ -580,10 +607,34 @@ export const useAction = <
             ];
           }
         })
-        .then(([returnData, callback, type = "success"]: any) => {
-          revalidate().then(() => {
-            return startTransition(callback);
-          });
+        .then(([response, returnData, callback, type = "success"]: any) => {
+          let redirectedTo = undefined;
+          if (response instanceof Response) {
+            if (response.redirected) {
+              redirectedTo = response.url;
+            }
+          }
+          if (
+            redirectedTo &&
+            (response as Response).headers
+              .get("content-type")
+              ?.includes("text/x-script")
+          ) {
+            navigate(redirectedTo, {
+              replace: true,
+              async: true,
+              readableStream: (response as Response).body?.pipeThrough(
+                new TextDecoderStream()
+              ),
+            }).then(() => {
+              return startTransition(callback);
+            });
+          } else {
+            revalidate().then(() => {
+              return startTransition(callback);
+            });
+          }
+
           if (type === "error") throw returnData;
           return returnData;
         });

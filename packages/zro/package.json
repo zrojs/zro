@@ -46,7 +46,8 @@
   },
   "scripts": {
     "dev": "unbuild --watch",
-    "build": "unbuild",
+    "build": "pnpm run clean && unbuild",
+    "clean": "del dist",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "prepublishOnly": "pnpm build && pnpx changelogen --release --push"
@@ -89,6 +90,7 @@
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "@unhead/react": "^2.0.5",
+    "del-cli": "^6.0.0",
     "es-toolkit": "^1.35.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
