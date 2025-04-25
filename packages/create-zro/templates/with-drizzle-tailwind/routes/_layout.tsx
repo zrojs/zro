@@ -1,19 +1,15 @@
-import launchEditor from "launch-editor";
-import { Outlet, useAction, useHead } from "zro/react";
-import { Action } from "zro/router";
+import { Outlet, useHead, useLoaderData } from "zro/react";
 import styles from "./styles.css?url";
 
-export const actions = {
-  launchEditor: new Action({
-    async handler() {
-      await launchEditor(import.meta.url, "code");
-      return { ok: true };
-    },
-  }),
+type Route = Routes["/_layout"];
+
+export const loader = () => {
+  return { filePath: new URL(import.meta.url).pathname };
 };
 
 export default function MainLayout() {
-  const launchEditorAction = useAction("/_layout", "launchEditor");
+  const { filePath } = useLoaderData<Route>();
+  const openFileEditor = () => fetch(`/__open-in-editor?file=${filePath}`);
   useHead({
     link: [
       {
@@ -39,35 +35,37 @@ export default function MainLayout() {
             Your journey to building amazing applications starts here
           </p>
           <Outlet />
-          <form {...launchEditorAction.formProps} className="contents">
-            <button className="cursor-pointer hover:bg-gray-100 transition max-w-md mx-auto text-md bg-gray-50 border border-gray-200 rounded-xl p-6 mb-12 text-left">
-              <span className="flex items-center justify-center space-x-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-6 h-6 text-black mt-1 flex-shrink-0"
-                >
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
-                <span className="flex gap-4 w-full items-center">
-                  <span className="text-black font-medium">
-                    Get started by editing
-                  </span>
-                  <code className="rounded-md text-black font-mono">
-                    ./routes/index.tsx
-                  </code>
+
+          <button
+            onClick={openFileEditor}
+            className="cursor-pointer hover:bg-gray-100 transition max-w-md mx-auto text-md bg-gray-50 border border-gray-200 rounded-xl p-6 mb-12 text-left"
+          >
+            <span className="flex items-center justify-center space-x-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-6 h-6 text-black mt-1 flex-shrink-0"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+              <span className="flex gap-4 w-full items-center">
+                <span className="text-black font-medium">
+                  Get started by editing
                 </span>
+                <code className="rounded-md text-black font-mono">
+                  ./routes/index.tsx
+                </code>
               </span>
-            </button>
-          </form>
+            </span>
+          </button>
         </div>
       </div>
     </div>

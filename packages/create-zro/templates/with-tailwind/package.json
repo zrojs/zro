@@ -7,7 +7,6 @@
     "prepare": "zro prepare"
   },
   "dependencies": {
-    "launch-editor": "^2.10.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "zro": "latest"

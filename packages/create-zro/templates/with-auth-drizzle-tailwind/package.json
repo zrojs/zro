@@ -10,9 +10,6 @@
   },
   "dependencies": {
     "@libsql/client": "^0.15.4",
-    "@zro/auth": "^0.0.6",
-    "@zro/db": "^0.0.3",
-    "@zro/logger": "^0.0.5",
     "drizzle-orm": "^0.42.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
