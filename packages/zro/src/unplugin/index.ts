@@ -47,6 +47,7 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                   "react",
                   "react/jsx-runtime",
                   "react/jsx-dev-runtime",
+                  "react-dom",
                   "react-dom/client",
                   "zro/router",
                 ],
