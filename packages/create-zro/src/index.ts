@@ -139,6 +139,36 @@ const availableTemplates = fs.readdirSync(templatesDir).reverse();
     }
   }
 
+  // Ask for git initialization
+  const initGit = await confirm({
+    message: "Initialize git?",
+    active: "Yes",
+    inactive: "No",
+    initialValue: true,
+  });
+
+  if (isCancel(initGit)) {
+    outro("Operation cancelled.");
+    process.exit(0);
+  }
+
+  if (initGit) {
+    const initGitSpinner = spinner();
+    initGitSpinner.start("Initializing git repository...");
+    try {
+      const { exec } = await import("node:child_process");
+      exec("git init", { cwd: projectPath }, (error) => {
+        if (error) {
+          initGitSpinner.stop("Failed to initialize git repository.");
+        } else {
+          initGitSpinner.stop("Git repository initialized successfully.");
+        }
+      });
+    } catch (error) {
+      initGitSpinner.stop("Failed to initialize git repository.");
+    }
+  }
+
   outro(
     `Next steps:\n   ${chalk.dim("$")} ${chalk.bold(
       `cd ${projectName}`
