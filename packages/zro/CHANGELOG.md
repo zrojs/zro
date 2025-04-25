@@ -1,6 +1,39 @@
 # Changelog
 
 
+## v0.0.50
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.49...v0.0.50)
+
+### 🚀 Enhancements
+
+- **create-zro:** With-auth-drizzle template added ([1efc154](https://github.com/zrojs/zro/commit/1efc154))
+- Rename auth template to `with-auth-drizzle-tailwind` ([42f7520](https://github.com/zrojs/zro/commit/42f7520))
+- Add option to initialize git repository during project setup ([1333a18](https://github.com/zrojs/zro/commit/1333a18))
+
+### 🩹 Fixes
+
+- **auth:** Improve guest middleware token handling and session clearing ([8190ef3](https://github.com/zrojs/zro/commit/8190ef3))
+- Reverse available templates order for improved selection ([74f7e3d](https://github.com/zrojs/zro/commit/74f7e3d))
+- Correct _gitignore file for with-auth-drizzle-tailwind template ([c6f6fc2](https://github.com/zrojs/zro/commit/c6f6fc2))
+- Remove redundant error logging in importPlugin function ([db4ff68](https://github.com/zrojs/zro/commit/db4ff68))
+
+### 💅 Refactors
+
+- Remove launch-editor dependency and simplify file editing functionality ([701c8a8](https://github.com/zrojs/zro/commit/701c8a8))
+
+### 🏡 Chore
+
+- **release:** V0.0.6 ([9398c76](https://github.com/zrojs/zro/commit/9398c76))
+- **release:** V0.0.10 ([5cf067d](https://github.com/zrojs/zro/commit/5cf067d))
+- **release:** V0.0.11 ([c90af9c](https://github.com/zrojs/zro/commit/c90af9c))
+- **release:** V0.0.12 ([e838f70](https://github.com/zrojs/zro/commit/e838f70))
+- **release:** V0.0.13 ([e3b4384](https://github.com/zrojs/zro/commit/e3b4384))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.49
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.48...v0.0.49)
