@@ -1,6 +1,28 @@
 # Changelog
 
 
+## v0.0.48
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.47...v0.0.48)
+
+### 🩹 Fixes
+
+- **auth:** Auth type generation using tsup to support providers ([72e521f](https://github.com/zrojs/zro/commit/72e521f))
+- **auth:** Clear session on invalid token during authentication ([b9a0633](https://github.com/zrojs/zro/commit/b9a0633))
+- **auth:** Update AuthConfig types to enforce string literal paths ([b97d63f](https://github.com/zrojs/zro/commit/b97d63f))
+- **dev-server:** Add error handling to H3 instance in bootstrapDevServer ([89bb209](https://github.com/zrojs/zro/commit/89bb209))
+- **deps:** Update h3 dependency to latest nightly version ([68794ac](https://github.com/zrojs/zro/commit/68794ac))
+
+### 🏡 Chore
+
+- **release:** V0.0.3 ([62275c8](https://github.com/zrojs/zro/commit/62275c8))
+- **release:** V0.0.4 ([ffc52f5](https://github.com/zrojs/zro/commit/ffc52f5))
+- **release:** V0.0.5 ([2fcc48e](https://github.com/zrojs/zro/commit/2fcc48e))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.47
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.46...v0.0.47)
