@@ -14,6 +14,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { flushSync } from "react-dom";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { decode, encode } from "turbo-stream";
 import { withQuery, withTrailingSlash } from "ufo";
@@ -494,16 +495,18 @@ export const useAction = <
   type TAction = Actions[TRouteId][TActionKey];
   const globalActionData = useGlobalActionData();
 
-  const [data, setData] = useState<InferActionReturnType<TAction>>(() => {
-    if (
-      globalActionData &&
-      !globalActionData.error &&
-      globalActionData.data.get(routePath)
-    ) {
-      return globalActionData.data.get(routePath);
+  const [data, setData] = useState<InferActionReturnType<TAction> | undefined>(
+    () => {
+      if (
+        globalActionData &&
+        !globalActionData.error &&
+        globalActionData.data.get(routePath)
+      ) {
+        return globalActionData.data.get(routePath);
+      }
+      return undefined;
     }
-    return {};
-  });
+  );
 
   type TActionErrors = Partial<
     Record<AlsoAllowString<"root" | keyof InferActionSchema<TAction>>, string>
@@ -526,6 +529,10 @@ export const useAction = <
   const { revalidate } = useRevalidate();
   const sendReq = useCallback(
     (formData: FormData) => {
+      flushSync(() => {
+        setData(undefined);
+        setErrors({});
+      });
       fetch(url, {
         method: "POST",
         body: formData,
