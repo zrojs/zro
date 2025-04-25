@@ -1,3 +1,31 @@
 {
-  "name": "zro-with-auth-drizzle"
+  "name": "zro-with-auth-drizzle",
+  "type": "module",
+  "scripts": {
+    "dev": "zro dev",
+    "build": "zro build",
+    "prepare": "zro prepare && pnpm run db:migrate",
+    "db:migrate": "drizzle-kit generate && drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.4",
+    "@zro/auth": "^0.0.6",
+    "@zro/db": "^0.0.3",
+    "@zro/logger": "^0.0.5",
+    "drizzle-orm": "^0.42.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "^3.24.3",
+    "zro": "^0.0.49"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.3",
+    "@types/react": "^19.1.1",
+    "@types/react-dom": "^19.1.2",
+    "drizzle-kit": "^0.31.0",
+    "tailwindcss": "^4.1.3",
+    "vite": "^6.2.6"
+  },
+  "packageManager": "pnpm@10.8.1"
 }
