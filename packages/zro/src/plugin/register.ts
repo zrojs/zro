@@ -58,8 +58,6 @@ const importPlugin = async (
     try {
       return requireFromUser(plugin); // fallback for CJS/dev-monorepo
     } catch (err2) {
-      console.error(err);
-      console.error(err2);
       if (tryInstall) {
         await addDependency(plugin, {
           cwd: process.cwd(),
