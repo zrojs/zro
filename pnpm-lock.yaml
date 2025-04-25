@@ -51,8 +51,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       h3:
-        specifier: npm:h3-nightly@2.0.0-20250423-223431-7586c5b
-        version: h3-nightly@2.0.0-20250423-223431-7586c5b
+        specifier: npm:h3-nightly@2.0.0-20250425-083926-e01c999
+        version: h3-nightly@2.0.0-20250425-083926-e01c999
       jiti:
         specifier: ^2.4.2
         version: 2.4.2
@@ -2374,8 +2374,8 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  h3-nightly@2.0.0-20250423-223431-7586c5b:
-    resolution: {integrity: sha512-WnVVtHrStZXCvdtjc9xLZzlZI13ImZZ+Kf0fkfL/mZCsaZTc+uuqPDna+zW2qjGdICd3RmOTO1DRT3qtcj2ENQ==}
+  h3-nightly@2.0.0-20250425-083926-e01c999:
+    resolution: {integrity: sha512-1J+GWw5nbHKRVrf/MOHDg+arvyQUqwopwCmr6XM3HLVWbhPzNE6rb+eBp2K+wVdjeqBbk7E5B8Lgpp1SsESlSQ==}
     engines: {node: '>=20.11.1'}
     peerDependencies:
       crossws: ^0.2.4
@@ -5354,7 +5354,7 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  h3-nightly@2.0.0-20250423-223431-7586c5b:
+  h3-nightly@2.0.0-20250425-083926-e01c999:
     dependencies:
       cookie-es: 2.0.0
       rou3: 0.6.1
