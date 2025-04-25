@@ -16,10 +16,9 @@ import { fileURLToPath } from "node:url";
 import { installDependencies, PackageManagerName } from "nypm";
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const templatesDir = path.resolve(__filename, "../..", `templates`);
-const availableTemplates = fs.readdirSync(templatesDir);
+const availableTemplates = fs.readdirSync(templatesDir).reverse();
 
 (async () => {
   intro(`Create a new ${chalk.gray.bold("[Z۰RO]")} project`);
