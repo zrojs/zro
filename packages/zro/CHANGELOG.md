@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.52
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.51...v0.0.52)
+
+### 🩹 Fixes
+
+- **unplugin:** Include "react-dom" in optimizeDeps ([086bf30](https://github.com/zrojs/zro/commit/086bf30))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.51
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.50...v0.0.51)
