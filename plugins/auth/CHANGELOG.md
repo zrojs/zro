@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.6
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.49...v0.0.6)
+
+### 🩹 Fixes
+
+- **auth:** Improve guest middleware token handling and session clearing ([8190ef3](https://github.com/zrojs/zro/commit/8190ef3))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.5
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.47...v0.0.5)
