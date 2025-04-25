@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.49
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.48...v0.0.49)
+
+### 🩹 Fixes
+
+- **templates:** Update zro dependency to `latest` ([b50e558](https://github.com/zrojs/zro/commit/b50e558))
+- **deps:** Update h3-nightly dependency to latest version ([ce05a4b](https://github.com/zrojs/zro/commit/ce05a4b))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.48
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.47...v0.0.48)
