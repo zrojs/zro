@@ -51,7 +51,7 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       h3:
-        specifier: npm:h3-nightly@2x
+        specifier: npm:h3-nightly@2.0.0-20250423-223431-7586c5b
         version: h3-nightly@2.0.0-20250423-223431-7586c5b
       jiti:
         specifier: ^2.4.2
