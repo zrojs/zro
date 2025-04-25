@@ -74,7 +74,13 @@ export const guest = (onAuthenticatedRedirect: string) =>
     const config = (globalThis as any).__auth as AuthConfig;
     const session = await getSession(config.session);
     const token = session.data.token;
-    if (token) redirect(onAuthenticatedRedirect);
+    if (token) {
+      const user = await config.verifyToken(token);
+      if (user) {
+        redirect(onAuthenticatedRedirect);
+      }
+      await session.clear();
+    }
     return next();
   });
 
