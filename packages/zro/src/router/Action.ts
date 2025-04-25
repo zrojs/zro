@@ -18,7 +18,7 @@ export class Action<TSchema extends StandardSchemaV1, ReturnType> {
       input?: TSchema;
       handler: (
         input: StandardSchemaV1.InferInput<TSchema>
-      ) => Promise<ReturnType>;
+      ) => Promise<ReturnType> | ReturnType;
     }
   ) {}
 
