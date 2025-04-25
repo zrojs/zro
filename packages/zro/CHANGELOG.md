@@ -1,6 +1,24 @@
 # Changelog
 
 
+## v0.0.51
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.50...v0.0.51)
+
+### 🩹 Fixes
+
+- Remove packageManager field from package.json in templates ([4d22768](https://github.com/zrojs/zro/commit/4d22768))
+- **react:** Improve state initialization and reset in useAction hook ([00d4d9d](https://github.com/zrojs/zro/commit/00d4d9d))
+- **router:** Allow handler to return either a Promise or a direct value ([3a4eca0](https://github.com/zrojs/zro/commit/3a4eca0))
+
+### 🏡 Chore
+
+- **release:** V0.0.14 ([d6884a5](https://github.com/zrojs/zro/commit/d6884a5))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.50
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.49...v0.0.50)
