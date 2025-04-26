@@ -1,6 +1,6 @@
 import { guest } from "@zro/auth";
+import { useGithubButtonState } from "@zro/auth/providers/github/react";
 import { useAction } from "zro/react";
-
 export const middlewares = [guest("/dashboard")];
 
 export default function LoginPage() {
@@ -26,9 +26,21 @@ export default function LoginPage() {
       <button className="bg-gray-700 px-2 py-1 rounded-md text-white">
         login
       </button>
-      <a href="/auth/github">
-        <button type="button">Login with github</button>
-      </a>
+      <GithubButton />
     </form>
   );
 }
+
+const GithubButton = () => {
+  const { isPending, errors } = useGithubButtonState();
+
+  return (
+    <a href="/auth/github">
+      {isPending && "Logging in with github..."}
+      {errors.root && <span className="text-red-500">{errors.root}</span>}
+      {!errors.root && !isPending && (
+        <button type="button">Login with github</button>
+      )}
+    </a>
+  );
+};

@@ -3,6 +3,8 @@ import { Action } from "zro/router";
 
 type Route = Routes["/"];
 
+export const middlewares = [] as const;
+
 export const actions = {
   dummyAction: new Action({
     async handler() {

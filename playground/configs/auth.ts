@@ -14,7 +14,7 @@ declare module "@zro/auth" {
 
 export default defineConfig({
   authPrefix: "/auth",
-  loginPage: "/login",
+  loginPage: "/login/",
   session: {
     password: process.env.AUTH_SESSION_KEY!,
   },
