@@ -8,6 +8,7 @@ export default defineConfig({
     "post-install.ts",
     "providers/**/*.ts",
   ],
+  external: ["react", "react-dom", "zro"],
   outDir: "dist",
   format: ["esm"],
   dts: true,

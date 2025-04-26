@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Auth integration for ZRO",
   "scripts": {
-    "dev": "unbuild --watch",
+    "dev": "unbuild --watch & tsup --dts-only --watch",
     "build": "unbuild & tsup --dts-only",
     "prepublishOnly": "pnpm build && pnpx changelogen --release --no-tag --push"
   },
@@ -16,6 +16,10 @@
     "./providers/*": {
       "types": "./dist/providers/*/index.d.ts",
       "default": "./dist/providers/*/index.mjs"
+    },
+    "./providers/github/react": {
+      "types": "./dist/providers/github/react.d.ts",
+      "default": "./dist/providers/github/react.mjs"
     }
   },
   "keywords": [],
@@ -27,12 +31,16 @@
     "unbuild": "^3.5.0"
   },
   "peerDependencies": {
-    "zro": "workspace:^*"
+    "zro": "workspace:^*",
+    "react": ">=19",
+    "react-dom": ">=19"
   },
   "dependencies": {
     "defu": "^6.1.4",
     "tinyglobby": "^0.2.12",
-    "zod": "^3.24.2"
+    "zod": "4.0.0-beta.20250424T163858",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2"
   },
   "publishConfig": {
     "access": "public"

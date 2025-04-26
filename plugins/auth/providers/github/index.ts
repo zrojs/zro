@@ -74,9 +74,15 @@ export class GithubProvider extends AuthProvider<GithubAuthenticateUser> {
       config.authPrefix + "/github",
       plugin.configFileName
     );
+    const loginRoute = tree.getRoute(config.loginPage);
+    if (!loginRoute)
+      throw new Error(
+        `[Github Provider] login page "${config.loginPage}" not exists!`
+      );
+
     await tree.addRootRoute(
-      __dirname + "/github-callback-action.mjs",
-      config.authPrefix + "/github/callback",
+      __dirname + "/github-verify.mjs",
+      config.authPrefix + "/github/verify",
       plugin.configFileName
     );
   }

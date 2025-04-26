@@ -13,15 +13,16 @@ export const loader = () => {
   if (!providerConfig) throw new Error("Unable to find the password provider");
   const appProps = (providerConfig as unknown as GithubProvider).appOptions;
 
-  const origin = new URL(request.url).origin;
-  const callbackUrl = new URL(
-    `${config.authPrefix}/github/callback`,
-    origin
-  ).toString();
+  const redirectUri = request.headers.get("referer");
+  if (!redirectUri) {
+    throw new Error("Unable to find the redirect uri");
+  }
 
   redirect(
     `https://github.com/login/oauth/authorize?client_id=${
       appProps.clientId
-    }&redirect_uri=${callbackUrl}&scope=${(appProps.scopes || []).join(" ")}`
+    }&redirect_uri=${redirectUri}&scope=${(appProps.scopes || []).join(
+      " "
+    )}&state=github-auth&allow_signup=true`
   );
 };
