@@ -17,7 +17,12 @@ import {
 import { flushSync } from "react-dom";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { decode, encode } from "turbo-stream";
-import { withQuery, withTrailingSlash } from "ufo";
+import {
+  parseURL,
+  stringifyParsedURL,
+  withQuery,
+  withTrailingSlash,
+} from "ufo";
 import type { ResolvableHead, Unhead } from "unhead/types";
 import type {
   Actions,
@@ -54,7 +59,7 @@ const getRouterCacheKey = (url: string) =>
 
 type NavigateFn = (
   url: string,
-  options: {
+  options?: {
     replace?: boolean;
     async?: boolean;
     readableStream?: ReadableStream;
@@ -116,7 +121,17 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
   const navigateValue = useMemo((): NavigateContext => {
     return {
       url,
-      navigate: async (url, { replace = false, async, readableStream }) => {
+      navigate: async (
+        url,
+        { replace = false, async, readableStream } = {}
+      ) => {
+        const parsedUrl = parseURL(url);
+        if (!parsedUrl.host) {
+          parsedUrl.host = initialUrl?.host || window.location.host;
+          parsedUrl.protocol = initialUrl?.protocol || window.location.protocol;
+          url = stringifyParsedURL(parsedUrl);
+        }
+
         let __zro_tree;
         if (async) {
           __zro_tree = findTree(url, readableStream);
@@ -178,8 +193,7 @@ const ClientRouter: FC<RouterProps & { cache: Cache }> = ({
                   async: true,
                   readableStream: res,
                 });
-              }
-              return decode(res);
+              } else return decode(res);
             }
           });
         }
@@ -428,13 +442,14 @@ const RenderRouteComponent: FC = () => {
 };
 
 export const Link: FC<HTMLProps<HTMLAnchorElement>> = (props) => {
+  const { navigate } = useNavigate();
   const onClick = async (
     e: MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>
   ) => {
     props.onClick && (await props.onClick(e));
-    if (!e.defaultPrevented) {
+    if (!e.defaultPrevented && props.href) {
       e.preventDefault();
-      window.history.pushState({}, "", props.href);
+      navigate(props.href);
     }
   };
   return <a {...props} onClick={onClick} />;
@@ -494,7 +509,6 @@ export const useAction = <
 ) => {
   type TAction = Actions[TRouteId][TActionKey];
   const globalActionData = useGlobalActionData();
-
   const [data, setData] = useState<InferActionReturnType<TAction> | undefined>(
     () => {
       if (
@@ -507,11 +521,9 @@ export const useAction = <
       return undefined;
     }
   );
-
   type TActionErrors = Partial<
     Record<AlsoAllowString<"root" | keyof InferActionSchema<TAction>>, string>
   >;
-
   const [errors, setErrors] = useState<TActionErrors>(() => {
     if (
       globalActionData &&
@@ -521,17 +533,21 @@ export const useAction = <
       return parseServerError(globalActionData.data.get(routePath));
     return {};
   });
+  const [isPending, setIsPending] = useState(false);
   const { navigate } = useNavigate();
   const url = useMemo(
     () => withQuery(routePath, { action: String(action) }),
     [routePath, action]
   );
   const { revalidate } = useRevalidate();
-  const sendReq = useCallback(
+  const submit = useCallback(
     (formData: FormData) => {
-      flushSync(() => {
-        setData(undefined);
-        setErrors({});
+      queueMicrotask(() => {
+        flushSync(() => {
+          setIsPending(true);
+          setData(undefined);
+          setErrors({});
+        });
       });
       fetch(url, {
         method: "POST",
@@ -644,6 +660,9 @@ export const useAction = <
 
           if (type === "error") throw returnData;
           return returnData;
+        })
+        .finally(() => {
+          setIsPending(false);
         });
     },
     [url]
@@ -652,9 +671,9 @@ export const useAction = <
   const onSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      return sendReq(new FormData(e.target as HTMLFormElement));
+      return submit(new FormData(e.target as HTMLFormElement));
     },
-    [sendReq]
+    [submit]
   );
 
   const formProps = useMemo(() => {
@@ -669,5 +688,7 @@ export const useAction = <
     formProps,
     data,
     errors,
+    submit,
+    isPending,
   };
 };
