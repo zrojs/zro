@@ -1,6 +1,6 @@
+import { mergeWith } from "es-toolkit/compat";
 import { getQuery } from "ufo";
 import { withAsyncContext } from "unctx";
-import { merge } from "../utils/tools";
 import { abort } from "./abort";
 import { Action } from "./Action";
 import { Middleware } from "./Middleware";
@@ -65,8 +65,10 @@ export class Route<
     private path: RouteId,
     _options: Partial<LoaderOptions<LoaderData, ParentLoaderData, TMiddlewares>>
   ) {
-    if (!_options.middlewares)
-      _options.middlewares = [] as unknown as TMiddlewares;
+    _options.middlewares = (_options.middlewares
+      ? [..._options.middlewares]
+      : []) as unknown as TMiddlewares;
+
     if (!_options.actions) _options.actions = {};
 
     this.options = _options as LoaderOptions<
@@ -173,7 +175,13 @@ export class Route<
             try {
               loaderData = await this.options.loader();
               if (loaderData) {
-                loadedData = merge(loaderData, loadedData);
+                loadedData = mergeWith(
+                  loaderData,
+                  loadedData,
+                  (targetValue) => {
+                    if (targetValue instanceof Promise) return targetValue;
+                  }
+                );
               }
             } catch (e) {
               loadedData = e;
@@ -188,9 +196,16 @@ export class Route<
             return await middlewares[index].run({
               next: async (newData) => {
                 if (newData) {
-                  loadedData = merge(newData, loadedData);
+                  loadedData = mergeWith(newData, loadedData, (targetValue) => {
+                    if (targetValue instanceof Promise) return targetValue;
+                  });
                 }
-                return runMiddlewares(index + 1, merge(data, newData || {}));
+                return runMiddlewares(
+                  index + 1,
+                  mergeWith(data, newData || {}, (targetValue) => {
+                    if (targetValue instanceof Promise) return targetValue;
+                  })
+                );
               },
             });
           }, true)
