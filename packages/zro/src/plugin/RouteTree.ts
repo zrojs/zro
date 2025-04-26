@@ -21,7 +21,7 @@ export class RouteTree {
           moduleInfo,
           children ? traverse(children, path) : undefined
         );
-        addRoute(this.tree, "", filePath, route);
+        addRoute(this.tree, "", path, route);
         routes.push(route);
       }
       return routes;
@@ -31,7 +31,7 @@ export class RouteTree {
   }
   public findRootRoutes() {
     const rootRoutesKeys = Object.keys(this._tree);
-    return rootRoutesKeys.map((key) => this.getRoute(key));
+    return rootRoutesKeys.map((key) => this.getRoute(this._tree[key]!.path));
   }
   public getRoute(id: string) {
     return findRoute(this.tree, "", id)?.data;
@@ -57,7 +57,7 @@ export class RouteTree {
       [],
       configFileName
     );
-    addRoute(this.tree, "", filePath, route);
+    addRoute(this.tree, "", path, route);
     this._tree[filePath] = {
       children: {},
       filePath,
