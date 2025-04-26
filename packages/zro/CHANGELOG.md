@@ -1,6 +1,28 @@
 # Changelog
 
 
+## v0.0.53
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.52...v0.0.53)
+
+### 🚀 Enhancements
+
+- **auth:** Github oauth flow improved and integrated with react ([0981fd7](https://github.com/zrojs/zro/commit/0981fd7))
+- **react:** Improve useAction states ([a4661bb](https://github.com/zrojs/zro/commit/a4661bb))
+
+### 🩹 Fixes
+
+- **router:** Middlewares duplication and promise merging ([2f1f851](https://github.com/zrojs/zro/commit/2f1f851))
+- **plugins:** Find route with route instead of file path ([a948077](https://github.com/zrojs/zro/commit/a948077))
+
+### 💅 Refactors
+
+- **playground:** Github auth flow updated ([7e426f2](https://github.com/zrojs/zro/commit/7e426f2))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.52
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.51...v0.0.52)
