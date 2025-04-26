@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.54
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.53...v0.0.54)
+
+### 💅 Refactors
+
+- **useAction:** Replace flushSync with startTransition for better performance ([d0bbd8e](https://github.com/zrojs/zro/commit/d0bbd8e))
+
+### 🏡 Chore
+
+- **release:** V0.0.7 ([80c2deb](https://github.com/zrojs/zro/commit/80c2deb))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.53
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.52...v0.0.53)
