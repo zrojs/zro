@@ -14,7 +14,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { flushSync } from "react-dom";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { decode, encode } from "turbo-stream";
 import {
@@ -542,12 +541,10 @@ export const useAction = <
   const { revalidate } = useRevalidate();
   const submit = useCallback(
     (formData: FormData) => {
-      queueMicrotask(() => {
-        flushSync(() => {
-          setIsPending(true);
-          setData(undefined);
-          setErrors({});
-        });
+      startTransition(() => {
+        setIsPending(true);
+        setData(undefined);
+        setErrors({});
       });
       fetch(url, {
         method: "POST",
@@ -662,7 +659,9 @@ export const useAction = <
           return returnData;
         })
         .finally(() => {
-          setIsPending(false);
+          startTransition(() => {
+            setIsPending(false);
+          });
         });
     },
     [url]
