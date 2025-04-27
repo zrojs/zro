@@ -32,6 +32,10 @@ const plugin: Plugin<AuthConfig> = {
       this.configFileName
     );
     const config = getConfig<AuthConfig>();
+    tree.addRootRoute(
+      __dirname + "/routes/logout.mjs",
+      config.authPrefix + "/logout"
+    );
     for (const provider of config.providers) {
       await provider.registerRotes(tree, config);
     }

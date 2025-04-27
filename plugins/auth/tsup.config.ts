@@ -7,6 +7,7 @@ export default defineConfig({
     "auth-provider.ts",
     "post-install.ts",
     "providers/**/*.ts",
+    "routes/**/*.ts",
   ],
   external: ["react", "react-dom", "zro"],
   outDir: "dist",

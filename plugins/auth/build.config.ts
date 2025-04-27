@@ -19,6 +19,12 @@ export default defineBuildConfig({
     },
     {
       builder: "mkdist",
+      input: "./routes",
+      outDir: "./dist/routes",
+      declaration: false,
+    },
+    {
+      builder: "mkdist",
       input: "./providers",
       outDir: "./dist/providers",
       declaration: false,
