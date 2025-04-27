@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.8
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.54...v0.0.8)
+
+### 🚀 Enhancements
+
+- **auth:** Add logout route by default ([aac5e54](https://github.com/zrojs/zro/commit/aac5e54))
+
+### 💅 Refactors
+
+- **playground:** Integrate playground with logout route added by auth plugin ([d240dd8](https://github.com/zrojs/zro/commit/d240dd8))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.7
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.53...v0.0.7)
