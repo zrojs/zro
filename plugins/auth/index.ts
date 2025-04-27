@@ -67,7 +67,7 @@ export const auth = <TUser = User>() =>
       await session.clear();
       redirect(config.loginPage);
     }
-
+    (globalThis as any).__user = user;
     return next({
       user,
     });
