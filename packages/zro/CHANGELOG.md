@@ -1,6 +1,34 @@
 # Changelog
 
 
+## v0.0.55
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.54...v0.0.55)
+
+### 🚀 Enhancements
+
+- **auth:** Add logout route by default ([aac5e54](https://github.com/zrojs/zro/commit/aac5e54))
+- **zro:** Basic `cloudflare worker` build compability ([414954a](https://github.com/zrojs/zro/commit/414954a))
+- **playground:** Leverage pages function to start ([24c5a56](https://github.com/zrojs/zro/commit/24c5a56))
+
+### 🩹 Fixes
+
+- **auth:** Ensure user is set in global context after authentication ([b27a121](https://github.com/zrojs/zro/commit/b27a121))
+
+### 💅 Refactors
+
+- **playground:** Integrate playground with logout route added by auth plugin ([d240dd8](https://github.com/zrojs/zro/commit/d240dd8))
+- **zro:** Decouple load env from build output ([4ed20bd](https://github.com/zrojs/zro/commit/4ed20bd))
+
+### 🏡 Chore
+
+- **release:** V0.0.8 ([8ca938c](https://github.com/zrojs/zro/commit/8ca938c))
+- **release:** V0.0.9 ([2983b7a](https://github.com/zrojs/zro/commit/2983b7a))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.54
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.53...v0.0.54)
