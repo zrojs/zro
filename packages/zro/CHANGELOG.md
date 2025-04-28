@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.58
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.57...v0.0.58)
+
+### 🩹 Fixes
+
+- **cli:** Resolve package.json path using dirname as esm ([d90daa4](https://github.com/zrojs/zro/commit/d90daa4))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.57
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.56...v0.0.57)
