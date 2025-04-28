@@ -40,8 +40,16 @@
       "import": "./dist/router/server/index.mjs"
     },
     "./server": {
-      "types": "./dist/server.d.ts",
-      "import": "./dist/server.mjs"
+      "types": "./dist/server/node.d.ts",
+      "import": "./dist/server/node.mjs"
+    },
+    "./server.node": {
+      "types": "./dist/server/node.d.ts",
+      "import": "./dist/server/node.mjs"
+    },
+    "./server.edge": {
+      "types": "./dist/server/edge.d.ts",
+      "import": "./dist/server/edge.mjs"
     }
   },
   "scripts": {
@@ -60,12 +68,12 @@
   "dependencies": {
     "@babel/core": "^7.26.10",
     "@babel/types": "^7.27.0",
+    "@cloudflare/vite-plugin": "^1.0.12",
     "@standard-schema/spec": "^1.0.0",
     "citty": "^0.1.6",
     "consola": "^3.4.0",
     "defu": "^6.1.4",
-    "dotenv": "^16.5.0",
-    "es-module-lexer": "^1.6.0",
+    "es-module-lexer": "^1.7.0",
     "h3": "npm:h3-nightly@2.0.0-20250425-083926-e01c999",
     "jiti": "^2.4.2",
     "knitwork": "^1.2.0",
@@ -86,11 +94,14 @@
     "youch": "4.1.0-beta.7"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.27.0",
     "@types/babel__core": "^7.20.5",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "@unhead/react": "^2.0.5",
     "del-cli": "^6.0.0",
+    "dotenv": "^16.5.0",
     "es-toolkit": "^1.35.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

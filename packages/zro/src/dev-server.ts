@@ -10,24 +10,19 @@ import { listen, Listener } from "listhen";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { createContext } from "unctx";
 import { extractUnheadInputFromHtml } from "unhead/server";
-import { createServer, ViteDevServer } from "vite";
+import { createServer } from "vite";
 import loadingSpinner from "yocto-spinner";
 import { Youch } from "youch";
 import { Router as ZroRouter } from "./router/Router";
-import { handleRequest } from "./server";
+import { handleRequest } from "./server/node";
 import { upperFirst } from "./utils/tools";
+import { viteContext } from "./vite-context";
 
 const serverContext = createContext<H3>({
   asyncContext: true,
   AsyncLocalStorage,
 });
 export const useServer = serverContext.use;
-
-export const viteContext = createContext<ViteDevServer>({
-  asyncContext: true,
-  AsyncLocalStorage,
-});
-export const useVite = viteContext.use;
 
 const startingServerSpinner = loadingSpinner({
   text: colors.dim(`Starting server...`),

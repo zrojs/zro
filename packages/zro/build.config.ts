@@ -44,7 +44,12 @@ export default defineBuildConfig({
     },
     {
       builder: "rollup",
-      input: "./src/server",
+      input: "./src/server/node",
+      outDir: "./dist/server",
+    },
+    {
+      builder: "rollup",
+      input: "./src/server/edge",
       outDir: "./dist/server",
     },
   ],

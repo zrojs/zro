@@ -5,9 +5,6 @@ import { Middleware, redirect } from "zro/router";
 import { getSession, SessionConfig } from "zro/router/server";
 import { AuthProvider } from "./auth-provider";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 export interface User {}
 
 export interface AuthConfig {
@@ -24,6 +21,8 @@ const plugin: Plugin<AuthConfig> = {
   name: "auth",
   configFileName: "auth",
   async setup(tree) {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
     tree.addBootstrapScript(
       {
         name: "bootstrap",

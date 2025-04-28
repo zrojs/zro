@@ -4,9 +4,6 @@ import { RouteTree } from "zro/plugin";
 import { AuthConstructorOptions, AuthProvider } from "../../auth-provider";
 import plugin, { AuthConfig } from "../../index";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 export type GithubUser = {
   login: string;
   id: number;
@@ -64,11 +61,13 @@ export class GithubProvider extends AuthProvider<GithubAuthenticateUser> {
     options: GithubAppProps,
     authProps: AuthConstructorOptions<GithubAuthenticateUser>
   ) {
-    super(authProps);
+    super("github", authProps);
     this.appOptions = options;
   }
 
   async registerRotes(tree: RouteTree, config: AuthConfig) {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
     await tree.addRootRoute(
       __dirname + "/github-action.mjs",
       config.authPrefix + "/github",

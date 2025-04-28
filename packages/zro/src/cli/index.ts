@@ -50,6 +50,18 @@ const cli = defineCommand({
         await prepare();
       },
     }),
+
+    build: defineCommand({
+      meta: {
+        name: "build",
+        description: "Build the project for production",
+      },
+      args: {},
+      run: async ({ args }) => {
+        const { build } = await import("./build");
+        await build();
+      },
+    }),
   },
 });
 

@@ -18,23 +18,46 @@ export default defineBuildConfig({
       outDir: "./dist",
     },
     {
-      builder: "mkdist",
-      input: "./routes",
+      builder: "rollup",
+      input: "./routes/logout.ts",
       outDir: "./dist/routes",
-      declaration: false,
     },
     {
-      builder: "mkdist",
-      input: "./providers",
-      outDir: "./dist/providers",
-      declaration: false,
+      builder: "rollup",
+      input: "./providers/password/index.ts",
+      outDir: "./dist/providers/password",
+    },
+    {
+      builder: "rollup",
+      input: "./providers/password/password-action.ts",
+      outDir: "./dist/providers/password",
+    },
+    {
+      builder: "rollup",
+      input: "./providers/github/github-action.ts",
+      outDir: "./dist/providers/github",
+    },
+    {
+      builder: "rollup",
+      input: "./providers/github/github-verify.ts",
+      outDir: "./dist/providers/github",
+    },
+    {
+      builder: "rollup",
+      input: "./providers/github/index.ts",
+      outDir: "./dist/providers/github",
+    },
+    {
+      builder: "rollup",
+      input: "./providers/github/react.ts",
+      outDir: "./dist/providers/github",
     },
   ],
   clean: true,
   rollup: {
     esbuild: {
       format: "esm",
-      minify: true,
+      minify: false,
     },
   },
   stubOptions: {
@@ -43,5 +66,6 @@ export default defineBuildConfig({
     },
   },
   failOnWarn: false,
-  declaration: false, // handle dts using tsup as mkdist is not able to generate dts with complex types
+  declaration: "compatible",
+  // declaration: false, // handle dts using tsup as mkdist is not able to generate dts with complex types
 });

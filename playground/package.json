@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -w '../packages/' -x 'zro dev'",
+    "build": "zro build",
     "db:migrate": "drizzle-kit generate && drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "prepare": "zro prepare"
@@ -15,8 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "@zro/auth": "workspace:^",
-    "@zro/db": "workspace:^*",
-    "@zro/logger": "workspace:^*",
+    "@zro/db": "workspace:^",
+    "@zro/logger": "workspace:^",
     "drizzle-kit": "^0.30.6",
     "drizzle-orm": "^0.41.0",
     "react": "^19.0.0",
@@ -28,14 +29,15 @@
   },
   "packageManager": "pnpm@10.6.3",
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.0.1",
     "@tailwindcss/vite": "^4.0.14",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
+    "h3": "npm:h3-nightly@2.0.0-20250425-083926-e01c999",
     "nodemon": "^3.1.9",
     "tailwindcss": "^4.0.14",
     "vite": "^6.2.2",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^4.13.2"
   }
 }

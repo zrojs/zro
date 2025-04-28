@@ -4,21 +4,24 @@
   "type": "module",
   "description": "Auth integration for ZRO",
   "scripts": {
-    "dev": "unbuild --watch & tsup --dts-only --watch",
-    "build": "unbuild & tsup --dts-only",
+    "dev": "unbuild --watch",
+    "build": "unbuild",
     "prepublishOnly": "pnpm build && pnpx changelogen --release --no-tag --push"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
     "./providers/*": {
       "types": "./dist/providers/*/index.d.ts",
+      "import": "./dist/providers/*/index.mjs",
       "default": "./dist/providers/*/index.mjs"
     },
     "./providers/github/react": {
       "types": "./dist/providers/github/react.d.ts",
+      "import": "./dist/providers/github/react.mjs",
       "default": "./dist/providers/github/react.mjs"
     }
   },

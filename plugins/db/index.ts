@@ -7,9 +7,6 @@ import { fileURLToPath } from "node:url";
 import { Plugin } from "zro/plugin";
 export * from "db0";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 export type DBConfig = {
   connector: Connector;
   orm?: "drizzle";
@@ -19,6 +16,8 @@ const plugin: Plugin<DBConfig> = {
   name: "db",
   configFileName: "db",
   setup(tree) {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
     tree.addBootstrapScript(
       {
         name: "bootstrap",

@@ -1,5 +1,4 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec";
-import { readBody } from "h3";
 import { abort } from "./abort";
 import { getServerContext } from "./server/context";
 
@@ -52,15 +51,16 @@ export class Action<TSchema extends StandardSchemaV1, ReturnType> {
   }
   async run() {
     const { handler } = this.options;
-
     const { event } = getServerContext()!;
-
     let data;
     const contentType = event.req.headers.get("content-type");
     if (contentType?.toLowerCase().startsWith("multipart/form-data;")) {
       const dataMultipart = (await event.req.formData())!;
       data = this.formDataToObject(dataMultipart);
     } else {
+      //! @remove
+      const { readBody } = await import("h3");
+      //! @remove
       data = await readBody(event);
     }
 

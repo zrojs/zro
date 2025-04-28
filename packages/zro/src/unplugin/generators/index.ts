@@ -1,5 +1,6 @@
-import { existsSync } from "fs";
-import { loadFile } from "magicast";
+import babel from "@babel/core";
+import { parse } from "es-module-lexer";
+import { existsSync, readFileSync } from "node:fs";
 import { exit } from "process";
 import { glob } from "tinyglobby";
 import { joinURL } from "ufo";
@@ -39,8 +40,20 @@ export type Tree = {
 };
 
 export const getModuleInfo = async (file: string) => {
-  const module = await loadFile(file);
-  const exports = Object.keys(module.exports);
+  // Get the filename from the file path
+  // const fileName = file.split("/").pop() || "";
+  // console.log(fileName);
+  const code = babel.transformSync(readFileSync(file, "utf-8"), {
+    filename: file,
+    presets: ["@babel/preset-typescript", "@babel/preset-react"],
+  })?.code;
+  let exports: string[] = [];
+
+  if (code) {
+    const [_, exportNames] = await parse(code);
+    exports = (exportNames?.map((e) => e.n) || []) as string[];
+  }
+
   const d = {
     hasLoader: !!exports.includes("loader"),
     hasMiddleware: !!exports.includes("middlewares"),

@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "worker",
+  "compatibility_date": "2024-09-23",
+  "main": "./worker.js",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS",
+    "html_handling": "force-trailing-slash"
+  }
+}

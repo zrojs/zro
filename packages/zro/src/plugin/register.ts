@@ -3,7 +3,7 @@ import { addDependency } from "nypm";
 import { glob } from "tinyglobby";
 import { joinURL } from "ufo";
 import { Plugin, PluginConfigContext, RouteTree } from ".";
-import { useVite } from "../dev-server";
+import { useVite } from "../vite-context";
 
 export const registerPlugins = async (
   plugins: string[],
@@ -30,12 +30,13 @@ export const registerPlugins = async (
         }
       ).then((res) => res[0]);
       const configExists = !!configPath;
-      if (configExists)
+      if (configExists) {
         config = (
           await vite.ssrLoadModule(
             joinURL(process.cwd(), `configs/${pluginModule.configFileName}`)
           )
         ).default;
+      }
     } catch (e) {}
     await PluginConfigContext.call(config, async () => {
       return await pluginModule.setup(routeTree);

@@ -75,7 +75,7 @@ fallbackHead.push({
   script: [
     {
       type: "module",
-      src: "/@zro/client-entry",
+      src: "/zro_client-entry.js",
       tagPosition: "bodyClose",
     },
   ],

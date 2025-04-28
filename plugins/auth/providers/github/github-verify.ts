@@ -16,7 +16,7 @@ export const actions = {
       const { request } = getRequest();
       const redirect_uri = request.headers.get("referer");
       const providerConfig = config.providers.find(
-        (provider) => provider instanceof GithubProvider
+        (provider) => provider.name === "github"
       );
       if (!providerConfig)
         throw new Error("Unable to find the Github provider");

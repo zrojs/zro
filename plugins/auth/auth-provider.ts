@@ -8,7 +8,10 @@ export type AuthConstructorOptions<TAuthenticationProps> = {
 export class AuthProvider<TAuthenticationProps = any> {
   authenticate: (data: TAuthenticationProps) => User | Promise<User>;
 
-  constructor(options: AuthConstructorOptions<TAuthenticationProps>) {
+  constructor(
+    public name: string,
+    options: AuthConstructorOptions<TAuthenticationProps>
+  ) {
     this.authenticate = options.authenticate;
   }
 

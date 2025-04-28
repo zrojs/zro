@@ -11,14 +11,17 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
     "./connectors/libsql/*": {
       "types": "./dist/connectors/libsql/*.d.ts",
+      "import": "./dist/connectors/libsql/*.mjs",
       "default": "./dist/connectors/libsql/*.mjs"
     },
     "./connectors/*": {
       "types": "./dist/connectors/*.d.ts",
+      "import": "./dist/connectors/*.mjs",
       "default": "./dist/connectors/*.mjs"
     }
   },

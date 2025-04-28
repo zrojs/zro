@@ -3,7 +3,7 @@ import defu from "defu";
 import { joinURL } from "ufo";
 import { createUnplugin } from "unplugin";
 import { createFilter, loadEnv, ViteDevServer } from "vite";
-import { viteContext } from "../dev-server";
+import { viteContext } from "../vite-context";
 import deadImportsRemover from "./babel/dead-imports-remover";
 import serverCodeRemover, {
   stripAnnotatedBlocks,
@@ -20,7 +20,7 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
     const options = defu(_options, { plugins: [] });
     let vite: ViteDevServer | null = null;
     const ziroRouterLibFilter = createFilter(
-      ["**/zro/dist/src/router/*.{js,jsx,ts,tsx}"],
+      ["**/zro/dist/router/*.{js,jsx,ts,tsx,mjs,mts}"],
       null
     );
     const routeFilesFilter = createFilter(
@@ -65,8 +65,13 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
                 dedupe: ["react", "react-dom", "zro/react", "zro/plugin"],
               },
               ssr: {
-                external: ["zro/react"],
-                noExternal: ["zro/plugin", ...options.plugins],
+                external: [
+                  "zro/react",
+                  "zro/plugin",
+                  "zro",
+                  ...options.plugins,
+                ],
+                noExternal: [],
               },
             };
           },
@@ -74,9 +79,10 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
             vite = server;
           },
           async buildStart() {
-            await viteContext.callAsync(vite!, async () => {
-              return await prepare({ routesDir, options });
-            });
+            if (process.env.NODE_ENV !== "production")
+              await viteContext.callAsync(vite!, async () => {
+                return await prepare({ routesDir, options });
+              });
           },
           async watchChange(id, change) {
             // console.log(id);
@@ -131,10 +137,13 @@ export default createUnplugin<ZroUnpluginOptions | undefined>(
             return code;
           },
           async resolveId(source, importer, options) {
-            if (source == "virtual:zro/router.client") {
+            if (
+              process.env.NODE_ENV !== "production" &&
+              source == "virtual:zro/router.client"
+            ) {
               return "/.zro/router.client";
             }
-            if (source == "/@zro/client-entry") {
+            if (source == "/zro_client-entry.js") {
               const isClientEntryExists = await this.resolve("/client-entry");
               if (isClientEntryExists) return isClientEntryExists.id;
               return await this.resolve("zro/react/client-entry", undefined, {

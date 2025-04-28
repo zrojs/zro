@@ -8,9 +8,9 @@ export const loader = () => {
   const { request } = getRequest();
 
   const providerConfig = config.providers.find(
-    (provider) => provider instanceof GithubProvider
+    (provider) => provider.name === "github"
   );
-  if (!providerConfig) throw new Error("Unable to find the password provider");
+  if (!providerConfig) throw new Error("Unable to find the Github provider");
   const appProps = (providerConfig as unknown as GithubProvider).appOptions;
 
   const redirectUri = request.headers.get("referer");

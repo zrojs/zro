@@ -3,7 +3,6 @@ import { getConfig } from "zro/plugin";
 import { Action, redirect } from "zro/router";
 import { getSession } from "zro/router/server";
 import { AuthConfig } from "../../index";
-import { PasswordProvider } from "./index";
 
 export const actions = {
   signIn: new Action({
@@ -14,7 +13,7 @@ export const actions = {
     async handler(input) {
       const config = getConfig<AuthConfig>();
       const providerConfig = config.providers.find(
-        (provider) => provider instanceof PasswordProvider
+        (provider) => provider.name === "password"
       );
       if (!providerConfig)
         throw new Error("Unable to find the password provider");
