@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.57
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.56...v0.0.57)
+
+### 🚀 Enhancements
+
+- **adapters:** `cloudflare` support ([8725051](https://github.com/zrojs/zro/commit/8725051))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.56
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.55...v0.0.56)
