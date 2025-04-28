@@ -1,6 +1,24 @@
 # Changelog
 
 
+## v0.0.56
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.55...v0.0.56)
+
+### 🩹 Fixes
+
+- **build:** Specify output directory for client build `dist/client` ([0ead96f](https://github.com/zrojs/zro/commit/0ead96f))
+
+### 🏡 Chore
+
+- **release:** V0.0.6 ([c962f4d](https://github.com/zrojs/zro/commit/c962f4d))
+- **release:** V0.0.4 ([518b1e9](https://github.com/zrojs/zro/commit/518b1e9))
+- **release:** V0.0.10 ([f9b44f3](https://github.com/zrojs/zro/commit/f9b44f3))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.55
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.54...v0.0.55)
