@@ -14,6 +14,7 @@ import { createServer } from "vite";
 import loadingSpinner from "yocto-spinner";
 import { Youch } from "youch";
 import { Router as ZroRouter } from "./router/Router";
+import { createH3App } from "./server/h3";
 import { handleRequest } from "./server/node";
 import { upperFirst } from "./utils/tools";
 import { viteContext } from "./vite-context";
@@ -38,7 +39,7 @@ export const bootstrapDevServer = async ({
   host: boolean;
 }) => {
   startingServerSpinner.start();
-  const app = new H3({
+  const app = createH3App({
     async onError(error, event) {
       const youch = new Youch();
       const html = await youch.toHTML(error);

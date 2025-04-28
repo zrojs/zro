@@ -10,6 +10,10 @@ import { ZroUnpluginOptions } from "../../unplugin";
 import { createTypesFile } from "../../unplugin/generators/types";
 import { logger } from "../../utils/log";
 import { createRouterFile } from "./router";
+// @ts-ignore
+import babelTypescriptPreset from "@babel/preset-typescript";
+// @ts-ignore
+import babelReactPreset from "@babel/preset-react";
 
 const filePathToRoutePath = (file: string, cwd: string) => {
   return file
@@ -45,7 +49,7 @@ export const getModuleInfo = async (file: string) => {
   // console.log(fileName);
   const code = babel.transformSync(readFileSync(file, "utf-8"), {
     filename: file,
-    presets: ["@babel/preset-typescript", "@babel/preset-react"],
+    presets: [babelTypescriptPreset, babelReactPreset],
   })?.code;
   let exports: string[] = [];
 

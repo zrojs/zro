@@ -50,6 +50,10 @@
     "./server.edge": {
       "types": "./dist/server/edge.d.ts",
       "import": "./dist/server/edge.mjs"
+    },
+    "./adapters/cloudflare": {
+      "types": "./dist/adapters/cloudflare.d.ts",
+      "import": "./dist/adapters/cloudflare.mjs"
     }
   },
   "scripts": {

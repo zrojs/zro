@@ -52,6 +52,11 @@ export default defineBuildConfig({
       input: "./src/server/edge",
       outDir: "./dist/server",
     },
+    {
+      builder: "rollup",
+      input: "./src/adapters/cloudflare",
+      outDir: "./dist/adapters",
+    },
   ],
   externals: [
     "react",

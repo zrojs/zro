@@ -22,8 +22,6 @@
     "drizzle-orm": "^0.41.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "unctx": "^2.4.1",
-    "vite-plugin-inspect": "^11.0.0",
     "zod": "4.0.0-beta.20250418T073619",
     "zro": "workspace:^*"
   },
@@ -33,7 +31,6 @@
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
-    "h3": "npm:h3-nightly@2.0.0-20250425-083926-e01c999",
     "nodemon": "^3.1.9",
     "tailwindcss": "^4.0.14",
     "vite": "^6.2.2",
