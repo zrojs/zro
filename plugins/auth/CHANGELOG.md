@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.0.12
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.58...v0.0.12)
+
+### 🩹 Fixes
+
+- **github:** Add User-Agent header to GitHub user fetch request ([6a35918](https://github.com/zrojs/zro/commit/6a35918))
+- **github:** Ensure User-Agent header is included in GitHub OAuth request ([d7f0694](https://github.com/zrojs/zro/commit/d7f0694))
+
+### 🏡 Chore
+
+- **release:** V0.0.11 ([085e2c7](https://github.com/zrojs/zro/commit/085e2c7))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.11
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.58...v0.0.11)
