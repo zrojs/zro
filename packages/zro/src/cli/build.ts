@@ -13,7 +13,7 @@ export const build = async () => {
       },
     },
     build: {
-      outDir: "./dist",
+      outDir: "./dist/client",
       emptyOutDir: false,
       rollupOptions: {
         input: ["zro/react/client-entry"],
