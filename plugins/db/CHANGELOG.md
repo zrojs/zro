@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.4
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.55...v0.0.4)
+
+### 🏡 Chore
+
+- **release:** V0.0.6 ([c962f4d](https://github.com/zrojs/zro/commit/c962f4d))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.3
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.30...v0.0.3)
