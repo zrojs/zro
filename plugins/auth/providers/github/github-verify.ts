@@ -38,6 +38,7 @@ export const actions = {
         fetch("https://api.github.com/user", {
           headers: {
             Authorization: `Bearer ${ghAuthorization.access_token}`,
+            "User-Agent": "zro-auth",
           },
         }).then((r) => r.json()) as Promise<GithubUser>;
       const user = await providerConfig.authenticate({
