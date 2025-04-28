@@ -4,6 +4,7 @@ vendor/
 .env
 .env.local
 .env.*.local
+*.vars
 
 # Build outputs
 dist/
