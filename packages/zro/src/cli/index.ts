@@ -1,7 +1,12 @@
 import { defineCommand, runMain } from "citty";
 import { colors } from "consola/utils";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { readPackageJSON } from "pkg-types";
 import { useZro, zroContext } from "./context";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const cli = defineCommand({
   meta: {
@@ -65,7 +70,7 @@ const cli = defineCommand({
   },
 });
 
-readPackageJSON(import.meta.resolve("../../package.json")).then((pkg) => {
+readPackageJSON(resolve(__dirname, "../../package.json")).then((pkg) => {
   zroContext.call(
     {
       title: "[Z•RO]",
