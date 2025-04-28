@@ -21,6 +21,7 @@ export const verify = ({
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      "User-Agent": "zro-auth",
     },
   }).then((r) => r.json()) as Promise<
     | {
