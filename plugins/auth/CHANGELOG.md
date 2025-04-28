@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.11
+
+[compare changes](https://github.com/zrojs/zro/compare/v0.0.58...v0.0.11)
+
+### 🩹 Fixes
+
+- **github:** Add User-Agent header to GitHub user fetch request ([6a35918](https://github.com/zrojs/zro/commit/6a35918))
+
+### ❤️ Contributors
+
+- Narixius <nariman.movaffaghi@gmail.com>
+
 ## v0.0.10
 
 [compare changes](https://github.com/zrojs/zro/compare/v0.0.55...v0.0.10)
